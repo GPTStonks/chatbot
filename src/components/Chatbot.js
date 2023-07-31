@@ -52,27 +52,74 @@ const Chatbot = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (newMessage.trim() !== '') {
-      setMessages(prevMessages => [...prevMessages, { text: newMessage, user: 'Me' }, { loading: true }]);
+      const userMessage = { text: newMessage, user: 'Me' };
+      const loadingMessage = { loading: true };
+      setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
       setNewMessage('');
 
-      const botResponse = `You said: ${newMessage}`;
+      try {
+        let response = await fetch('http://localhost:8000/process_query_async', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ query: newMessage })
+        });
 
-      let botMessageIndex = messages.length + 1;
-      let i = 0;
-
-      const typingInterval = setInterval(() => {
-        if (i < botResponse.length) {
-          let newMessages = [...messages, { text: newMessage, user: 'Me' }, { text: botResponse.slice(0, i+1), user: 'Bot' }];
-          setMessages(newMessages);
-          i++;
-        } else {
-          clearInterval(typingInterval);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }, 10);
+
+        const data = await response.json();
+        const jobId = data.job_id;
+        console.log(data);
+        console.log(jobId);
+
+        let botMessageText;
+
+        while (true) {
+          response = await fetch(`http://localhost:8000/get_processing_result/${jobId}`);
+          const resultData = await response.json();
+
+          console.log(`Status: ${resultData.status}`);
+          console.log(`Result: ${JSON.stringify(resultData.result)}`);
+
+          if (resultData.status === "completed") {
+            botMessageText = resultData.result.result || resultData.result.error;
+            break;
+          }
+
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+
+
+        const newMessages = messages.slice(0, -1);
+        let botMessageIndex = newMessages.length;
+        let i = 0;
+
+        const typingInterval = setInterval(() => {
+          if (i < botMessageText.length) {
+            let newBotMessage = { text: botMessageText.slice(0, i + 1), user: 'Bot' };
+            newMessages[botMessageIndex] = newBotMessage;
+            setMessages([...newMessages]);
+            i++;
+          } else {
+            clearInterval(typingInterval);
+          }
+        }, 10);
+
+      } catch (error) {
+        setMessages(prevMessages => {
+          const newMessages = prevMessages.slice(0, -1); // remove loading message
+          return [...newMessages, { text: "Couldn't process the request. Try again.", user: 'Bot' }];
+        });
+      }
     }
   };
+
+
 
   return (
     <div>
@@ -101,17 +148,17 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </List>
       </Box>
-      <Box sx={{ position: "fixed", right: "0", bottom: "3%", left: "0"}} >
+      <Box sx={{ position: "fixed", right: "0", bottom: "3%", left: "0" }} >
         <TextField
           value={newMessage}
           onChange={event => setNewMessage(event.target.value)}
           label="Specify your message here"
-          sx={{ width: "50%"}}
+          sx={{ width: "50%" }}
         />
         <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>Send</Button>
-        <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
+        {/* <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
           <BsTerminal size={24}/>
-        </Button>
+        </Button> */}
       </Box>
     </div>
   );
