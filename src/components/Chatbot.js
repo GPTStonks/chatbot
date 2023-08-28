@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { TextField, Button, List, ListItem, Card, CardContent, Typography, CircularProgress, Box, Avatar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BsRobot, BsTerminal } from 'react-icons/bs';
+import { Line } from 'react-chartjs-2';
 
 import { gruvboxTheme } from '../theme/Theme';
+import GruvboxGraph from './Graph';
 
 /* STYLES */
 
@@ -119,8 +121,6 @@ const Chatbot = () => {
     }
   };
 
-
-
   return (
     <div>
       <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
@@ -133,7 +133,12 @@ const Chatbot = () => {
                 </Avatar>
               )}
               {message.loading ? (
-                <CircularProgress className={classes.progress} />
+                //<CircularProgress className={classes.progress} />
+                <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
+                  <CardContent>
+                    <GruvboxGraph />
+                  </CardContent>
+                </Card>
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
                   <CardContent>
