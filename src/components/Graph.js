@@ -5,7 +5,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { useState } from 'react';
 import { gruvboxTheme } from '../theme/Theme';
 
-const GruvboxGraph = (someData) => {
+const GruvboxGraph = (someData="") => {
 
     const [open, setOpen] = useState(false);
 
@@ -29,8 +29,6 @@ const GruvboxGraph = (someData) => {
     ];
 
     /* LINE CHART DATA */
-
-    
 
     const formattedData = [
         ['Date', 'Sentiment'],

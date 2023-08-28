@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { TextField, Button, List, ListItem, Card, CardContent, Typography, CircularProgress, Box, Avatar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BsRobot, BsTerminal } from 'react-icons/bs';
-import { Line } from 'react-chartjs-2';
 
 import { gruvboxTheme } from '../theme/Theme';
 import GruvboxGraph from './Graph';
@@ -57,7 +56,7 @@ const mockData = {
       "2023-08-25T00:00:00": "0.262"
     }
   }
-}
+};
 
 const sentimentData = {
   "Sentiment Analysis": {
@@ -89,20 +88,7 @@ const Chatbot = () => {
   useEffect(scrollToBottom, [messages]);
 
   const sendMessage = async () => {
-    if (newMessage == "hello") {
-
-      let botMessageText;
-      setMessages(prevMessages => {
-        const newMessages = [...prevMessages];
-        const botMessage = { text: JSON.stringify(mockData), user: 'Bot' };
-
-        newMessages.pop();
-        newMessages.push(botMessage);
-
-        return newMessages;
-      });
-    }
-    else if (newMessage.trim() !== '') {
+    if (newMessage.trim() !== '') {
       const userMessage = { text: newMessage, user: 'Me' };
       const loadingMessage = { loading: true };
 
@@ -138,7 +124,7 @@ const Chatbot = () => {
           console.log(`Result: ${JSON.stringify(resultData.result)}`);
 
           if (resultData.status === "completed") {
-            botMessageText = resultData.result.result || resultData.result.error;
+            botMessageText = JSON.stringify(resultData.result.result) || resultData.result.error;
             break;
           }
 
@@ -182,7 +168,7 @@ const Chatbot = () => {
                   <Typography variant="body2" component="p">
                     {message.text}
                   </Typography>
-                  <GruvboxGraph someData={sentimentData} />
+                 {/*  <GruvboxGraph someData={sentimentData} /> */}
                 </Card>
               )}
             </ListItem>
