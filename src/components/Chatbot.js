@@ -96,16 +96,17 @@ const Chatbot = () => {
           }
 
           await new Promise(resolve => setTimeout(resolve, 5000));
-          console.log(messages);
         }
 
-        const newMessages = [...messages];  
-        const botMessage = { text: botMessageText, user: 'Bot' };
+        setMessages(prevMessages => {
+          const newMessages = [...prevMessages];
+          const botMessage = { text: botMessageText, user: 'Bot' };
 
-        newMessages.pop(); 
-        newMessages.push(botMessage);  
+          newMessages.pop(); 
+          newMessages.push(botMessage);  
 
-        setMessages(newMessages);  
+          return newMessages;
+        });
 
       } catch (error) {
         setMessages(prevMessages => {
