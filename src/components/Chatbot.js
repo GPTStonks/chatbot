@@ -58,7 +58,9 @@ const Chatbot = () => {
     if (newMessage.trim() !== '') {
       const userMessage = { text: newMessage, user: 'Me' };
       const loadingMessage = { loading: true };
+
       setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
+
       setNewMessage('');
 
       try {
@@ -94,23 +96,16 @@ const Chatbot = () => {
           }
 
           await new Promise(resolve => setTimeout(resolve, 5000));
+          console.log(messages);
         }
 
+        const newMessages = [...messages];  
+        const botMessage = { text: botMessageText, user: 'Bot' };
 
-        const newMessages = messages.slice(0, -1);
-        let botMessageIndex = newMessages.length;
-        let i = 0;
+        newMessages.pop(); 
+        newMessages.push(botMessage);  
 
-        const typingInterval = setInterval(() => {
-          if (i < botMessageText.length) {
-            let newBotMessage = { text: botMessageText.slice(0, i + 1), user: 'Bot' };
-            newMessages[botMessageIndex] = newBotMessage;
-            setMessages([...newMessages]);
-            i++;
-          } else {
-            clearInterval(typingInterval);
-          }
-        }, 10);
+        setMessages(newMessages);  
 
       } catch (error) {
         setMessages(prevMessages => {
@@ -135,7 +130,7 @@ const Chatbot = () => {
               {message.loading ? (
                 //<CircularProgress className={classes.progress} />
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                    <GruvboxGraph />
+                  <GruvboxGraph />
                 </Card>
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
