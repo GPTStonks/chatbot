@@ -5,7 +5,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { useState } from 'react';
 import { gruvboxTheme } from '../theme/Theme';
 
-const GruvboxGraph = () => {
+const GruvboxGraph = (someData) => {
 
     const [open, setOpen] = useState(false);
 
@@ -27,6 +27,50 @@ const GruvboxGraph = () => {
         ['Sat', 15, 20, 65, 75],
         ['Sun', 23, 25, 60, 68],
     ];
+
+    /* LINE CHART DATA */
+
+    
+
+    const formattedData = [
+        ['Date', 'Sentiment'],
+        ...Object.entries(someData["Sentiment Analysis"]).map(([date, sentiment]) => [new Date(date), parseFloat(sentiment)])
+    ];
+
+    const lineOptions = {
+        legend: 'none',
+        curveType: "function",
+        backgroundColor: gruvboxTheme.palette.background.default,
+        fontName: gruvboxTheme.typography.fontFamily,
+        colors: [gruvboxTheme.palette.info.main],
+        hAxis: {
+            textStyle: {
+                color: gruvboxTheme.palette.text.primary
+            },
+            baselineColor: gruvboxTheme.palette.background.paper,
+            gridlines: {
+                color: gruvboxTheme.palette.background.paper
+            },
+            format: 'MMM d'
+        },
+        vAxis: {
+            textStyle: {
+                color: gruvboxTheme.palette.text.primary
+            },
+            baselineColor: gruvboxTheme.palette.background.paper,
+            gridlines: {
+                color: gruvboxTheme.palette.background.paper
+            }
+        },
+        chartArea: {
+            backgroundColor: gruvboxTheme.palette.background.paper
+        },
+        animation: {
+            duration: 300,
+            easing: 'inAndOut',
+            startup: true
+        }
+    };
 
     const options = {
         legend: 'none',
@@ -74,10 +118,10 @@ const GruvboxGraph = () => {
                 options={options}
             />
             <IconButton
-                style={{ position: 'absolute', top: "1.5%", right: "1.5%", color:gruvboxTheme.palette.info.main }}
+                style={{ position: 'absolute', top: "1.5%", right: "1.5%", color: gruvboxTheme.palette.info.main }}
                 onClick={handleOpen}
             >
-                <OpenInFullIcon  />
+                <OpenInFullIcon />
             </IconButton>
             <Dialog
                 open={open}
@@ -85,13 +129,21 @@ const GruvboxGraph = () => {
                 fullWidth
                 maxWidth="lg"
             >
-                <Chart
+                {/* <Chart
                     chartType="CandlestickChart"
                     width="100%"
                     height="400px"
                     data={data}
                     options={options}
+                /> */}
+                <Chart
+                    chartType="LineChart"
+                    width="100%"
+                    height="400px"
+                    data={formattedData}
+                    options={lineOptions}
                 />
+
             </Dialog>
         </div>
     );

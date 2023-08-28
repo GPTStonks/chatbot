@@ -40,6 +40,40 @@ const useStyles = makeStyles({
   },
 });
 
+/* MOCK DATA */
+
+const mockData = {
+  "result": {
+    "Sentiment Analysis": {
+      "2023-08-14T00:00:00": "0.059",
+      "2023-08-15T00:00:00": "0.031",
+      "2023-08-16T00:00:00": "0.231",
+      "2023-08-17T00:00:00": "0.127",
+      "2023-08-18T00:00:00": "0.164",
+      "2023-08-21T00:00:00": "0.393",
+      "2023-08-22T00:00:00": "0.308",
+      "2023-08-23T00:00:00": "0.414",
+      "2023-08-24T00:00:00": "0.206",
+      "2023-08-25T00:00:00": "0.262"
+    }
+  }
+}
+
+const sentimentData = {
+  "Sentiment Analysis": {
+    "2023-08-14T00:00:00": "0.059",
+    "2023-08-15T00:00:00": "0.031",
+    "2023-08-16T00:00:00": "0.231",
+    "2023-08-17T00:00:00": "0.127",
+    "2023-08-18T00:00:00": "0.164",
+    "2023-08-21T00:00:00": "0.393",
+    "2023-08-22T00:00:00": "0.308",
+    "2023-08-23T00:00:00": "0.414",
+    "2023-08-24T00:00:00": "0.206",
+    "2023-08-25T00:00:00": "0.262"
+  }
+};
+
 /* COMPONENT */
 
 const Chatbot = () => {
@@ -55,7 +89,20 @@ const Chatbot = () => {
   useEffect(scrollToBottom, [messages]);
 
   const sendMessage = async () => {
-    if (newMessage.trim() !== '') {
+    if (newMessage == "hello") {
+
+      let botMessageText;
+      setMessages(prevMessages => {
+        const newMessages = [...prevMessages];
+        const botMessage = { text: JSON.stringify(mockData), user: 'Bot' };
+
+        newMessages.pop();
+        newMessages.push(botMessage);
+
+        return newMessages;
+      });
+    }
+    else if (newMessage.trim() !== '') {
       const userMessage = { text: newMessage, user: 'Me' };
       const loadingMessage = { loading: true };
 
@@ -102,8 +149,8 @@ const Chatbot = () => {
           const newMessages = [...prevMessages];
           const botMessage = { text: botMessageText, user: 'Bot' };
 
-          newMessages.pop(); 
-          newMessages.push(botMessage);  
+          newMessages.pop();
+          newMessages.push(botMessage);
 
           return newMessages;
         });
@@ -129,17 +176,13 @@ const Chatbot = () => {
                 </Avatar>
               )}
               {message.loading ? (
-                //<CircularProgress className={classes.progress} />
-                <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                  <GruvboxGraph />
-                </Card>
+                <CircularProgress className={classes.progress} />
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                  <CardContent>
-                    <Typography variant="body2" component="p">
-                      {message.text}
-                    </Typography>
-                  </CardContent>
+                  <Typography variant="body2" component="p">
+                    {message.text}
+                  </Typography>
+                  <GruvboxGraph someData={sentimentData} />
                 </Card>
               )}
             </ListItem>
@@ -159,7 +202,7 @@ const Chatbot = () => {
           <BsTerminal size={24}/>
         </Button> */}
       </Box>
-    </div>
+    </div >
   );
 }
 

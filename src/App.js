@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Divider, ThemeProvider } from '@mui/material';
 
 import Chatbot from './components/Chatbot';
+import Dashboard from './components/Dashboard';
 import GruvboxGraph from './components/Graph';
 import { gruvboxTheme } from './theme/Theme';
 
@@ -16,6 +17,7 @@ function App() {
           {test ? <Card sx={{width: "30%"}}>
               <GruvboxGraph />
           </Card> : <Chatbot />}
+          {/*<Dashboard/> */}
         </Box>
       </ThemeProvider>
     </div>
