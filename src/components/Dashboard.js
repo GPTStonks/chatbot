@@ -3,6 +3,8 @@ import { Box, Card, CardContent, Divider, ThemeProvider, Grid } from '@mui/mater
 import Chatbot from './Chatbot';
 import GruvboxGraph from './Graph';
 import { gruvboxTheme } from '../theme/Theme';
+import { mockData, sentimentData } from '../const';
+
 
 function Dashboard() {
   return (
@@ -15,7 +17,7 @@ function Dashboard() {
             <Grid container item xs={12} spacing={3}>
               <Grid item xs={4}>
                 <Card>
-                  <GruvboxGraph />
+                  <GruvboxGraph someData={sentimentData}/>
                 </Card>
               </Grid>
               <Grid item xs={4}>

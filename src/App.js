@@ -17,7 +17,7 @@ function App() {
           {test ? <Card sx={{width: "30%"}}>
               <GruvboxGraph />
           </Card> : <Chatbot />}
-          {/*<Dashboard/> */}
+{/*           <Dashboard/> */}
         </Box>
       </ThemeProvider>
     </div>

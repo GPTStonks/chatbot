@@ -5,7 +5,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { useState } from 'react';
 import { gruvboxTheme } from '../theme/Theme';
 
-const GruvboxGraph = (someData="") => {
+const GruvboxGraph = ({ someData }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -30,10 +30,11 @@ const GruvboxGraph = (someData="") => {
 
     /* LINE CHART DATA */
 
-    const formattedData = [
-        ['Date', 'Sentiment'],
-        ...Object.entries(someData["Sentiment Analysis"]).map(([date, sentiment]) => [new Date(date), parseFloat(sentiment)])
-    ];
+    const formattedData = someData && someData["Sentiment Analysis"]
+        ? [['Date', 'Sentiment'],
+        ...Object.entries(someData["Sentiment Analysis"]).map(([date, sentiment]) => [new Date(date), parseFloat(sentiment)])]
+        : [['Date', 'Sentiment']];
+
 
     const lineOptions = {
         legend: 'none',
@@ -108,12 +109,19 @@ const GruvboxGraph = (someData="") => {
 
     return (
         <div style={{ position: 'relative' }}>
-            <Chart
+            {/* <Chart
                 chartType="CandlestickChart"
                 width="100%"
                 height="400px"
                 data={data}
                 options={options}
+            /> */}
+            <Chart
+                chartType="LineChart"
+                width="100%"
+                height="400px"
+                data={formattedData}
+                options={lineOptions}
             />
             <IconButton
                 style={{ position: 'absolute', top: "1.5%", right: "1.5%", color: gruvboxTheme.palette.info.main }}
