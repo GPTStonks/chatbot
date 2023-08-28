@@ -5,6 +5,7 @@ import { BsRobot, BsTerminal } from 'react-icons/bs';
 
 import { gruvboxTheme } from '../theme/Theme';
 import GruvboxGraph from './Graph';
+import { sentimentData } from '../const';
 
 /* STYLES */
 
@@ -131,10 +132,12 @@ const Chatbot = () => {
                 <CircularProgress className={classes.progress} />
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                  <Typography variant="body2" component="p">
+                  <CardContent>
+                  <Typography variant="body2" component="p" sx={{p:1}}>
                     {message.text}
                   </Typography>
-                 {/*  <GruvboxGraph someData={sentimentData} /> */}
+                  {message.user === 'Bot' ? <GruvboxGraph someData={sentimentData} /> : <></>}
+                  </CardContent>
                 </Card>
               )}
             </ListItem>
