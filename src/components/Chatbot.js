@@ -135,9 +135,7 @@ const Chatbot = () => {
               {message.loading ? (
                 //<CircularProgress className={classes.progress} />
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                  <CardContent>
                     <GruvboxGraph />
-                  </CardContent>
                 </Card>
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
