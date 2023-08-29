@@ -12,7 +12,12 @@ import { sentimentData } from '../const';
 const useStyles = makeStyles({
   userCard: {
     margin: '10px',
-    textAlign: 'right'
+    textAlign: 'right',
+    width: 'fit-content',
+  },
+  botCard: {
+    width: '30vw',
+    margin: '10px',
   },
   progress: {
     alignSelf: 'flex-start'
@@ -50,6 +55,13 @@ const Chatbot = () => {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+      event.preventDefault();
+    }
   }
 
   useEffect(scrollToBottom, [messages]);
@@ -91,7 +103,7 @@ const Chatbot = () => {
           console.log(`Result: ${JSON.stringify(resultData.result)}`);
 
           if (resultData.status === "completed") {
-            botMessageText = JSON.stringify(resultData.result.result) || resultData.result.error;
+            botMessageText = resultData.result.result || resultData.result.error;
             break;
           }
 
@@ -100,7 +112,7 @@ const Chatbot = () => {
 
         setMessages(prevMessages => {
           const newMessages = [...prevMessages];
-          const botMessage = { text: botMessageText, user: 'Bot' };
+          const botMessage = { text: JSON.stringify(botMessageText), user: 'Bot', graphData: botMessageText };
 
           newMessages.pop();
           newMessages.push(botMessage);
@@ -133,10 +145,10 @@ const Chatbot = () => {
               ) : (
                 <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
                   <CardContent>
-                  <Typography variant="body2" component="p" sx={{p:1}}>
-                    {message.text}
-                  </Typography>
-                  {message.user === 'Bot' ? <GruvboxGraph someData={sentimentData} /> : <></>}
+                    <Typography variant="body2" component="p">
+                      {message.text}
+                    </Typography>
+                    {message.user === 'Bot' ? <GruvboxGraph apiData={message.graphData} /> : <></>}
                   </CardContent>
                 </Card>
               )}
@@ -151,6 +163,7 @@ const Chatbot = () => {
           onChange={event => setNewMessage(event.target.value)}
           label="Specify your message here"
           sx={{ width: "50%" }}
+          onKeyDown={handleKeyDown}
         />
         <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>Send</Button>
         {/* <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>

@@ -5,7 +5,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { useState } from 'react';
 import { gruvboxTheme } from '../theme/Theme';
 
-const GruvboxGraph = ({ someData }) => {
+const GruvboxGraph = ({ apiData }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -30,18 +30,31 @@ const GruvboxGraph = ({ someData }) => {
 
     /* LINE CHART DATA */
 
-    const formattedData = someData && someData["Sentiment Analysis"]
-        ? [['Date', 'Sentiment'],
-        ...Object.entries(someData["Sentiment Analysis"]).map(([date, sentiment]) => [new Date(date), parseFloat(sentiment)])]
-        : [['Date', 'Sentiment']];
+    const transformData = (data) => {
+        if (!data) {
+            return [['Date']];
+        }
 
+        const headers = ['Date', ...Object.keys(data)];
+        const dates = new Set(Object.values(data).flatMap(metric => Object.keys(metric)));
+        const rows = Array.from(dates).sort().map(date => {
+            const row = [new Date(date), ...headers.slice(1).map(header => parseFloat(data[header][date] || 0))];
+            return row;
+        });
+        return [headers, ...rows];
+    }
+
+    // Luego, cuando estés usando transformData:
+    const formattedData = apiData ? transformData(apiData) : [['Date']];
+
+    const lineColors = [gruvboxTheme.palette.info.main, '#FF5733', '#33FF57', '#3357FF'];
 
     const lineOptions = {
         legend: 'none',
         curveType: "function",
         backgroundColor: gruvboxTheme.palette.background.default,
         fontName: gruvboxTheme.typography.fontFamily,
-        colors: [gruvboxTheme.palette.info.main],
+        colors: lineColors.slice(0, formattedData[0].length - 1),
         hAxis: {
             textStyle: {
                 color: gruvboxTheme.palette.text.primary
@@ -108,14 +121,7 @@ const GruvboxGraph = ({ someData }) => {
     };
 
     return (
-        <div style={{ position: 'relative' }}>
-            {/* <Chart
-                chartType="CandlestickChart"
-                width="100%"
-                height="400px"
-                data={data}
-                options={options}
-            /> */}
+        <div style={{ position: 'relative'}}>
             <Chart
                 chartType="LineChart"
                 width="100%"
@@ -135,13 +141,6 @@ const GruvboxGraph = ({ someData }) => {
                 fullWidth
                 maxWidth="lg"
             >
-                {/* <Chart
-                    chartType="CandlestickChart"
-                    width="100%"
-                    height="400px"
-                    data={data}
-                    options={options}
-                /> */}
                 <Chart
                     chartType="LineChart"
                     width="100%"
@@ -149,7 +148,6 @@ const GruvboxGraph = ({ someData }) => {
                     data={formattedData}
                     options={lineOptions}
                 />
-
             </Dialog>
         </div>
     );
