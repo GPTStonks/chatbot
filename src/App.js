@@ -1,7 +1,6 @@
-import { Box, Card, CardContent, Divider, ThemeProvider } from '@mui/material';
+import { Box, Card, Divider, ThemeProvider } from '@mui/material';
 
 import Chatbot from './components/Chatbot';
-import Dashboard from './components/Dashboard';
 import GruvboxGraph from './components/Graph';
 import { gruvboxTheme } from './theme/Theme';
 

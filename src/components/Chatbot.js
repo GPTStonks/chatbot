@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { TextField, Button, List, ListItem, Card, CardContent, Typography, CircularProgress, Box, Avatar } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, CircularProgress, List, ListItem, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BsRobot, BsTerminal } from 'react-icons/bs';
+import React, { useEffect, useRef, useState } from 'react';
+import { BsRobot } from 'react-icons/bs';
 
 import { gruvboxTheme } from '../theme/Theme';
 import GruvboxGraph from './Graph';
-import { sentimentData } from '../const';
 
 /* STYLES */
 

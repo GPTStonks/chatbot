@@ -1,9 +1,8 @@
-import { Box, Card, CardContent, Divider, ThemeProvider, Grid } from '@mui/material';
+import { Box, Card, Divider, Grid, ThemeProvider } from '@mui/material';
 
-import Chatbot from './Chatbot';
-import GruvboxGraph from './Graph';
+import { sentimentData } from '../const';
 import { gruvboxTheme } from '../theme/Theme';
-import { mockData, sentimentData } from '../const';
+import GruvboxGraph from './Graph';
 
 
 function Dashboard() {

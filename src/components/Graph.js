@@ -1,8 +1,7 @@
-import React from 'react';
-import { Chart } from "react-google-charts";
-import { Button, Dialog, IconButton } from '@mui/material';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import { useState } from 'react';
+import { Dialog, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { Chart } from "react-google-charts";
 import { gruvboxTheme } from '../theme/Theme';
 
 const GruvboxGraph = ({ apiData }) => {
