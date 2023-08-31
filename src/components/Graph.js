@@ -8,6 +8,8 @@ import { gruvboxTheme } from '../theme/Theme';
 const GruvboxGraph = ({ apiData }) => {
 
     const [open, setOpen] = useState(false);
+    const [chartType, setChartType] = useState('LineChart');
+    const [chartOptions, setChartOptions] = useState({});
 
     const handleOpen = () => {
         setOpen(true);
@@ -17,20 +19,12 @@ const GruvboxGraph = ({ apiData }) => {
         setOpen(false);
     };
 
-    const data = [
-        ['day', 'low', 'open', 'close', 'high'],
-        ['Mon', 18, 20, 28, 45],
-        ['Tue', 28, 31, 38, 68],
-        ['Wed', 45, 50, 55, 83],
-        ['Thu', 47, 50, 77, 78],
-        ['Fri', 10, 15, 66, 70],
-        ['Sat', 15, 20, 65, 75],
-        ['Sun', 23, 25, 60, 68],
-    ];
-
     /* LINE CHART DATA */
 
     const transformData = (data) => {
+
+        // TODO: identify data type to avoid errors and render the correct Chart type with proper options
+
         if (!data) {
             return [['Date']];
         }
@@ -44,8 +38,11 @@ const GruvboxGraph = ({ apiData }) => {
         return [headers, ...rows];
     }
 
-    // Luego, cuando estés usando transformData:
     const formattedData = apiData ? transformData(apiData) : [['Date']];
+
+    // TODO: unify base options
+
+    /* LINE CHART OPTIONS */
 
     const lineColors = [gruvboxTheme.palette.info.main, '#FF5733', '#33FF57', '#3357FF'];
 
@@ -83,6 +80,8 @@ const GruvboxGraph = ({ apiData }) => {
             startup: true
         }
     };
+
+    /* CORE OPTIONS */
 
     const options = {
         legend: 'none',
@@ -123,7 +122,7 @@ const GruvboxGraph = ({ apiData }) => {
     return (
         <div style={{ position: 'relative'}}>
             <Chart
-                chartType="LineChart"
+                chartType={chartType}
                 width="100%"
                 height="400px"
                 data={formattedData}
@@ -142,7 +141,7 @@ const GruvboxGraph = ({ apiData }) => {
                 maxWidth="lg"
             >
                 <Chart
-                    chartType="LineChart"
+                    chartType={chartType}
                     width="100%"
                     height="400px"
                     data={formattedData}
