@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, CardContent, CircularProgress, List, ListItem, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
-import { BsRobot } from 'react-icons/bs';
+import { BsRobot, BsPersonCircle } from 'react-icons/bs';
 
 import { gruvboxTheme } from '../theme/Theme';
 import GruvboxGraph from './Graph';
@@ -15,7 +15,9 @@ const useStyles = makeStyles({
     width: 'fit-content',
   },
   botCard: {
-    width: '30vw',
+    width: 'fit-content',
+    height: 'fit-content',
+    maxWidth: '40vw',
     margin: '10px',
   },
   progress: {
@@ -39,7 +41,7 @@ const useStyles = makeStyles({
     }
   },
   avatar: {
-    backgroundColor: '#c3c3c3',
+    backgroundColor: gruvboxTheme.palette.text.primary,
     margin: '5px'
   },
 });
@@ -102,7 +104,7 @@ const Chatbot = () => {
           console.log(`Result: ${JSON.stringify(resultData.result)}`);
 
           if (resultData.status === "completed") {
-            botMessageText = resultData.result.result || resultData.result.error;
+            botMessageText = resultData.result || resultData.result.error;
             break;
           }
 
@@ -111,7 +113,7 @@ const Chatbot = () => {
 
         setMessages(prevMessages => {
           const newMessages = [...prevMessages];
-          const botMessage = { text: JSON.stringify(botMessageText), user: 'Bot', graphData: botMessageText };
+          const botMessage = { text: JSON.stringify(botMessageText.body), user: 'Bot', graphData: botMessageText.result_data };
 
           newMessages.pop();
           newMessages.push(botMessage);
@@ -121,7 +123,7 @@ const Chatbot = () => {
 
       } catch (error) {
         setMessages(prevMessages => {
-          const newMessages = prevMessages.slice(0, -1); // remove loading message
+          const newMessages = prevMessages.slice(0, -1);
           return [...newMessages, { text: "Couldn't process the request. Try again.", user: 'Bot' }];
         });
       }
@@ -134,11 +136,9 @@ const Chatbot = () => {
         <List>
           {messages.map((message, index) => (
             <ListItem key={index} style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}>
-              {message.user === 'Bot' && (
-                <Avatar className={classes.avatar}>
-                  <BsRobot />
-                </Avatar>
-              )}
+              <Avatar className={classes.avatar}>
+                {message.user === 'Me' ? <BsPersonCircle size={24} /> : <BsRobot size={24} />}
+              </Avatar>
               {message.loading ? (
                 <CircularProgress className={classes.progress} />
               ) : (
@@ -147,7 +147,7 @@ const Chatbot = () => {
                     <Typography variant="body2" component="p">
                       {message.text}
                     </Typography>
-                    {message.user === 'Bot' ? <GruvboxGraph apiData={message.graphData} /> : <></>}
+                    {message.user === 'Bot' &&  message.graphData && <GruvboxGraph apiData={message.graphData} />}
                   </CardContent>
                 </Card>
               )}

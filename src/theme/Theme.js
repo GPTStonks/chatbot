@@ -34,4 +34,12 @@ export const gruvboxTheme = createTheme({
       secondary: '#d5c4a1',  // dark beige
     },
   },
+  scrollBar: {
+    main: '#d5c4a1',
+    width: '8px',
+  },
+  table: {
+    headerBackground: '#504945',
+  }
+
 });
