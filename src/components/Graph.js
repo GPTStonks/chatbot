@@ -1,7 +1,10 @@
 
 /* React and MUI imports */
 import React, { useEffect, useState } from 'react';
-import { Dialog, IconButton, Button, Menu, Card } from '@mui/material';
+import {
+    Dialog, IconButton, Button, Menu, Card, DialogTitle, DialogActions, DialogContent, List, ListItem, ListItemIcon, Checkbox,
+    ListItemText, ListItemSecondaryAction
+} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 
@@ -19,10 +22,16 @@ import TuneIcon from '@mui/icons-material/Tune';
 import Rotate90DegreesCcwIcon from '@mui/icons-material/Rotate90DegreesCcw';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 /* File download imports */
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+
+/* Columns Editor */
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const lineColors = [gruvboxTheme.palette.info.main, '#FF5733', '#33FF57', '#3357FF'];
 
@@ -109,8 +118,6 @@ const GruvboxGraph = ({ apiData }) => {
     const [formattedData, setFormattedData] = useState([["Answer"]]);
     const [options, setOptions] = useState();
     const [chartType, setChartType] = useState('table');
-    const [columnsInView, setColumnsInView] = useState(null);
-    const [headers, setHeaders] = useState([]);
 
     const [anchorElExport, setAnchorElExport] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -121,6 +128,112 @@ const GruvboxGraph = ({ apiData }) => {
     const [chartWrapper, setChartWrapper] = useState();
     const [google, setGoogle] = useState();
 
+    const [isColumnEditorOpen, setIsColumnEditorOpen] = useState(false);
+    const [columnsInView, setColumnsInView] = useState(null);
+    const [originalHeaders, setOriginalHeaders] = useState(null);
+    const [headers, setHeaders] = useState([]);
+
+    /* COLUMN EDITOR */
+
+    const handleOpenColumnEditor = () => {
+        setIsColumnEditorOpen(true);
+    };
+
+    const handleColumnChange = (newColumnsInView) => {
+        setColumnsInView(newColumnsInView);
+    };
+    const handleResetColumns = () => {
+        setColumnsInView(originalHeaders.map((_, index) => index));
+    };
+
+
+    const ColumnEditor = ({ columns, columnsInView, onColumnChange }) => {
+        const [localColumnsInView, setLocalColumnsInView] = useState(columnsInView);
+        const [hiddenColumns, setHiddenColumns] = useState(
+            columns
+                .map((_, index) => index)
+                .filter((index) => !columnsInView.includes(index))
+        );
+
+        useEffect(() => {
+            setHiddenColumns(
+                columns.map((_, index) => index).filter((index) => !localColumnsInView.includes(index))
+            );
+        }, [localColumnsInView]);
+
+        const handleColumnSelectionChange = (index, isHidden) => {
+            if (isHidden) {
+                setLocalColumnsInView((prevState) => [...prevState, index]);
+            } else {
+                setLocalColumnsInView((prevState) => prevState.filter((i) => i !== index));
+            }
+        };
+
+        const handleMoveColumn = (index, direction) => {
+            setLocalColumnsInView((prevState) => {
+                const newState = [...prevState];
+                const [removedColumn] = newState.splice(index, 1);
+                newState.splice(index + direction, 0, removedColumn);
+                return newState;
+            });
+        };
+
+        useEffect(() => {
+            onColumnChange(localColumnsInView);
+        }, [localColumnsInView]);
+
+        return (
+            <div>
+                <List>
+                    {localColumnsInView.map((colIndex, index) => (
+                        <ListItem key={colIndex} dense>
+                            <ListItemIcon>
+                                <Checkbox
+                                    edge="start"
+                                    checked={!hiddenColumns.includes(colIndex)}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    onClick={() => handleColumnSelectionChange(colIndex, false)}
+                                />
+                            </ListItemIcon>
+                            <ListItemText primary={columns[colIndex]} />
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" onClick={() => handleMoveColumn(index, -1)} disabled={index === 0}>
+                                    <ArrowUpwardIcon />
+                                </IconButton>
+                                <IconButton
+                                    edge="end"
+                                    onClick={() => handleMoveColumn(index, 1)}
+                                    disabled={index === localColumnsInView.length - 1}
+                                >
+                                    <ArrowDownwardIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
+                </List>
+                <h3>Hidden</h3>
+                <List>
+                    {hiddenColumns.map((colIndex) => (
+                        <ListItem key={colIndex} dense>
+                            <ListItemIcon>
+                                <Checkbox
+                                    edge="start"
+                                    checked={false}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    onClick={() => handleColumnSelectionChange(colIndex, true)}
+                                />
+                            </ListItemIcon>
+                            <ListItemText primary={columns[colIndex]} />
+                        </ListItem>
+                    ))}
+                </List>
+            </div>
+        );
+    };
+
+    /* ----------------- */
     /* CHART SETTINGS */
 
     const handleClickChartSettings = (event) => {
@@ -291,24 +404,23 @@ const GruvboxGraph = ({ apiData }) => {
     /* ----------------- */
     /* TRANSFORMATION FUNCTION TO APIDATA */
 
-    const transformData = (data, columnsToView) => {
+
+    const transformData = (data) => {
         let newChartType = "LineChart";
         let newOptions;
 
-        console.log(data)
         const series = Object.keys(data);
         const pandasIndices = [...new Set(Object.values(data).flatMap(serieData => Object.keys(serieData)))];
-        console.log(pandasIndices);
+
         const rows = pandasIndices.sort().map(pandasIndex => {
             newChartType = "Table";
             let row = [
                 pandasIndex,
                 ...series.map(serie => parseFloat(data[serie][pandasIndex]) || data[serie][pandasIndex])
             ];
-            console.log(row);
             return row;
         });
-        let newHeaders = [...series];
+        let newHeaders = ["Index", ...series];
         if (newHeaders.length === rows[0].length - 1) {
             newHeaders = ["Index", ...newHeaders];
         }
@@ -323,8 +435,6 @@ const GruvboxGraph = ({ apiData }) => {
         }
         setHeaders(newHeaders);
 
-        console.log(newFormattedData);
-
         if (newChartType === "LineChart") {
             newOptions = dateLineOptions(newFormattedData);
         } else if (newChartType === "BarChart") {
@@ -338,20 +448,11 @@ const GruvboxGraph = ({ apiData }) => {
         return {
             newFormattedData,
             newOptions,
-            newChartType
+            newChartType,
+            newHeaders
         };
-    }
-    /*-----------------*/
-    /* USE EFFECTS */
+    };
 
-    useEffect(() => {
-        if (apiData) {
-            const { newFormattedData, newOptions, newChartType } = transformData(apiData);
-            setFormattedData(newFormattedData);
-            setOptions(newOptions);
-            setChartType(newChartType);
-        }
-    }, [apiData]);
 
     /* ----------------- */
     /* CHART EDITOR */
@@ -378,6 +479,23 @@ const GruvboxGraph = ({ apiData }) => {
         });
     };
 
+    /*-----------------*/
+    /* USE EFFECTS */
+
+    const updateFormattedData = () => {
+        if (apiData) {
+            const { newFormattedData, newOptions, newChartType, newHeaders } = transformData(apiData);
+            setFormattedData(newFormattedData);
+            setOptions(newOptions);
+            setChartType(newChartType);
+            setOriginalHeaders(newHeaders);
+        }
+    };
+
+    useEffect(() => {
+        updateFormattedData();
+    }, [apiData]);
+
     /* ----------------- */
     /* RENDER */
 
@@ -385,11 +503,12 @@ const GruvboxGraph = ({ apiData }) => {
 
         <div style={{ overflow: 'auto' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1 }}>
+
                 <Chart
                     chartType={chartType}
                     width="100%"
                     height="400px"
-                    data={formattedData || DefaultData}
+                    data={formattedData}
                     options={modifiedChartOptions || options}
                     chartPackages={["corechart", "controls", "charteditor"]}
                     getChartEditor={({ chartEditor, chartWrapper, google }) => {
@@ -422,6 +541,7 @@ const GruvboxGraph = ({ apiData }) => {
                         />
                     </Box>
                 </Dialog>
+
                 <IconButton
                     aria-label="settings"
                     className={rotated ? classes.rotate : ''}
@@ -440,7 +560,7 @@ const GruvboxGraph = ({ apiData }) => {
                     <MenuItem onClick={() => { handleCloseChartSettings(); onEditClick(); }}>
                         Customize Chart <TuneIcon style={{ marginLeft: 20 }} />
                     </MenuItem>
-                    <MenuItem onClick={handleCloseChartSettings}>
+                    <MenuItem onClick={() => { handleCloseChartSettings(); handleOpenColumnEditor(); }}>
                         Edit Columns <Rotate90DegreesCcwIcon style={{ marginLeft: 'auto' }} />
                     </MenuItem>
                     <MenuItem
@@ -448,7 +568,6 @@ const GruvboxGraph = ({ apiData }) => {
                         style={{ position: 'relative' }}
                     >
                         Export Data <FileDownloadIcon style={{ marginLeft: 'auto' }} />
-
                         <Menu
                             id="export-menu"
                             anchorEl={anchorElExport}
@@ -467,6 +586,29 @@ const GruvboxGraph = ({ apiData }) => {
                         Expand <OpenInFullIcon style={{ marginLeft: 'auto' }} />
                     </MenuItem>
                 </Menu>
+                <Dialog
+                    open={isColumnEditorOpen}
+                    onClose={() => setIsColumnEditorOpen(false)}
+                    fullWidth
+                >
+                    <DialogTitle>Edit Columns</DialogTitle>
+                    <DialogContent>
+                        <ColumnEditor
+                            columns={headers}
+                            columnsInView={columnsInView}
+                            onColumnChange={handleColumnChange}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setIsColumnEditorOpen(false)}>Cancel</Button>
+                        <Button onClick={() => {
+                            handleColumnChange(columnsInView);
+                            setIsColumnEditorOpen(false);
+                            updateFormattedData();
+                        }}>SAVE</Button>
+                        <Button onClick={handleResetColumns}>Reset to Default</Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </div>
     );
