@@ -30,9 +30,9 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 /* Columns Editor */
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
+/* import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
+ */
 const lineColors = [gruvboxTheme.palette.info.main, '#FF5733', '#33FF57', '#3357FF'];
 
 
