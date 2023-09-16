@@ -1,4 +1,15 @@
-import { Avatar, Box, Button, Card, CardContent, CircularProgress, List, ListItem, TextField, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  List,
+  ListItem,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsRobot, BsPersonCircle } from 'react-icons/bs';
@@ -21,28 +32,28 @@ const useStyles = makeStyles({
     margin: '10px',
   },
   progress: {
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   chatArea: {
     height: 'calc(100vh - 100px)',
     overflowY: 'scroll',
     '&::-webkit-scrollbar': {
-      width: '10px'
+      width: '10px',
     },
     '&::-webkit-scrollbar-track': {
       background: gruvboxTheme.palette.background.paper,
     },
     '&::-webkit-scrollbar-thumb': {
       background: gruvboxTheme.palette.text.primary,
-      borderRadius: '5px'
+      borderRadius: '5px',
     },
     '&::-webkit-scrollbar-thumb:hover': {
       background: gruvboxTheme.palette.text.secondary,
-    }
+    },
   },
   avatar: {
     backgroundColor: gruvboxTheme.palette.text.primary,
-    margin: '5px'
+    margin: '5px',
   },
 });
 
@@ -55,8 +66,8 @@ const Chatbot = () => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
@@ -72,7 +83,7 @@ const Chatbot = () => {
       const userMessage = { text: newMessage, user: 'Me' };
       const loadingMessage = { loading: true };
 
-      setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
+      setMessages((prevMessages) => [...prevMessages, userMessage, loadingMessage]);
 
       setNewMessage('');
 
@@ -80,9 +91,9 @@ const Chatbot = () => {
         let response = await fetch('http://localhost:8000/process_query_async', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ query: newMessage })
+          body: JSON.stringify({ query: newMessage }),
         });
 
         if (!response.ok) {
@@ -103,28 +114,34 @@ const Chatbot = () => {
           console.log(`Status: ${resultData.status}`);
           console.log(`Result: ${JSON.stringify(resultData.result)}`);
 
-          if (resultData.status === "completed") {
+          if (resultData.status === 'completed') {
             botMessageText = resultData.result || resultData.result.error;
             break;
           }
 
-          await new Promise(resolve => setTimeout(resolve, 5000));
+          await new Promise((resolve) => setTimeout(resolve, 5000));
         }
 
-        setMessages(prevMessages => {
+        setMessages((prevMessages) => {
           const newMessages = [...prevMessages];
-          const botMessage = { text: JSON.stringify(botMessageText.body), user: 'Bot', graphData: botMessageText.result_data };
+          const botMessage = {
+            text: JSON.stringify(botMessageText.body),
+            user: 'Bot',
+            graphData: botMessageText.result_data,
+          };
 
           newMessages.pop();
           newMessages.push(botMessage);
 
           return newMessages;
         });
-
       } catch (error) {
-        setMessages(prevMessages => {
+        setMessages((prevMessages) => {
           const newMessages = prevMessages.slice(0, -1);
-          return [...newMessages, { text: "Couldn't process the request. Try again.", user: 'Bot' }];
+          return [
+            ...newMessages,
+            { text: "Couldn't process the request. Try again.", user: 'Bot' },
+          ];
         });
       }
     }
@@ -135,7 +152,10 @@ const Chatbot = () => {
       <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
         <List>
           {messages.map((message, index) => (
-            <ListItem key={index} style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}>
+            <ListItem
+              key={index}
+              style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}
+            >
               <Avatar className={classes.avatar}>
                 {message.user === 'Me' ? <BsPersonCircle size={24} /> : <BsRobot size={24} />}
               </Avatar>
@@ -147,7 +167,9 @@ const Chatbot = () => {
                     <Typography variant="body2" component="p">
                       {message.text}
                     </Typography>
-                    {message.user === 'Bot' &&  message.graphData && <GruvboxGraph apiData={message.graphData} />}
+                    {message.user === 'Bot' && message.graphData && (
+                      <GruvboxGraph apiData={message.graphData} />
+                    )}
                   </CardContent>
                 </Card>
               )}
@@ -156,21 +178,23 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </List>
       </Box>
-      <Box sx={{ position: "fixed", right: "0", bottom: "3%", left: "0" }} >
+      <Box sx={{ position: 'fixed', right: '0', bottom: '3%', left: '0' }}>
         <TextField
           value={newMessage}
-          onChange={event => setNewMessage(event.target.value)}
+          onChange={(event) => setNewMessage(event.target.value)}
           label="Specify your message here"
-          sx={{ width: "50%" }}
+          sx={{ width: '50%' }}
           onKeyDown={handleKeyDown}
         />
-        <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>Send</Button>
+        <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
+          Send
+        </Button>
         {/* <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
           <BsTerminal size={24}/>
         </Button> */}
       </Box>
-    </div >
+    </div>
   );
-}
+};
 
 export default Chatbot;
