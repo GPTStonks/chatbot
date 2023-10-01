@@ -1,110 +1,135 @@
 import React, { useState, useRef, useEffect } from 'react';
+
+// React Router imports
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+
+// MUI imports
 import { Box, Card, Divider, ThemeProvider, IconButton, Tooltip } from '@mui/material';
-import Chatbot from './components/Chatbot';
-import GruvboxGraph from './components/Graph';
-import Dashboard from './components/Dashboard'; // Importa el componente Dashboard
-import { gruvboxTheme } from './theme/Theme';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import './App.css';
+import KeyIcon from '@mui/icons-material/Key';
+
+// Custom components imports
+import Chatbot from './components/Chatbot';
+import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
+import ApikeyList from './components/ApikeyList';
+
+// Icons & Themes
+import { gruvboxTheme } from './theme/Theme';
 import { BsQuestion } from 'react-icons/bs';
 
+// App styles
+import './App.css';
+import { Home } from '@mui/icons-material';
+
+/**
+ * Main App component that renders the overall layout and routing for the application.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered component
+ */
 function App() {
-  const [showDashboard, setShowDashboard] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   const footerRef = useRef(null);
-
-  const toggleDashboard = () => {
-    setShowDashboard(!showDashboard);
-  };
 
   const toggleFooter = () => {
     setShowFooter(!showFooter);
   };
 
-  useEffect(() => {
-    const handleDocumentClick = (event) => {
-      if (showFooter && footerRef.current && !footerRef.current.contains(event.target)) {
-        setShowFooter(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleDocumentClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleDocumentClick);
-    };
-  }, [showFooter]);
-
   return (
-    <div
-      className="App"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        backgroundColor: gruvboxTheme.palette.background.default,
-        position: 'relative',
-      }}
-    >
+    <BrowserRouter>
       <ThemeProvider theme={gruvboxTheme}>
-        <img
-          src="/logo.png"
-          alt="logo"
-          style={{ position: 'absolute', left: '1.5%', top: '2%', width: '200px' }}
-        />
-        <Divider
-          orientation="vertical"
-          style={{ backgroundColor: '#ebdbb2' }}
-          sx={{ position: 'absolute', left: '17vw', height: '95vh', m: 3 }}
-        />
-        <Box sx={{ position: 'absolute', width: '78vw', right: 0 }}>
-          {showDashboard ? <Dashboard /> : <Chatbot />}
-          <Tooltip title="Dashboard" placement="top">
-            <IconButton
-              onClick={toggleDashboard}
-              sx={{
-                position: 'fixed',
-                bottom: '3.5%',
-                right: '1.5%',
-                backgroundColor: gruvboxTheme.table.headerBackground,
-                color: gruvboxTheme.palette.text.primary,
-              }}
-            >
-              <DashboardIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
-        <IconButton
-          onClick={toggleFooter}
-          sx={{
-            position: 'fixed',
-            bottom: '3.5%',
-            left: '1.5%',
-            backgroundColor: gruvboxTheme.table.headerBackground,
-            color: gruvboxTheme.palette.text.primary,
+        <div
+          className="App"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+            backgroundColor: gruvboxTheme.palette.background.default,
+            position: 'relative',
           }}
         >
-          <BsQuestion />
-        </IconButton>
+          <Routes>
+            <Route path="/" element={<Chatbot />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/apiKeyList" element={<ApikeyList />} />
+          </Routes>
 
-        {showFooter && (
-          <Card
-            ref={footerRef}
+          <Link to="/dashboard">
+            <Tooltip title="Dashboard" placement="top">
+              <IconButton
+                sx={{
+                  position: 'fixed',
+                  bottom: '8.5%',
+                  right: '1.5%',
+                  backgroundColor: gruvboxTheme.table.headerBackground,
+                  color: gruvboxTheme.palette.text.primary,
+                }}
+              >
+                <DashboardIcon />
+              </IconButton>
+            </Tooltip>
+          </Link>
+          <Link to="/">
+            <Tooltip title="Home" placement="bottom">
+              <IconButton
+                sx={{
+                  position: 'fixed',
+                  bottom: '3.5%',
+                  right: '1.5%',
+                  backgroundColor: gruvboxTheme.table.headerBackground,
+                  color: gruvboxTheme.palette.text.primary,
+                }}
+              >
+                <Home />
+              </IconButton>
+            </Tooltip>
+          </Link>
+          <Link to="/apiKeyList">
+            <Tooltip title="API Settings" placement="top">
+              <IconButton
+                sx={{
+                  position: 'fixed',
+                  top: '3.5%',
+                  right: '1.5%',
+                  backgroundColor: gruvboxTheme.table.headerBackground,
+                  color: gruvboxTheme.palette.text.primary,
+                }}
+              >
+                <KeyIcon />
+              </IconButton>
+            </Tooltip>
+          </Link>
+          <IconButton
+            onClick={toggleFooter}
             sx={{
-              position: 'absolute',
-              bottom: '5%',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '60vw',
-              zIndex: 2,
+              position: 'fixed',
+              bottom: '3.5%',
+              left: '1.5%',
+              backgroundColor: gruvboxTheme.table.headerBackground,
+              color: gruvboxTheme.palette.text.primary,
             }}
           >
-            <Footer />
-          </Card>
-        )}
+            <BsQuestion />
+          </IconButton>
+          {showFooter && (
+            <Card
+              ref={footerRef}
+              sx={{
+                position: 'absolute',
+                bottom: '5%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '60vw',
+                zIndex: 2,
+              }}
+            >
+              <Footer closeFooter={toggleFooter} />
+            </Card>
+          )}
+        </div>
       </ThemeProvider>
-    </div>
+    </BrowserRouter>
   );
 }
 

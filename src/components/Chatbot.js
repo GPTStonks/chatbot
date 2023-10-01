@@ -9,6 +9,7 @@ import {
   ListItem,
   TextField,
   Typography,
+  Divider,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
@@ -148,52 +149,64 @@ const Chatbot = () => {
   };
 
   return (
-    <div>
-      <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
-        <List>
-          {messages.map((message, index) => (
-            <ListItem
-              key={index}
-              style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}
-            >
-              <Avatar className={classes.avatar}>
-                {message.user === 'Me' ? <BsPersonCircle size={24} /> : <BsRobot size={24} />}
-              </Avatar>
-              {message.loading ? (
-                <CircularProgress className={classes.progress} />
-              ) : (
-                <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
-                  <CardContent>
-                    <Typography variant="body2" component="p">
-                      {message.text}
-                    </Typography>
-                    {message.user === 'Bot' && message.graphData && (
-                      <GruvboxGraph apiData={message.graphData} />
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </ListItem>
-          ))}
-          <div ref={messagesEndRef} />
-        </List>
-      </Box>
-      <Box sx={{ position: 'fixed', right: '0', bottom: '3%', left: '0' }}>
-        <TextField
-          value={newMessage}
-          onChange={(event) => setNewMessage(event.target.value)}
-          label="Specify your message here"
-          sx={{ width: '50%' }}
-          onKeyDown={handleKeyDown}
-        />
-        <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
-          Send
-        </Button>
-        {/* <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
+    <>
+      <img
+        src="/logo.png"
+        alt="logo"
+        style={{ position: 'absolute', left: '1.5%', top: '2%', width: '200px' }}
+      />
+      <Divider
+        orientation="vertical"
+        style={{ backgroundColor: '#ebdbb2' }}
+        sx={{ position: 'absolute', left: '17vw', height: '95vh', m: 3 }}
+      />
+      <Box sx={{ position: 'absolute', width: '78vw', right: 0 }}>
+        <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
+          <List>
+            {messages.map((message, index) => (
+              <ListItem
+                key={index}
+                style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}
+              >
+                <Avatar className={classes.avatar}>
+                  {message.user === 'Me' ? <BsPersonCircle size={24} /> : <BsRobot size={24} />}
+                </Avatar>
+                {message.loading ? (
+                  <CircularProgress className={classes.progress} />
+                ) : (
+                  <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
+                    <CardContent>
+                      <Typography variant="body2" component="p">
+                        {message.text}
+                      </Typography>
+                      {message.user === 'Bot' && message.graphData && (
+                        <GruvboxGraph apiData={message.graphData} />
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+              </ListItem>
+            ))}
+            <div ref={messagesEndRef} />
+          </List>
+        </Box>
+        <Box sx={{ position: 'fixed', right: '0', bottom: '3%', left: '0' }}>
+          <TextField
+            value={newMessage}
+            onChange={(event) => setNewMessage(event.target.value)}
+            label="Specify your message here"
+            sx={{ width: '50%' }}
+            onKeyDown={handleKeyDown}
+          />
+          <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
+            Send
+          </Button>
+          {/* <Button variant="contained" color="primary" onClick={sendMessage} sx={{ m: 1 }}>
           <BsTerminal size={24}/>
         </Button> */}
+        </Box>
       </Box>
-    </div>
+    </>
   );
 };
 
