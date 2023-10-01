@@ -1,6 +1,14 @@
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Box, Container, Grid, Typography, Link, IconButton, Divider } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link,
+  IconButton,
+  Divider,
+  Tooltip,
+} from '@mui/material';
 import {
   Twitter,
   Google,
@@ -11,16 +19,30 @@ import {
   Email,
   Phone,
   Print,
+  CloseOutlined,
 } from '@mui/icons-material';
 
 import LinkIcon from '@mui/icons-material/Link';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useTheme } from '@emotion/react';
 
-function Footer() {
+function Footer({ closeFooter }) {
   const theme = useTheme();
   return (
     <Box sx={{ p: 4, backgroundColor: theme.palette.background.paper }}>
+      <Tooltip title="Close Footer" placement="top">
+        <IconButton
+          onClick={closeFooter}
+          sx={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            color: theme.palette.primary.main,
+          }}
+        >
+          <CloseOutlined />
+        </IconButton>
+      </Tooltip>
       <Container>
         <Grid container spacing={5}>
           <Grid item xs={12} md={4}>
