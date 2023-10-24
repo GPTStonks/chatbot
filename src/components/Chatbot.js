@@ -15,8 +15,10 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsRobot, BsPersonCircle } from 'react-icons/bs';
 
-import { gruvboxTheme } from '../theme/Theme';
+import { chatbotZIndex, gruvboxTheme, rightFixedPercentage } from '../theme/Theme';
 import GruvboxGraph from './Graph';
+import { API_DEFAULT_PORT, API_DEFAULT_URL, NOTHING_RETURNED } from '../constants/API';
+import UsefulCommands from './UsefulCommands';
 
 /* STYLES */
 
@@ -34,6 +36,8 @@ const useStyles = makeStyles({
   },
   progress: {
     alignSelf: 'flex-start',
+    marginTop: 5,
+    scale: 0.75,
   },
   chatArea: {
     height: 'calc(100vh - 100px)',
@@ -58,6 +62,11 @@ const useStyles = makeStyles({
   },
 });
 
+/* CONSTANTS */
+
+const botUser = 'Bot';
+const humanUser = 'Me';
+
 /* COMPONENT */
 
 const Chatbot = () => {
@@ -81,7 +90,7 @@ const Chatbot = () => {
 
   const sendMessage = async () => {
     if (newMessage.trim() !== '') {
-      const userMessage = { text: newMessage, user: 'Me' };
+      const userMessage = { text: newMessage, user: humanUser };
       const loadingMessage = { loading: true };
 
       setMessages((prevMessages) => [...prevMessages, userMessage, loadingMessage]);
@@ -89,7 +98,7 @@ const Chatbot = () => {
       setNewMessage('');
 
       try {
-        let response = await fetch('http://localhost:8000/process_query_async', {
+        let response = await fetch(`${API_DEFAULT_URL}:${API_DEFAULT_PORT}/process_query_async`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -103,13 +112,13 @@ const Chatbot = () => {
 
         const data = await response.json();
         const jobId = data.job_id;
-        console.log(data);
-        console.log(jobId);
 
         let botMessageText;
 
         while (true) {
-          response = await fetch(`http://localhost:8000/get_processing_result/${jobId}`);
+          response = await fetch(
+            `${API_DEFAULT_URL}:${API_DEFAULT_PORT}/get_processing_result/${jobId}`,
+          );
           const resultData = await response.json();
 
           console.log(`Status: ${resultData.status}`);
@@ -125,11 +134,21 @@ const Chatbot = () => {
 
         setMessages((prevMessages) => {
           const newMessages = [...prevMessages];
+          let plotData = null;
+          if (
+            botMessageText.result_data != null &&
+            Object.keys(botMessageText.result_data).length > 0 &&
+            botMessageText.result_data !== NOTHING_RETURNED
+          ) {
+            plotData = botMessageText.result_data;
+          }
           const botMessage = {
             text: JSON.stringify(botMessageText.body),
-            user: 'Bot',
-            graphData: botMessageText.result_data,
+            user: botUser,
+            graphData: plotData,
           };
+
+          console.log(botMessage.graphData);
 
           newMessages.pop();
           newMessages.push(botMessage);
@@ -141,7 +160,7 @@ const Chatbot = () => {
           const newMessages = prevMessages.slice(0, -1);
           return [
             ...newMessages,
-            { text: "Couldn't process the request. Try again.", user: 'Bot' },
+            { text: "Couldn't process the request. Try again.", user: botUser },
           ];
         });
       }
@@ -160,26 +179,32 @@ const Chatbot = () => {
         style={{ backgroundColor: '#ebdbb2' }}
         sx={{ position: 'absolute', left: '17vw', height: '95vh', m: 3 }}
       />
-      <Box sx={{ position: 'absolute', width: '78vw', right: 0 }}>
+
+      <UsefulCommands />
+      <Box sx={{ position: 'absolute', width: '78vw', right: 0, zIndex: chatbotZIndex }}>
         <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
           <List>
             {messages.map((message, index) => (
               <ListItem
                 key={index}
-                style={{ flexDirection: message.user === 'Me' ? 'row-reverse' : 'row' }}
+                style={{ flexDirection: message.user === humanUser ? 'row-reverse' : 'row' }}
               >
                 <Avatar className={classes.avatar}>
-                  {message.user === 'Me' ? <BsPersonCircle size={24} /> : <BsRobot size={24} />}
+                  {message.user === humanUser ? (
+                    <BsPersonCircle size={24} />
+                  ) : (
+                    <BsRobot size={24} />
+                  )}
                 </Avatar>
                 {message.loading ? (
                   <CircularProgress className={classes.progress} />
                 ) : (
-                  <Card className={message.user === 'Me' ? classes.userCard : classes.botCard}>
+                  <Card className={message.user === humanUser ? classes.userCard : classes.botCard}>
                     <CardContent>
                       <Typography variant="body2" component="p">
                         {message.text}
                       </Typography>
-                      {message.user === 'Bot' && message.graphData && (
+                      {message.user === botUser && message.graphData && (
                         <GruvboxGraph apiData={message.graphData} />
                       )}
                     </CardContent>

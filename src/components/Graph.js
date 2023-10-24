@@ -1,48 +1,46 @@
 /* React and MUI imports */
-import React, { useEffect, useState } from 'react';
 import {
-  Dialog,
-  IconButton,
   Button,
-  Menu,
-  Card,
-  DialogTitle,
+  Checkbox,
+  Dialog,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
-  Checkbox,
-  ListItemText,
   ListItemSecondaryAction,
+  ListItemText,
+  Menu,
+  Tooltip,
 } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useEffect, useState } from 'react';
 
 /* Chart imports */
-import { GoogleChartEditor, GoogleChartWrapper, GoogleViz, Chart } from 'react-google-charts';
+import { Chart } from 'react-google-charts';
 
 /* Theme imports */
-import { gruvboxTheme } from '../theme/Theme';
 import { makeStyles } from '@mui/styles';
+import { gruvboxTheme } from '../theme/Theme';
 import '../theme/table.css';
 
 /* Icons imports */
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import Rotate90DegreesCcwIcon from '@mui/icons-material/Rotate90DegreesCcw';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
-import Rotate90DegreesCcwIcon from '@mui/icons-material/Rotate90DegreesCcw';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 /* File download imports */
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 /* Columns Editor */
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const lineColors = [gruvboxTheme.palette.info.main, '#FF5733', '#33FF57', '#3357FF'];
 
@@ -552,14 +550,16 @@ const GruvboxGraph = ({ apiData }) => {
           </Box>
         </Dialog>
 
-        <IconButton
-          aria-label="settings"
-          className={rotated ? classes.rotate : ''}
-          onClick={handleClickChartSettings}
-          sx={{ color: gruvboxTheme.scrollBar.main }}
-        >
-          <SettingsIcon />
-        </IconButton>
+        <Tooltip title="Chart Settings" placement="top">
+          <IconButton
+            aria-label="settings"
+            className={rotated ? classes.rotate : ''}
+            onClick={handleClickChartSettings}
+            sx={{ color: gruvboxTheme.scrollBar.main }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}

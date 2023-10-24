@@ -11,6 +11,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -29,6 +30,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
+import { API_DEFAULT_PORT, API_DEFAULT_URL } from '../constants/API';
 
 function ApikeyList() {
   const theme = useTheme();
@@ -53,7 +55,7 @@ function ApikeyList() {
   useEffect(() => {
     async function fetchAPIKeys() {
       try {
-        const response = await fetch('http://localhost:8000/get_api_keys');
+        const response = await fetch(`${API_DEFAULT_URL}:${API_DEFAULT_PORT}/get_api_keys`);
         const data = await response.json();
         setAvailableAPIs(data.result);
       } catch (error) {
@@ -76,7 +78,7 @@ function ApikeyList() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch('http://localhost:8000/set_api_keys', {
+      const response = await fetch(`${API_DEFAULT_PORT}:${API_DEFAULT_PORT}/set_api_keys`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -156,128 +158,152 @@ function ApikeyList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Paper
-        style={{ padding: 16, margin: 'auto', backgroundColor: theme.palette.background.paper }}
-      >
-        <Box
-          display="flex"
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          sx={{ mt: 2, mb: 2 }}
-        >
-          <Button
-            variant="outlined"
-            startIcon={<InfoIcon />}
-            onClick={handleOpenDialog}
-            color="info"
-            sx={{ zIndex: 1000 }}
-          >
-            Info
-          </Button>
+      {Object.keys(availableAPIs).length === 0 ? (
+        <Box sx={{ mt: 2 }}>
+          <CircularProgress color="info" />
           <Typography
-            variant="h5"
-            gutterBottom
-            sx={{ mt: 5, mb: 3, fontWeight: 'bold', position: 'absolute', right: 0, left: 0 }}
+            variant="h6"
+            align="center"
+            sx={{ mt: 5, mb: 3, color: theme.palette.text.primary }}
           >
-            API Keys Settings
+            Loading APIs...
+          </Typography>
+        </Box>
+      ) : (
+        <Paper
+          style={{
+            marginTop: 20,
+            marginBot: 20,
+            padding: 16,
+            margin: 'auto',
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: '10px',
+          }}
+        >
+          <Box display="flex" alignItems={'center'} justifyContent={'space-between'} sx={{ mt: 2 }}>
+            <Button
+              variant="outlined"
+              startIcon={<InfoIcon />}
+              onClick={handleOpenDialog}
+              color="info"
+              sx={{ zIndex: 1000 }}
+            >
+              Info
+            </Button>
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{ mt: 5, mb: 3, fontWeight: 'bold', position: 'absolute', right: 0, left: 0 }}
+            >
+              API Keys Settings
+            </Typography>
+
+            <FormControl
+              sx={{
+                width: '8vw',
+                mt: 2,
+              }}
+            >
+              <InputLabel id="filter-label">Filter</InputLabel>
+              <Select
+                labelId="filter-label"
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="configured">Configured</MenuItem>
+                <MenuItem value="notConfigured">Not Configured</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Typography variant="caption" display="flex" width="30vw" marginTop={3}>
+            In this section you can set the API keys for the APIs you want to use.
           </Typography>
 
-          <FormControl
-            sx={{
-              width: '8vw',
-              mt: 2,
-            }}
-          >
-            <InputLabel id="filter-label">Filter</InputLabel>
-            <Select
-              labelId="filter-label"
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="configured">Configured</MenuItem>
-              <MenuItem value="notConfigured">Not Configured</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <List sx={{ bgcolor: 'background.paper' }}>
-          {Object.entries(availableAPIs).length === 0 && filter === 'all' ? (
-            <Typography variant="h6" align="center" sx={{ mt: 5, mb: 3 }}>
-              Loading APIs...
-            </Typography>
-          ) : (
-            <>
-              {Object.entries(availableAPIs).map(([api, keys]) => {
-                if (
-                  (filter === 'configured' && !isConfigured(api)) ||
-                  (filter === 'notConfigured' && isConfigured(api))
-                ) {
-                  return null;
-                }
-                return (
-                  <Box key={api}>
-                    <ListItem
-                      sx={{ alignItems: 'flex-start', flexDirection: 'row' }}
-                      disablePadding
-                    >
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          checked={keys.some((key) => apiKeys[api] && apiKeys[api][key])}
-                          tabIndex={-1}
-                          disableRipple
-                          disabled
-                          sx={{
-                            mt: 1,
-                          }}
+          <List sx={{ bgcolor: 'background.paper' }}>
+            {Object.entries(availableAPIs).length === 0 && filter === 'all' ? (
+              <Typography variant="h6" align="center" sx={{ mt: 5, mb: 3 }}>
+                Loading APIs...
+              </Typography>
+            ) : (
+              <>
+                {Object.entries(availableAPIs).map(([api, keys]) => {
+                  if (
+                    (filter === 'configured' && !isConfigured(api)) ||
+                    (filter === 'notConfigured' && isConfigured(api))
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <Box key={api}>
+                      <ListItem
+                        sx={{ alignItems: 'flex-start', flexDirection: 'row' }}
+                        disablePadding
+                      >
+                        <ListItemIcon>
+                          <Checkbox
+                            edge="start"
+                            checked={keys.some((key) => apiKeys[api] && apiKeys[api][key])}
+                            tabIndex={-1}
+                            disableRipple
+                            disabled
+                            sx={{
+                              mt: 1,
+                            }}
+                          />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={<strong>{api.toUpperCase()}</strong>}
+                          sx={{ mt: 2, mr: 2 }}
                         />
-                      </ListItemIcon>
-                      <ListItemText primary={api.toUpperCase()} sx={{ mt: 2, mr: 2 }} />
 
-                      {keys.map((key) => (
-                        <TextField
-                          key={`${api}-${key}`}
-                          label={key}
-                          variant="outlined"
-                          value={apiKeys[api]?.[key] || ''}
-                          onChange={handleInputChange(api, key)}
-                          placeholder="API Key"
-                          sx={{ mt: 1, ml: 2 }}
-                        />
-                      ))}
-                    </ListItem>
-                    <Divider orientation="horizontal" sx={{ flexDirection: 'column', m: 2 }} />
-                  </Box>
-                );
-              })}
+                        {keys.map((key) => (
+                          <TextField
+                            key={`${api}-${key}`}
+                            label={key}
+                            variant="outlined"
+                            value={apiKeys[api]?.[key] || ''}
+                            onChange={handleInputChange(api, key)}
+                            placeholder="API Key"
+                            size="small"
+                            sx={{ mt: 1, ml: 2, maxWidth: '7.5vw', fontStyle: 'italic' }}
+                          />
+                        ))}
+                      </ListItem>
+                      <Divider orientation="horizontal" sx={{ flexDirection: 'column', m: 2 }} />
+                    </Box>
+                  );
+                })}
 
-              {filter === 'configured' && !anyConfigured() && (
-                <Typography variant="h7" align="center" sx={{ mt: 5, mb: 3 }}>
-                  Not found any configured API keys. Make sure to set some and save!
-                </Typography>
-              )}
-
-              {filter === 'notConfigured' &&
-                anyConfigured() &&
-                Object.keys(availableAPIs).length === Object.keys(apiKeys).length && (
-                  <Typography variant="h6" align="center" sx={{ mt: 5, mb: 3 }}>
-                    All APIs are configured.
+                {filter === 'configured' && !anyConfigured() && (
+                  <Typography variant="h7" align="center" sx={{ mt: 5, mb: 3 }}>
+                    Not found any configured API keys. Make sure to set some and save!
                   </Typography>
                 )}
-            </>
-          )}
 
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<SaveIcon />}
-            onClick={handleSave}
-            sx={{ mt: 3, position: 'fixed', bottom: '5%', width: '5vw' }}
-          >
-            Save
-          </Button>
-        </List>
-      </Paper>
+                {filter === 'notConfigured' &&
+                  anyConfigured() &&
+                  Object.keys(availableAPIs).length === Object.keys(apiKeys).length && (
+                    <Typography variant="h6" align="center" sx={{ mt: 5, mb: 3 }}>
+                      All APIs are configured.
+                    </Typography>
+                  )}
+              </>
+            )}
+
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<SaveIcon />}
+              onClick={handleSave}
+              sx={{ mt: 3, position: 'fixed', bottom: '5%', width: '5vw' }}
+            >
+              Save
+            </Button>
+          </List>
+        </Paper>
+      )}
     </>
   );
 }
