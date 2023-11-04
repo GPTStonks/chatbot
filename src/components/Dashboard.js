@@ -1,6 +1,6 @@
-import { Box, Card, Divider, Grid, ThemeProvider } from '@mui/material';
+import { Box, Card, Grid } from '@mui/material';
 
-import { sentimentData } from '../const';
+import { mockData, sentimentData } from '../constants/mockData';
 import GruvboxGraph from './Graph';
 
 import { useTheme } from '@emotion/react';
@@ -12,22 +12,22 @@ function Dashboard() {
       className="Dashboard"
       style={{ backgroundColor: theme.palette.background.default, height: '100vh' }}
     >
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 3, animation: 'ease-in' }}>
         <Grid container spacing={3}>
           <Grid container item xs={12} spacing={3}>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph someData={sentimentData} />
+                <GruvboxGraph apiData={mockData} />
               </Card>
             </Grid>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph />
+                <GruvboxGraph apiData={sentimentData} />
               </Card>
             </Grid>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph />
+                <GruvboxGraph apiData={mockData} />
               </Card>
             </Grid>
           </Grid>
@@ -35,17 +35,17 @@ function Dashboard() {
           <Grid container item xs={12} spacing={3}>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph />
+                <GruvboxGraph apiData={sentimentData} />
               </Card>
             </Grid>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph />
+                <GruvboxGraph apiData={mockData} />
               </Card>
             </Grid>
             <Grid item xs={4}>
               <Card>
-                <GruvboxGraph />
+                <GruvboxGraph apiData={sentimentData} />
               </Card>
             </Grid>
           </Grid>

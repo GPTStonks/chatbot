@@ -41,3 +41,16 @@ export const gruvboxTheme = createTheme({
     headerBackground: '#504945',
   },
 });
+
+// OFFSETS, LAYOUT and Z-INDEX CONSTANTS
+
+export const topFixedPercentage = '3.5%';
+export const rightFixedPercentage = '2%';
+export const bottomFixedPercentage = '3.5%';
+export const leftFixedPercentage = '1.5%';
+export const dashboardOffsetBotPercentage = '8.5%';
+export const commandSearchOffsetRightPercentage = '7.5%';
+
+export const chatbotZIndex = 1;
+export const commandSearchZindex = 2;
+export const fixedButtonsZIndex = 3;

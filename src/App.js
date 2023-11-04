@@ -1,26 +1,36 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 
 // React Router imports
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 
 // MUI imports
-import { Box, Card, Divider, ThemeProvider, IconButton, Tooltip } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import KeyIcon from '@mui/icons-material/Key';
+import { Card, IconButton, ThemeProvider, Tooltip } from '@mui/material';
+import { GiArtificialIntelligence } from 'react-icons/gi';
 
 // Custom components imports
+import ApikeyList from './components/ApikeyList';
 import Chatbot from './components/Chatbot';
 import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
-import ApikeyList from './components/ApikeyList';
 
 // Icons & Themes
-import { gruvboxTheme } from './theme/Theme';
 import { BsQuestion } from 'react-icons/bs';
-
+import {
+  bottomFixedPercentage,
+  dashboardOffsetBotPercentage,
+  fixedButtonsZIndex,
+  gruvboxTheme,
+  leftFixedPercentage,
+  rightFixedPercentage,
+  topFixedPercentage,
+} from './theme/Theme';
 // App styles
-import './App.css';
 import { Home } from '@mui/icons-material';
+import './App.css';
+import UsefulCommands from './components/UsefulCommands';
+import LLMSelector from './components/LLMSelector';
 
 /**
  * Main App component that renders the overall layout and routing for the application.
@@ -53,6 +63,7 @@ function App() {
             <Route path="/" element={<Chatbot />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/apiKeyList" element={<ApikeyList />} />
+            <Route path="/llmSelector" element={<LLMSelector />} />
           </Routes>
 
           <Link to="/dashboard">
@@ -60,10 +71,11 @@ function App() {
               <IconButton
                 sx={{
                   position: 'fixed',
-                  bottom: '8.5%',
-                  right: '1.5%',
+                  bottom: dashboardOffsetBotPercentage,
+                  right: rightFixedPercentage,
                   backgroundColor: gruvboxTheme.table.headerBackground,
                   color: gruvboxTheme.palette.text.primary,
+                  zIndex: fixedButtonsZIndex,
                 }}
               >
                 <DashboardIcon />
@@ -75,43 +87,67 @@ function App() {
               <IconButton
                 sx={{
                   position: 'fixed',
-                  bottom: '3.5%',
-                  right: '1.5%',
+                  bottom: bottomFixedPercentage,
+                  right: rightFixedPercentage,
                   backgroundColor: gruvboxTheme.table.headerBackground,
                   color: gruvboxTheme.palette.text.primary,
+                  zIndex: fixedButtonsZIndex,
                 }}
               >
                 <Home />
               </IconButton>
             </Tooltip>
           </Link>
+
+          <Link to="/llmSelector">
+            <Tooltip title="LLM Selector" placement="bottom">
+              <IconButton
+                sx={{
+                  position: 'fixed',
+                  top: '8%',
+                  right: rightFixedPercentage,
+                  backgroundColor: gruvboxTheme.table.headerBackground,
+                  color: gruvboxTheme.palette.text.primary,
+                  zIndex: fixedButtonsZIndex,
+                }}
+              >
+                <GiArtificialIntelligence />
+              </IconButton>
+            </Tooltip>
+          </Link>
+
           <Link to="/apiKeyList">
             <Tooltip title="API Settings" placement="top">
               <IconButton
                 sx={{
                   position: 'fixed',
-                  top: '3.5%',
-                  right: '1.5%',
+                  top: topFixedPercentage,
+                  right: rightFixedPercentage,
                   backgroundColor: gruvboxTheme.table.headerBackground,
                   color: gruvboxTheme.palette.text.primary,
+                  zIndex: fixedButtonsZIndex,
                 }}
               >
                 <KeyIcon />
               </IconButton>
             </Tooltip>
           </Link>
-          <IconButton
-            onClick={toggleFooter}
-            sx={{
-              position: 'fixed',
-              bottom: '3.5%',
-              left: '1.5%',
-              backgroundColor: gruvboxTheme.table.headerBackground,
-              color: gruvboxTheme.palette.text.primary,
-            }}
-          >
-            <BsQuestion />
-          </IconButton>
+
+          <Tooltip title="Information" placement="top">
+            <IconButton
+              onClick={toggleFooter}
+              sx={{
+                position: 'fixed',
+                bottom: bottomFixedPercentage,
+                left: leftFixedPercentage,
+                backgroundColor: gruvboxTheme.table.headerBackground,
+                color: gruvboxTheme.palette.text.primary,
+                zIndex: fixedButtonsZIndex,
+              }}
+            >
+              <BsQuestion />
+            </IconButton>
+          </Tooltip>
           {showFooter && (
             <Card
               ref={footerRef}
@@ -121,7 +157,7 @@ function App() {
                 left: '50%',
                 transform: 'translateX(-50%)',
                 width: '60vw',
-                zIndex: 2,
+                zIndex: fixedButtonsZIndex + 1,
               }}
             >
               <Footer closeFooter={toggleFooter} />
