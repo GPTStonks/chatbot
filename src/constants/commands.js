@@ -4,10 +4,7 @@ export const COMMANDS = [
   { command: 'get future prices', tags: 'forex' },
   { command: 'get last messages about TEF from stocktwits', tags: 'news' },
   { command: 'get the top 3 queries related to Telefonica', tags: 'news' },
-  {
-    command: 'get company news about TEF from finnhub and from 2023-08-25 to 2023-09-07',
-    tags: 'news',
-  },
+  { command: 'get company news about TEF from finnhub and from 2023-08-25 to 2023-09-07', tags: 'news' },
   { command: 'get trending tickers', tags: 'markets' },
   { command: 'get trending articles', tags: 'news' },
   { command: 'get the historical dividends of microsoft', tags: 'markets' },
@@ -27,6 +24,27 @@ export const COMMANDS = [
   { command: 'get the latest cryptocurrency news', tags: 'news' },
   { command: 'get the current interest rates of central banks', tags: 'forex' },
   { command: 'get investment strategies for a bear market', tags: 'news' },
+  // Additional commands
+  { command: 'get analyst ratings for AAPL', tags: 'markets' },
+  { command: 'get earnings calendar for this week', tags: 'markets' },
+  { command: 'get insider trading activity for TSLA', tags: 'markets' },
+  { command: 'get revenue estimates for GOOGL', tags: 'markets' },
+  { command: 'get sector performance', tags: 'markets' },
+  { command: 'get stock screener for growth stocks', tags: 'markets' },
+  { command: 'get volatility index (VIX) level', tags: 'forex' },
+  { command: 'get the latest commodity prices', tags: 'forex' },
+  { command: 'get currency exchange rates', tags: 'forex' },
+  { command: 'get the latest SEC filings for a company', tags: 'news' },
+  { command: 'get the environmental, social, and governance score for [ticker]', tags: 'markets' },
+  { command: 'get company\'s earnings before interest, taxes, depreciation, and amortization (EBITDA)', tags: 'markets' },
+  { command: 'get economic calendar events', tags: 'news' },
+  { command: 'get the short interest for [ticker]', tags: 'markets' },
+  { command: 'get social sentiment analysis for [ticker]', tags: 'news' },
+  { command: 'get recent analyst downgrades', tags: 'news' },
+  { command: 'get the historical beta of [ticker]', tags: 'markets' },
+  { command: 'get a list of upcoming dividend payments', tags: 'markets' },
+  { command: 'get stock splits calendar', tags: 'markets' },
+  { command: 'get average trading volume for [ticker]', tags: 'markets' }
 ];
 
 export const TAGS = ['forex', 'markets', 'news'];
