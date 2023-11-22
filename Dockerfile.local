@@ -1,7 +1,7 @@
-# Image for Github Actions workflows to build and deploy the front-end image
+# Image made not by cloning the repository, but by local files
 FROM node:latest AS build-stage
 WORKDIR /app
-RUN git clone https://github.com/GPTStonks/front-end.git front-end
+COPY . /app/front-end
 WORKDIR /app/front-end
 RUN npm install --force && \
     npm run build

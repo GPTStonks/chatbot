@@ -103,7 +103,7 @@ const Chatbot = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ query: newMessage }),
+          body: JSON.stringify({ query: newMessage, use_agent: true }),
         });
 
         if (!response.ok) {
