@@ -19,13 +19,13 @@ if __name__ == "__main__":
     # Commands
     build_command = "sudo npm run build"
     scp_command = f"sudo scp -i {args.keyfile} -r build/ {args.username}@{args.ip}:/tmp/"
+    remove_old_files_command = f"ssh -i {args.keyfile} {args.username}@{args.ip} 'sudo rm -rf /var/www/html/*'"
     remote_copy_command = f"ssh -i {args.keyfile} {args.username}@{args.ip} 'sudo cp -r /tmp/build/* /var/www/html'"
-    remove_old_files = f"ssh -i {args.keyfile} {args.username}@{args.ip} 'sudo rm -rf /var/www/html/*'"
     remote_nginx_restart_command = f"ssh -i {args.keyfile} {args.username}@{args.ip} 'sudo systemctl restart nginx'"
 
     if run_command(build_command):
         if run_command(scp_command):
-            if run_command(remote_copy_command):
-                if run_command(remove_old_files):
+            if run_command(remove_old_files_command):
+                if run_command(remote_copy_command):
                     run_command(remote_nginx_restart_command)
 
