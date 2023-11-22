@@ -5,19 +5,20 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Divider,
   List,
   ListItem,
   TextField,
   Typography,
-  Divider,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
-import { BsRobot, BsPersonCircle } from 'react-icons/bs';
+import { BsPersonCircle, BsRobot } from 'react-icons/bs';
 
-import { chatbotZIndex, gruvboxTheme, rightFixedPercentage } from '../theme/Theme';
-import GruvboxGraph from './Graph';
+import ReactMarkdown from 'react-markdown';
 import { API_DEFAULT_PORT, API_DEFAULT_URL, NOTHING_RETURNED } from '../constants/API';
+import { chatbotZIndex, gruvboxTheme } from '../theme/Theme';
+import GruvboxGraph from './Graph';
 import UsefulCommands from './UsefulCommands';
 
 /* STYLES */
@@ -57,7 +58,6 @@ const useStyles = makeStyles({
     },
   },
   avatar: {
-    backgroundColor: gruvboxTheme.palette.text.primary,
     margin: '5px',
   },
 });
@@ -167,6 +167,53 @@ const Chatbot = () => {
     }
   };
 
+  const parseNewsText = (text) => {
+    const formattedText = text.replace(/\n/g, '<br>');
+    const formattedTextWithQuotes = formattedText.replace(/'/g, '"');
+
+    const formattedTextWithLinks = formattedTextWithQuotes.replace(
+      /\[link\]\((.*?)\)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+    );
+
+    return <div dangerouslySetInnerHTML={{ __html: formattedTextWithLinks }} />;
+  };
+
+  const parseApiText = (text) => {
+    const apiMessage = text;
+
+    const apiMessageLines = apiMessage.split('\n');
+
+    const customLinkStyle = {
+      color: gruvboxTheme.palette.success.main,
+      textDecoration: 'none',
+    };
+    return (
+      <div>
+        {apiMessageLines.map((line, index) => (
+          <ReactMarkdown
+            key={index}
+            components={{
+              a: ({ node, ...props }) => (
+                <a
+                  href={props.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="custom-link"
+                  style={customLinkStyle}
+                >
+                  {props.children}
+                </a>
+              ),
+            }}
+          >
+            {line.replace(/\\n/g, '\n').replace(/"/g, '')}
+          </ReactMarkdown>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       <img
@@ -189,7 +236,13 @@ const Chatbot = () => {
                 key={index}
                 style={{ flexDirection: message.user === humanUser ? 'row-reverse' : 'row' }}
               >
-                <Avatar className={classes.avatar}>
+                <Avatar
+                  className={classes.avatar}
+                  sx={{
+                    color: gruvboxTheme.palette.background.default,
+                    backgroundColor: gruvboxTheme.scrollBar.main,
+                  }}
+                >
                   {message.user === humanUser ? (
                     <BsPersonCircle size={24} />
                   ) : (
@@ -202,7 +255,7 @@ const Chatbot = () => {
                   <Card className={message.user === humanUser ? classes.userCard : classes.botCard}>
                     <CardContent>
                       <Typography variant="body2" component="p">
-                        {message.text}
+                        {parseApiText(message.text)}
                       </Typography>
                       {message.user === botUser && message.graphData && (
                         <GruvboxGraph apiData={message.graphData} />
