@@ -20,6 +20,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.1",
+    "react-google-login": "^5.2.2",
     "react-icons": "^4.10.1",
     "react-markdown": "^9.0.0",
     "react-router-dom": "^6.16.0",

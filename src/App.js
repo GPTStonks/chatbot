@@ -29,8 +29,8 @@ import {
 // App styles
 import { Home } from '@mui/icons-material';
 import './App.css';
-import UsefulCommands from './components/UsefulCommands';
 import LLMSelector from './components/LLMSelector';
+import SSOLoginView from './components/auth/SSOLoginView';
 
 /**
  * Main App component that renders the overall layout and routing for the application.
@@ -40,6 +40,7 @@ import LLMSelector from './components/LLMSelector';
  */
 function App() {
   const [showFooter, setShowFooter] = useState(false);
+  const [shouldShowIcons, setShouldShowIcons] = useState(false);
   const footerRef = useRef(null);
 
   const toggleFooter = () => {
@@ -60,78 +61,88 @@ function App() {
           }}
         >
           <Routes>
-            <Route path="/" element={<Chatbot />} />
+            <Route path="/" element={<SSOLoginView setShouldShowIcons={setShouldShowIcons} />} />
+            <Route
+              path="/login"
+              element={<SSOLoginView setShouldShowIcons={setShouldShowIcons} />}
+            />
+            <Route path="/home" element={<Chatbot />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/apiKeyList" element={<ApikeyList />} />
             <Route path="/llmSelector" element={<LLMSelector />} />
           </Routes>
 
-          <Link to="/dashboard">
-            <Tooltip title="Dashboard" placement="top">
-              <IconButton
-                sx={{
-                  position: 'fixed',
-                  bottom: dashboardOffsetBotPercentage,
-                  right: rightFixedPercentage,
-                  backgroundColor: gruvboxTheme.table.headerBackground,
-                  color: gruvboxTheme.palette.text.primary,
-                  zIndex: fixedButtonsZIndex,
-                }}
-              >
-                <DashboardIcon />
-              </IconButton>
-            </Tooltip>
-          </Link>
-          <Link to="/">
-            <Tooltip title="Home" placement="bottom">
-              <IconButton
-                sx={{
-                  position: 'fixed',
-                  bottom: bottomFixedPercentage,
-                  right: rightFixedPercentage,
-                  backgroundColor: gruvboxTheme.table.headerBackground,
-                  color: gruvboxTheme.palette.text.primary,
-                  zIndex: fixedButtonsZIndex,
-                }}
-              >
-                <Home />
-              </IconButton>
-            </Tooltip>
-          </Link>
+          {shouldShowIcons && (
+            <>
+              <Link to="/dashboard">
+                <Tooltip title="Dashboard" placement="top">
+                  <IconButton
+                    sx={{
+                      position: 'fixed',
+                      bottom: dashboardOffsetBotPercentage,
+                      right: rightFixedPercentage,
+                      backgroundColor: gruvboxTheme.table.headerBackground,
+                      color: gruvboxTheme.palette.text.primary,
+                      zIndex: fixedButtonsZIndex,
+                    }}
+                  >
+                    <DashboardIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
 
-          <Link to="/llmSelector">
-            <Tooltip title="LLM Selector" placement="bottom">
-              <IconButton
-                sx={{
-                  position: 'fixed',
-                  top: '8%',
-                  right: rightFixedPercentage,
-                  backgroundColor: gruvboxTheme.table.headerBackground,
-                  color: gruvboxTheme.palette.text.primary,
-                  zIndex: fixedButtonsZIndex,
-                }}
-              >
-                <GiArtificialIntelligence />
-              </IconButton>
-            </Tooltip>
-          </Link>
+              <Link to="/home">
+                <Tooltip title="Home" placement="bottom">
+                  <IconButton
+                    sx={{
+                      position: 'fixed',
+                      bottom: bottomFixedPercentage,
+                      right: rightFixedPercentage,
+                      backgroundColor: gruvboxTheme.table.headerBackground,
+                      color: gruvboxTheme.palette.text.primary,
+                      zIndex: fixedButtonsZIndex,
+                    }}
+                  >
+                    <Home />
+                  </IconButton>
+                </Tooltip>
+              </Link>
 
-          <Link to="/apiKeyList">
-            <Tooltip title="API Settings" placement="top">
-              <IconButton
-                sx={{
-                  position: 'fixed',
-                  top: topFixedPercentage,
-                  right: rightFixedPercentage,
-                  backgroundColor: gruvboxTheme.table.headerBackground,
-                  color: gruvboxTheme.palette.text.primary,
-                  zIndex: fixedButtonsZIndex,
-                }}
-              >
-                <KeyIcon />
-              </IconButton>
-            </Tooltip>
-          </Link>
+              <Link to="/llmSelector">
+                <Tooltip title="LLM Selector" placement="bottom">
+                  <IconButton
+                    sx={{
+                      position: 'fixed',
+                      top: '8%',
+                      right: rightFixedPercentage,
+                      backgroundColor: gruvboxTheme.table.headerBackground,
+                      color: gruvboxTheme.palette.text.primary,
+                      zIndex: fixedButtonsZIndex,
+                    }}
+                  >
+                    <GiArtificialIntelligence />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+
+              <Link to="/apiKeyList">
+                <Tooltip title="API Settings" placement="top">
+                  <IconButton
+                    sx={{
+                      position: 'fixed',
+                      top: topFixedPercentage,
+                      right: rightFixedPercentage,
+                      backgroundColor: gruvboxTheme.table.headerBackground,
+                      color: gruvboxTheme.palette.text.primary,
+                      zIndex: fixedButtonsZIndex,
+                    }}
+                  >
+                    <KeyIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+            </>
+          )}
 
           <Tooltip title="Information" placement="top">
             <IconButton
