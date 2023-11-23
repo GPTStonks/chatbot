@@ -29,15 +29,32 @@ import { useTheme } from '@emotion/react';
 function Footer({ closeFooter }) {
   const theme = useTheme();
   return (
-    <Box sx={{ p: 4, backgroundColor: theme.palette.background.paper }}>
+    <Box
+      sx={{
+        p: 4,
+        backgroundColor: theme.palette.background.paper,
+        overflowY: 'auto',
+        position: 'relative',
+        [theme.breakpoints.down('sm')]: {
+          maxHeight: '80vh',
+          minHeight: '80vh',
+        },
+        [theme.breakpoints.up('md')]: {
+          maxHeight: '40vh',
+        },
+      }}
+    >
       <Tooltip title="Close Footer" placement="top">
         <IconButton
           onClick={closeFooter}
           sx={{
             position: 'absolute',
-            right: 0,
-            top: 0,
+            right: 16,
+            top: 16,
             color: theme.palette.primary.main,
+            [theme.breakpoints.down('sm')]: {
+              zIndex: 10,
+            },
           }}
         >
           <CloseOutlined />

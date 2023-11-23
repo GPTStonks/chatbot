@@ -41,12 +41,13 @@ export default function SSOLoginView({ setShouldShowIcons }) {
 
   return (
     <Box
-      style={{
-        width: '100vw',
+      sx={{
         height: '100vh',
+        width: '100vw',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: gruvboxTheme.palette.background.default,
       }}
     >
       <Card
@@ -55,18 +56,22 @@ export default function SSOLoginView({ setShouldShowIcons }) {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
-          padding: '20px',
-          boxSizing: 'border-box',
+          padding: '10px',
           boxShadow: '0 15px 25px rgba(0, 0, 0, 0.5)',
           backgroundColor: gruvboxTheme.palette.background.default,
+          width: { xs: '90%', sm: '70%', md: '50%', lg: '30%' },
         }}
       >
         <CardContent>
           <img
             src="logo.png"
             alt="logo"
-            style={{ width: '100%', marginBottom: '5%', justifyContent: 'center' }}
+            style={{
+              width: '90%',
+              marginBottom: '5%',
+              padding: '0.5rem',
+              justifyContent: 'center',
+            }}
           />
           {/* <Typography variant="h4" style={{ color: gruvboxTheme.palette.text.primary, marginBottom: '5%' }}>
                         <strong>Login</strong>

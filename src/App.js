@@ -55,9 +55,8 @@ function App() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '100vh',
-            backgroundColor: gruvboxTheme.palette.background.default,
-            position: 'relative',
+            minHeight: '100%',
+            minWidth: '100%',
           }}
         >
           <Routes>
@@ -167,7 +166,6 @@ function App() {
                 bottom: '5%',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                width: '60vw',
                 zIndex: fixedButtonsZIndex + 1,
               }}
             >

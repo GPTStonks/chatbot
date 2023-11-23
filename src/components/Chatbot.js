@@ -208,7 +208,15 @@ const Chatbot = () => {
       />
 
       <UsefulCommands />
-      <Box sx={{ position: 'absolute', width: '78vw', right: 0, zIndex: chatbotZIndex }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          width: '78vw',
+          right: 0,
+          zIndex: chatbotZIndex,
+          backgroundColor: gruvboxTheme.palette.background.default,
+        }}
+      >
         <Box display="flex" flexDirection="column-reverse" className={classes.chatArea}>
           <List>
             {messages.map((message, index) => (
