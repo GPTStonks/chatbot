@@ -110,27 +110,7 @@ const Chatbot = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        const jobId = data.job_id;
-
-        let botMessageText;
-
-        while (true) {
-          response = await fetch(
-            `${API_DEFAULT_URL}:${API_DEFAULT_PORT}/get_processing_result/${jobId}`,
-          );
-          const resultData = await response.json();
-
-          console.log(`Status: ${resultData.status}`);
-          console.log(`Result: ${JSON.stringify(resultData.result)}`);
-
-          if (resultData.status === 'completed') {
-            botMessageText = resultData.result || resultData.result.error;
-            break;
-          }
-
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-        }
+        let botMessageText = await response.json();
 
         setMessages((prevMessages) => {
           const newMessages = [...prevMessages];
