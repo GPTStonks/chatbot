@@ -31,6 +31,8 @@ import Alert from '@mui/material/Alert';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import { API_DEFAULT_PORT, API_DEFAULT_URL } from '../constants/API';
+import Sidebar from './Sidebar';
+import { Navbar } from './NavBar';
 
 function ApikeyList() {
   const theme = useTheme();
@@ -119,6 +121,8 @@ function ApikeyList() {
 
   return (
     <>
+      <Sidebar />
+      <Navbar />
       <Snackbar
         open={alert.open}
         autoHideDuration={6000}

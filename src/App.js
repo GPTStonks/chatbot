@@ -1,13 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
 // React Router imports
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // MUI imports
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import KeyIcon from '@mui/icons-material/Key';
-import { Card, IconButton, ThemeProvider, Tooltip } from '@mui/material';
-import { GiArtificialIntelligence } from 'react-icons/gi';
+import { ThemeProvider } from '@mui/material';
 
 // Custom components imports
 import ApikeyList from './components/ApikeyList';
@@ -16,20 +13,11 @@ import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
 
 // Icons & Themes
-import { BsQuestion } from 'react-icons/bs';
-import {
-  bottomFixedPercentage,
-  dashboardOffsetBotPercentage,
-  fixedButtonsZIndex,
-  gruvboxTheme,
-  leftFixedPercentage,
-  rightFixedPercentage,
-  topFixedPercentage,
-} from './theme/Theme';
+import { gruvboxTheme } from './theme/Theme';
 // App styles
-import { Home } from '@mui/icons-material';
 import './App.css';
 import LLMSelector from './components/LLMSelector';
+import { TradingViewChart } from './components/TradingViewChart';
 import SSOLoginView from './components/auth/SSOLoginView';
 
 /**
@@ -39,139 +27,37 @@ import SSOLoginView from './components/auth/SSOLoginView';
  * @returns {JSX.Element} The rendered component
  */
 function App() {
-  const [showFooter, setShowFooter] = useState(false);
-  const [shouldShowIcons, setShouldShowIcons] = useState(false);
-  const footerRef = useRef(null);
-
-  const toggleFooter = () => {
-    setShowFooter(!showFooter);
-  };
-
+  const initialData = [
+    { time: '2018-12-22', value: 32.51 },
+    { time: '2018-12-23', value: 31.11 },
+    { time: '2018-12-24', value: 27.02 },
+    { time: '2018-12-25', value: 27.32 },
+    { time: '2018-12-26', value: 25.17 },
+    { time: '2018-12-27', value: 28.89 },
+    { time: '2018-12-28', value: 25.46 },
+    { time: '2018-12-29', value: 23.92 },
+    { time: '2018-12-30', value: 22.68 },
+    { time: '2019-12-31', value: 22.67 },
+  ];
   return (
     <BrowserRouter>
       <ThemeProvider theme={gruvboxTheme}>
         <div
           className="App"
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100%',
-            minWidth: '100%',
+            backgroundColor: gruvboxTheme.palette.background.default,
           }}
         >
           <Routes>
-            <Route path="/" element={<SSOLoginView setShouldShowIcons={setShouldShowIcons} />} />
-            <Route
-              path="/login"
-              element={<SSOLoginView setShouldShowIcons={setShouldShowIcons} />}
-            />
+            <Route path="/" element={<SSOLoginView />} />
+            <Route path="/login" element={<SSOLoginView />} />
             <Route path="/home" element={<Chatbot />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/apiKeyList" element={<ApikeyList />} />
             <Route path="/llmSelector" element={<LLMSelector />} />
+            <Route path="/aboutus" element={<Footer />} />
+            <Route path="/graph" element={<TradingViewChart data={initialData} />} />
           </Routes>
-
-          {shouldShowIcons && (
-            <>
-              <Link to="/dashboard">
-                <Tooltip title="Dashboard" placement="top">
-                  <IconButton
-                    sx={{
-                      position: 'fixed',
-                      bottom: dashboardOffsetBotPercentage,
-                      right: rightFixedPercentage,
-                      backgroundColor: gruvboxTheme.table.headerBackground,
-                      color: gruvboxTheme.palette.text.primary,
-                      zIndex: fixedButtonsZIndex,
-                    }}
-                  >
-                    <DashboardIcon />
-                  </IconButton>
-                </Tooltip>
-              </Link>
-
-              <Link to="/home">
-                <Tooltip title="Home" placement="bottom">
-                  <IconButton
-                    sx={{
-                      position: 'fixed',
-                      bottom: bottomFixedPercentage,
-                      right: rightFixedPercentage,
-                      backgroundColor: gruvboxTheme.table.headerBackground,
-                      color: gruvboxTheme.palette.text.primary,
-                      zIndex: fixedButtonsZIndex,
-                    }}
-                  >
-                    <Home />
-                  </IconButton>
-                </Tooltip>
-              </Link>
-
-              <Link to="/llmSelector">
-                <Tooltip title="LLM Selector" placement="bottom">
-                  <IconButton
-                    sx={{
-                      position: 'fixed',
-                      top: '8%',
-                      right: rightFixedPercentage,
-                      backgroundColor: gruvboxTheme.table.headerBackground,
-                      color: gruvboxTheme.palette.text.primary,
-                      zIndex: fixedButtonsZIndex,
-                    }}
-                  >
-                    <GiArtificialIntelligence />
-                  </IconButton>
-                </Tooltip>
-              </Link>
-
-              <Link to="/apiKeyList">
-                <Tooltip title="API Settings" placement="top">
-                  <IconButton
-                    sx={{
-                      position: 'fixed',
-                      top: topFixedPercentage,
-                      right: rightFixedPercentage,
-                      backgroundColor: gruvboxTheme.table.headerBackground,
-                      color: gruvboxTheme.palette.text.primary,
-                      zIndex: fixedButtonsZIndex,
-                    }}
-                  >
-                    <KeyIcon />
-                  </IconButton>
-                </Tooltip>
-              </Link>
-            </>
-          )}
-
-          <Tooltip title="Information" placement="top">
-            <IconButton
-              onClick={toggleFooter}
-              sx={{
-                position: 'fixed',
-                bottom: bottomFixedPercentage,
-                left: leftFixedPercentage,
-                backgroundColor: gruvboxTheme.table.headerBackground,
-                color: gruvboxTheme.palette.text.primary,
-                zIndex: fixedButtonsZIndex,
-              }}
-            >
-              <BsQuestion />
-            </IconButton>
-          </Tooltip>
-          {showFooter && (
-            <Card
-              ref={footerRef}
-              sx={{
-                position: 'absolute',
-                bottom: '5%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                zIndex: fixedButtonsZIndex + 1,
-              }}
-            >
-              <Footer closeFooter={toggleFooter} />
-            </Card>
-          )}
         </div>
       </ThemeProvider>
     </BrowserRouter>

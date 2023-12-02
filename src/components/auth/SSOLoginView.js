@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { gruvboxTheme } from '../../theme/Theme';
 import GoogleLoginButton from './GoogleLoginButton';
 
-export default function SSOLoginView({ setShouldShowIcons }) {
+export default function SSOLoginView() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +31,6 @@ export default function SSOLoginView({ setShouldShowIcons }) {
 
   const handleLogin = () => {
     console.log(username, password);
-    setShouldShowIcons(true);
     navigate('/home');
   };
 

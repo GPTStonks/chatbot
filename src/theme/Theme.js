@@ -10,7 +10,7 @@ export const gruvboxTheme = createTheme({
       main: '#fb4934', // red
     },
     secondary: {
-      main: '#83a598', // green
+      main: '#83a598', // blue
     },
     error: {
       main: '#fb4934', // red
@@ -19,12 +19,13 @@ export const gruvboxTheme = createTheme({
       main: '#fe8019', // orange
     },
     info: {
-      main: '#83a598', // green
+      main: '#83a598', // blue
     },
     success: {
-      main: '#b8bb26', // yellow
+      main: '#b8bb26', // green
     },
     background: {
+      darker: '#1d2021', // darkest grey
       default: '#282828', // dark grey
       paper: '#3c3836', // lighter grey
     },
@@ -41,6 +42,8 @@ export const gruvboxTheme = createTheme({
     headerBackground: '#504945',
   },
 });
+
+export const hoverBackgroundColor = '#504945';
 
 // OFFSETS, LAYOUT and Z-INDEX CONSTANTS
 

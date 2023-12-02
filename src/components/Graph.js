@@ -1,22 +1,5 @@
 /* React and MUI imports */
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  Menu,
-  Tooltip,
-} from '@mui/material';
 import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
 import React, { useEffect, useState } from 'react';
 
 /* Chart imports */
@@ -28,17 +11,9 @@ import { gruvboxTheme } from '../theme/Theme';
 import '../theme/table.css';
 
 /* Icons imports */
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import Rotate90DegreesCcwIcon from '@mui/icons-material/Rotate90DegreesCcw';
-import SettingsIcon from '@mui/icons-material/Settings';
-import TuneIcon from '@mui/icons-material/Tune';
 
 /* File download imports */
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import { useTheme } from '@emotion/react';
 
 /* Columns Editor */
 
@@ -120,15 +95,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GruvboxGraph = ({ apiData }) => {
+  const theme = useTheme();
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [formattedData, setFormattedData] = useState([['Answer']]);
+  const [formattedData, setFormattedData] = useState();
   const [options, setOptions] = useState();
   const [chartType, setChartType] = useState('table');
-
-  const [anchorElExport, setAnchorElExport] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [rotated, setRotated] = useState(false);
 
   const [modifiedChartOptions, setModifiedChartOptions] = useState(null);
   const [chartEditor, setChartEditor] = useState();
@@ -139,199 +110,6 @@ const GruvboxGraph = ({ apiData }) => {
   const [columnsInView, setColumnsInView] = useState(null);
   const [originalHeaders, setOriginalHeaders] = useState(null);
   const [headers, setHeaders] = useState([]);
-
-  /* COLUMN EDITOR */
-
-  const handleOpenColumnEditor = () => {
-    setIsColumnEditorOpen(true);
-  };
-
-  const handleColumnChange = (newColumnsInView) => {
-    setColumnsInView(newColumnsInView);
-  };
-  const handleResetColumns = () => {
-    setColumnsInView(originalHeaders.map((_, index) => index));
-  };
-
-  const ColumnEditor = ({ columns, columnsInView, onColumnChange }) => {
-    const [localColumnsInView, setLocalColumnsInView] = useState(columnsInView);
-    const [hiddenColumns, setHiddenColumns] = useState(
-      columns.map((_, index) => index).filter((index) => !columnsInView.includes(index)),
-    );
-
-    useEffect(() => {
-      setHiddenColumns(
-        columns.map((_, index) => index).filter((index) => !localColumnsInView.includes(index)),
-      );
-    }, [localColumnsInView]);
-
-    const handleColumnSelectionChange = (index, isHidden) => {
-      if (isHidden) {
-        setLocalColumnsInView((prevState) => [...prevState, index]);
-      } else {
-        setLocalColumnsInView((prevState) => prevState.filter((i) => i !== index));
-      }
-    };
-
-    const handleMoveColumn = (index, direction) => {
-      setLocalColumnsInView((prevState) => {
-        const newState = [...prevState];
-        const [removedColumn] = newState.splice(index, 1);
-        newState.splice(index + direction, 0, removedColumn);
-        return newState;
-      });
-    };
-
-    useEffect(() => {
-      onColumnChange(localColumnsInView);
-    }, [localColumnsInView]);
-
-    return (
-      <div>
-        <List>
-          {localColumnsInView.map((colIndex, index) => (
-            <ListItem key={colIndex} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={!hiddenColumns.includes(colIndex)}
-                  tabIndex={-1}
-                  disableRipple
-                  onClick={() => handleColumnSelectionChange(colIndex, false)}
-                />
-              </ListItemIcon>
-              <ListItemText primary={columns[colIndex]} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleMoveColumn(index, -1)}
-                  disabled={index === 0}
-                >
-                  <ArrowUpwardIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleMoveColumn(index, 1)}
-                  disabled={index === localColumnsInView.length - 1}
-                >
-                  <ArrowDownwardIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-        <h3>Hidden</h3>
-        <List>
-          {hiddenColumns.map((colIndex) => (
-            <ListItem key={colIndex} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={false}
-                  tabIndex={-1}
-                  disableRipple
-                  onClick={() => handleColumnSelectionChange(colIndex, true)}
-                />
-              </ListItemIcon>
-              <ListItemText primary={columns[colIndex]} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    );
-  };
-
-  /* ----------------- */
-  /* CHART SETTINGS */
-
-  const handleClickChartSettings = (event) => {
-    setRotated((prev) => !prev);
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseChartSettings = () => {
-    setRotated(false);
-    setAnchorEl(null);
-  };
-
-  /* EXPAND HANDLERS */
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  /* ----------------- */
-  /* EXPORT OPTIONS */
-
-  const handleExportMenuOpen = (event) => {
-    setAnchorElExport(event.currentTarget);
-  };
-
-  const handleExportMenuClose = () => {
-    setAnchorElExport(null);
-  };
-
-  const handleExportData = (format) => {
-    exportData(format);
-    handleExportMenuClose();
-  };
-
-  /* ----------------- */
-  /* DATA EXPORT FUNCTIONS */
-
-  const transformDataForExcel = (data) => {
-    const columns = Object.keys(data);
-    const indices = [
-      ...new Set(Object.values(data).flatMap((serieData) => Object.keys(serieData))),
-    ];
-
-    const excelData = [['Index', ...columns]];
-
-    indices.forEach((index) => {
-      const row = [index];
-      columns.forEach((column) => {
-        row.push(data[column][index] ? data[column][index] : null);
-      });
-      excelData.push(row);
-    });
-
-    return excelData;
-  };
-
-  const exportData = (format) => {
-    let dataToExport = apiData;
-
-    if (typeof apiData === 'string') {
-      try {
-        dataToExport = JSON.parse(apiData);
-      } catch (error) {
-        console.error('Error parsing JSON string:', error);
-        return;
-      }
-    }
-    switch (format) {
-      case 'json':
-        const jsonBlob = new Blob([JSON.stringify(dataToExport)], { type: 'application/json' });
-        saveAs(jsonBlob, 'data.json');
-        break;
-      case 'raw':
-        const rawBlob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'text/plain' });
-        saveAs(rawBlob, 'data.txt');
-        break;
-      case 'excel':
-        const excelData = transformDataForExcel(dataToExport);
-        const worksheet = XLSX.utils.aoa_to_sheet(excelData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-        XLSX.writeFile(workbook, 'data.xlsx');
-        break;
-      default:
-        break;
-    }
-  };
 
   /* ----------------- */
   /* CHART OPTIONS */
@@ -418,22 +196,45 @@ const GruvboxGraph = ({ apiData }) => {
     let newChartType = 'LineChart';
     let newOptions;
 
-    const series = Object.keys(data);
+    const timeSeries = Object.keys(data).map((key) => {
+      if (!isNaN(key)) {
+        return new Date(parseInt(key)).toISOString().split('T')[0];
+      }
+      return key;
+    });
+
+    console.log(timeSeries);
+
     const pandasIndices = [
       ...new Set(Object.values(data).flatMap((serieData) => Object.keys(serieData))),
     ];
+    console.log(pandasIndices);
+    console.log(Object.values(data));
 
-    const rows = pandasIndices.sort().map((pandasIndex) => {
+    const directValues = Object.values(data).map((row) => {
+      return pandasIndices.map((index) => {
+        return row[index] ?? null;
+      });
+    });
+
+    const rows = timeSeries.map((time, i) => {
       newChartType = 'Table';
-      let row = [
-        pandasIndex,
-        ...series.map((serie) => parseFloat(data[serie][pandasIndex]) || data[serie][pandasIndex]),
-      ];
+
+      let valuesForRow = directValues[i]
+        ? directValues[i]
+        : new Array(pandasIndices.length).fill(null);
+
+      let row = [time, ...valuesForRow];
+
       return row;
     });
-    let newHeaders = ['Index', ...series];
-    if (newHeaders.length === rows[0].length - 1) {
-      newHeaders = ['Index', ...newHeaders];
+
+    let newHeaders = [];
+
+    if (typeof timeSeries[0] === Date) {
+      newHeaders = ['Time', ...pandasIndices];
+    } else {
+      newHeaders = ['Key', ...pandasIndices];
     }
 
     let newFormattedData = [];
@@ -450,6 +251,7 @@ const GruvboxGraph = ({ apiData }) => {
     }
     setHeaders(newHeaders);
 
+    newChartType = 'Table';
     if (newChartType === 'LineChart') {
       newOptions = dateLineOptions(newFormattedData);
     } else if (newChartType === 'BarChart') {
@@ -459,6 +261,9 @@ const GruvboxGraph = ({ apiData }) => {
     } else {
       newOptions = baseOptions;
     }
+
+    console.log(newFormattedData);
+    console.log(newHeaders);
 
     return {
       newFormattedData,
@@ -514,11 +319,18 @@ const GruvboxGraph = ({ apiData }) => {
 
   return (
     <div style={{ overflow: 'auto' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          width: '100%',
+          paddingBottom: '1rem',
+        }}
+      >
         <Chart
           chartType={chartType}
-          width="100%"
-          height="400px"
           data={formattedData}
           options={modifiedChartOptions || options}
           chartPackages={['corechart', 'controls', 'charteditor']}
@@ -528,8 +340,9 @@ const GruvboxGraph = ({ apiData }) => {
             setGoogle(google);
           }}
           legendToggle
+          width="fit-content"
         />
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+        {/* <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
           <Box
             sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 3 }}
           >
@@ -548,108 +361,7 @@ const GruvboxGraph = ({ apiData }) => {
               legendToggle
             />
           </Box>
-        </Dialog>
-
-        <Tooltip title="Chart Settings" placement="top">
-          <IconButton
-            aria-label="settings"
-            className={rotated ? classes.rotate : ''}
-            onClick={handleClickChartSettings}
-            sx={{ color: gruvboxTheme.scrollBar.main }}
-          >
-            <SettingsIcon />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleCloseChartSettings}
-        >
-          <MenuItem
-            onClick={() => {
-              handleCloseChartSettings();
-              onEditClick();
-            }}
-          >
-            Customize Chart <TuneIcon style={{ marginLeft: 20 }} />
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleCloseChartSettings();
-              handleOpenColumnEditor();
-            }}
-          >
-            Edit Columns <Rotate90DegreesCcwIcon style={{ marginLeft: 'auto' }} />
-          </MenuItem>
-          <MenuItem onClick={handleExportMenuOpen} style={{ position: 'relative' }}>
-            Export Data <FileDownloadIcon style={{ marginLeft: 'auto' }} />
-            <Menu
-              id="export-menu"
-              anchorEl={anchorElExport}
-              open={Boolean(anchorElExport)}
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-              getcontentanchorel={null}
-              onClose={(e) => {
-                e.stopPropagation();
-                handleExportMenuClose();
-              }}
-            >
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExportData('json');
-                }}
-              >
-                JSON (.json)
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExportData('raw');
-                }}
-              >
-                RAW (.txt)
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExportData('excel');
-                }}
-              >
-                Excel (.xlsx)
-              </MenuItem>
-            </Menu>
-          </MenuItem>
-          <MenuItem onClick={handleOpen}>
-            Expand <OpenInFullIcon style={{ marginLeft: 'auto' }} />
-          </MenuItem>
-        </Menu>
-        <Dialog open={isColumnEditorOpen} onClose={() => setIsColumnEditorOpen(false)} fullWidth>
-          <DialogTitle>Edit Columns</DialogTitle>
-          <DialogContent>
-            <ColumnEditor
-              columns={headers}
-              columnsInView={columnsInView}
-              onColumnChange={handleColumnChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsColumnEditorOpen(false)}>Cancel</Button>
-            <Button
-              onClick={() => {
-                handleColumnChange(columnsInView);
-                setIsColumnEditorOpen(false);
-                updateFormattedData();
-              }}
-            >
-              SAVE
-            </Button>
-            <Button onClick={handleResetColumns}>Reset to Default</Button>
-          </DialogActions>
-        </Dialog>
+        </Dialog> */}
       </Box>
     </div>
   );

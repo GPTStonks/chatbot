@@ -43,6 +43,8 @@ import { useTheme } from '@emotion/react';
 import LLMMarkdown from './LLMMarkdown';
 import { MARKDOWN_CONTENTS } from '../constants/llms';
 import MarkdownStack from './MarkdownStack';
+import Sidebar from './Sidebar';
+import { Navbar } from './NavBar';
 
 const LLMSelector = () => {
   const theme = useTheme();
@@ -61,72 +63,70 @@ const LLMSelector = () => {
   }, []);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          minHeight="100vh"
-        >
-          <MarkdownStack markdowns={MARKDOWN_CONTENTS} />
-        </Box>
-      </Grid>
-      <Grid item xs={6}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          minHeight="100vh"
-        >
-          <strong>
-            <Typography variant="h4" mb={5} color={theme.palette.text.secondary}>
-              LLM Selector
-            </Typography>
-          </strong>
-          <Typography variant="h7" color={theme.palette.text.secondary} mb={5}>
-            Current LLM: <strong>{currentModel}</strong>
-          </Typography>
-          <Autocomplete
-            value={selectedModel}
-            onChange={(event, newValue) => setSelectedModel(newValue)}
-            options={models}
-            getOptionLabel={(option) => option}
-            renderInput={(params) => (
-              <TextField {...params} label="Select a Model" variant="outlined" />
-            )}
-            style={{ width: 300 }}
-          />
-          <Button
-            onClick={() => setConfirmationOpen(true)}
-            disabled={!selectedModel || selectedModel === currentModel}
-            style={{ marginTop: 20 }}
-            variant="outlined"
+    <>
+      <Sidebar />
+      <Navbar />
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <MarkdownStack markdowns={MARKDOWN_CONTENTS} />
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            minHeight="94.5vh"
           >
-            Set LLM
-          </Button>
+            <strong>
+              <Typography variant="h4" mb={5} color={theme.palette.text.secondary}>
+                LLM Selector
+              </Typography>
+            </strong>
+            <Typography variant="h7" color={theme.palette.text.secondary} mb={5}>
+              Current LLM: <strong>{currentModel}</strong>
+            </Typography>
+            <Autocomplete
+              value={selectedModel}
+              onChange={(event, newValue) => setSelectedModel(newValue)}
+              options={models}
+              getOptionLabel={(option) => option}
+              renderInput={(params) => (
+                <TextField {...params} label="Select a Model" variant="outlined" />
+              )}
+              style={{ width: 300 }}
+            />
+            <Button
+              onClick={() => setConfirmationOpen(true)}
+              disabled={!selectedModel || selectedModel === currentModel}
+              style={{ marginTop: 20 }}
+              variant="outlined"
+            >
+              Set LLM
+            </Button>
 
-          <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
-            <DialogTitle>Confirm Selection</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Are you sure you want to set {selectedModel} as the current LLM?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setConfirmationOpen(false)} color="primary">
-                No
-              </Button>
-              <Button onClick={handleSetLLM} color="primary">
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
+            <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+              <DialogTitle>Confirm Selection</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are you sure you want to set {selectedModel} as the current LLM?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setConfirmationOpen(false)} color="primary">
+                  No
+                </Button>
+                <Button onClick={handleSetLLM} color="primary">
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

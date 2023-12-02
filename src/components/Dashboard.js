@@ -4,6 +4,8 @@ import { mockData, sentimentData } from '../constants/mockData';
 import GruvboxGraph from './Graph';
 
 import { useTheme } from '@emotion/react';
+import Sidebar from './Sidebar';
+import { Navbar } from './NavBar';
 
 function Dashboard() {
   const theme = useTheme();
@@ -12,6 +14,8 @@ function Dashboard() {
       className="Dashboard"
       style={{ backgroundColor: theme.palette.background.default, height: '100vh' }}
     >
+      <Navbar />
+      <Sidebar />
       <Box sx={{ p: 3, animation: 'ease-in' }}>
         <Grid container spacing={3}>
           <Grid container item xs={12} spacing={3}>
