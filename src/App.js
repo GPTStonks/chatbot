@@ -39,6 +39,7 @@ function App() {
     { time: '2018-12-30', value: 22.68 },
     { time: '2019-12-31', value: 22.67 },
   ];
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={gruvboxTheme}>

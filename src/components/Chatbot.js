@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { Lightbulb, Send } from '@mui/icons-material';
+import { Brush, Lightbulb, Send, Settings } from '@mui/icons-material';
 import WarningIcon from '@mui/icons-material/Warning';
 import {
   Avatar,
@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  Dialog,
   IconButton,
   Link,
   List,
@@ -24,8 +25,8 @@ import { chatbotZIndex, gruvboxTheme } from '../theme/Theme';
 import GruvboxGraph from './Graph';
 import { Navbar } from './NavBar';
 import Sidebar from './Sidebar';
+import { TradingViewChart } from './TradingViewChart';
 import './loaders/loader.css';
-import { EditGraphButton } from './EditGraphButton';
 
 /* CONSTANTS */
 
@@ -240,11 +241,22 @@ const Chatbot = () => {
       );
     }
   };
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
 
   return (
     <>
       <Navbar />
       <Sidebar />
+
       <Box
         sx={{
           position: 'absolute',
@@ -290,10 +302,12 @@ const Chatbot = () => {
             }}
           >
             {messages.map((message, index) => (
+
               <ListItem
                 key={index}
                 style={{ flexDirection: message.user === humanUser ? 'row-reverse' : 'row' }}
               >
+
                 <Avatar
                   sx={{
                     backgroundColor:
@@ -324,8 +338,92 @@ const Chatbot = () => {
                     sx={{
                       display: 'flex',
                       flexDirection: 'row',
+                      position: 'relative',
                     }}
                   >
+                    {message.user === botUser && message.graphData && (
+                      <>
+                        < Button
+                          sx={{
+                            position: 'absolute',
+                            transform: 'translate(100%, -50%)',
+                            backgroundColor: theme.palette.background.paper,
+                            color: theme.palette.success.main,
+                            [theme.breakpoints.down('sm')]: {
+                              right: 0,
+                              top: '0.8rem',
+                              width: '1.5rem',
+                              height: '1.5rem',
+                              minWidth: '1.5rem',
+                              minHeight: '1.5rem',
+                              fontSize: '0.5rem',
+                            },
+                            [theme.breakpoints.up('md')]: {
+                              right: 0,
+                              top: '1rem',
+                              width: '2rem',
+                              minWidth: '2rem',
+                              fontSize: '0.7rem',
+                            },
+                            [theme.breakpoints.up('lg')]: {
+                              right: '0.3rem',
+                              top: '1rem',
+                              width: '2.5rem',
+                              minWidth: '2.5rem',
+                              fontSize: '1rem',
+                            },
+                          }}
+                          onClick={handleOpenDialog}
+
+                        >
+                          <Brush fontSize='small' />
+                        </Button>
+                        <Dialog open={openDialog} onClose={handleCloseDialog}>
+                            <Box sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%',
+                              height: '100%',
+                            }}>
+                              <TradingViewChart data={message.graphData} />
+                            </Box>
+
+                        </Dialog>
+                        < Button
+                          sx={{
+                            position: 'absolute',
+                            transform: 'translate(100%, -50%)',
+                            backgroundColor: theme.palette.background.paper,
+                            color: theme.palette.success.main,
+                            [theme.breakpoints.down('sm')]: {
+                              right: 0,
+                              top: '2.5rem',
+                              width: '1.5rem',
+                              height: '1.5rem',
+                              minWidth: '1.5rem',
+                              minHeight: '1.5rem',
+                              fontSize: '0.5rem',
+                            },
+                            [theme.breakpoints.up('md')]: {
+                              right: 0,
+                              top: '3.5rem',
+                              width: '2rem',
+                              minWidth: '2rem',
+                              fontSize: '0.7rem',
+                            },
+                            [theme.breakpoints.up('lg')]: {
+                              right: '0.3rem',
+                              top: '3.5rem',
+                              width: '2.5rem',
+                              minWidth: '2.5rem',
+                              fontSize: '1rem',
+                            },
+                          }}
+                        >
+                          <Settings fontSize='small' />
+                        </Button>
+                      </>
+                    )}
                     <Card
                       sx={{
                         color: theme.palette.text.primary,
@@ -371,7 +469,6 @@ const Chatbot = () => {
                         )}
                       </CardContent>
                     </Card>
-                    {/*                     <EditGraphButton data={message.graphData} headers={''} columnsInView={''} setColumnsInView={''}/> */}
                   </Box>
                 )}
               </ListItem>
@@ -430,7 +527,7 @@ const Chatbot = () => {
             </IconButton>
           )}
         </Box>
-      </Box>
+      </Box >
     </>
   );
 };

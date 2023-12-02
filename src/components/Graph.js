@@ -153,25 +153,6 @@ const GruvboxGraph = ({ apiData }) => {
     annotations: { textStyle: { className: classes.label } },
   };
 
-  // INHERITED OPTIONS
-  const dateLineOptions = (formattedData) => {
-    return {
-      ...baseOptions,
-      curveType: 'function',
-      colors: lineColors.slice(0, formattedData[0].length - 1),
-      hAxis: {
-        ...baseOptions.hAxis,
-        format: 'y-M-d',
-      },
-    };
-  };
-
-  // BARCHART OPTIONS
-  const barChartOptions = {
-    ...baseOptions,
-    isStacked: true,
-  };
-
   // TABLE OPTIONS
   const tableOptions = {
     ...baseOptions,
@@ -208,8 +189,8 @@ const GruvboxGraph = ({ apiData }) => {
     const pandasIndices = [
       ...new Set(Object.values(data).flatMap((serieData) => Object.keys(serieData))),
     ];
-    console.log(pandasIndices);
-    console.log(Object.values(data));
+    //console.log(pandasIndices);
+    //console.log(Object.values(data));
 
     const directValues = Object.values(data).map((row) => {
       return pandasIndices.map((index) => {
@@ -252,18 +233,10 @@ const GruvboxGraph = ({ apiData }) => {
     setHeaders(newHeaders);
 
     newChartType = 'Table';
-    if (newChartType === 'LineChart') {
-      newOptions = dateLineOptions(newFormattedData);
-    } else if (newChartType === 'BarChart') {
-      newOptions = barChartOptions;
-    } else if (newChartType === 'Table') {
-      newOptions = tableOptions;
-    } else {
-      newOptions = baseOptions;
-    }
+    newOptions = tableOptions;
 
     console.log(newFormattedData);
-    console.log(newHeaders);
+    //console.log(newHeaders);
 
     return {
       newFormattedData,
@@ -271,30 +244,6 @@ const GruvboxGraph = ({ apiData }) => {
       newChartType,
       newHeaders,
     };
-  };
-
-  /* ----------------- */
-  /* CHART EDITOR */
-
-  const onEditClick = () => {
-    if (!chartWrapper || !google || !chartEditor) {
-      console.error('ChartWrapper, google, or ChartEditor is not defined');
-      return;
-    }
-
-    chartEditor.openDialog(chartWrapper);
-
-    google.visualization.events.addListener(chartEditor, 'ok', () => {
-      const newChartWrapper = chartEditor.getChartWrapper();
-      setChartWrapper(newChartWrapper);
-
-      newChartWrapper.draw();
-
-      const newChartOptions = newChartWrapper.getOptions();
-      const newChartType = newChartWrapper.getChartType();
-      console.log(newChartOptions);
-      setChartType(newChartType);
-    });
   };
 
   /*-----------------*/
@@ -334,34 +283,9 @@ const GruvboxGraph = ({ apiData }) => {
           data={formattedData}
           options={modifiedChartOptions || options}
           chartPackages={['corechart', 'controls', 'charteditor']}
-          getChartEditor={({ chartEditor, chartWrapper, google }) => {
-            setChartEditor(chartEditor);
-            setChartWrapper(chartWrapper);
-            setGoogle(google);
-          }}
           legendToggle
           width="fit-content"
         />
-        {/* <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-          <Box
-            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 3 }}
-          >
-            <Chart
-              chartType={chartType}
-              width="100%"
-              height="400px"
-              data={formattedData}
-              options={modifiedChartOptions || options}
-              chartPackages={['corechart', 'controls', 'charteditor']}
-              getChartEditor={({ chartEditor, chartWrapper, google }) => {
-                setChartEditor(chartEditor);
-                setChartWrapper(chartWrapper);
-                setGoogle(google);
-              }}
-              legendToggle
-            />
-          </Box>
-        </Dialog> */}
       </Box>
     </div>
   );
