@@ -22,7 +22,7 @@ const MarkdownPaper = styled.div`
 `;
 
 const MarkdownStack = ({ markdowns }) => {
-  const theme = useTheme();
+  //const theme = useTheme();
   const [current, setCurrent] = useState(0);
 
   const handleNext = () => {

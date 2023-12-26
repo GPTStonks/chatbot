@@ -33,6 +33,9 @@ export const gruvboxTheme = createTheme({
       primary: '#ebdbb2', // beige
       secondary: '#d5c4a1', // dark beige
     },
+    secondaryBackground: {
+      main: '#141416', // black
+    },
   },
   scrollBar: {
     main: '#d5c4a1',
@@ -40,6 +43,18 @@ export const gruvboxTheme = createTheme({
   },
   table: {
     headerBackground: '#504945',
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        columnHeader: {
+          backgroundColor: '#1d2021',
+        },
+        root: {
+          borderColor: '#b8bb26',
+        },
+      },
+    },
   },
 });
 

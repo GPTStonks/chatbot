@@ -1,6 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { Brush, Lightbulb, Send, Settings } from '@mui/icons-material';
-import WarningIcon from '@mui/icons-material/Warning';
+import { Brush, Close, Lightbulb, Send, Settings, Warning } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -21,12 +20,14 @@ import { BsPersonCircle, BsRobot } from 'react-icons/bs';
 
 import ReactMarkdown from 'react-markdown';
 import { API_DEFAULT_PORT, API_DEFAULT_URL, NOTHING_RETURNED } from '../constants/API';
+import { OPENBB_HUB_PAT } from '../constants/env';
 import { chatbotZIndex, gruvboxTheme } from '../theme/Theme';
-import GruvboxGraph from './Graph';
+import MuiTable from './MuiTable';
 import { Navbar } from './NavBar';
 import Sidebar from './Sidebar';
 import { TradingViewChart } from './TradingViewChart';
 import './loaders/loader.css';
+import './markdown.css';
 
 /* CONSTANTS */
 
@@ -36,6 +37,7 @@ const humanUser = 'Me';
 /* COMPONENT */
 
 const Chatbot = () => {
+  const [filteredData, setFilteredData] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
@@ -69,7 +71,7 @@ const Chatbot = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ query: newMessage, use_agent: true }),
+          body: JSON.stringify({ query: newMessage, use_agent: true, openbb_pat: OPENBB_HUB_PAT }),
         });
 
         if (!response.ok) {
@@ -94,8 +96,6 @@ const Chatbot = () => {
             graphData: plotData,
           };
 
-          console.log(botMessage.graphData);
-
           newMessages.pop();
           newMessages.push(botMessage);
 
@@ -115,104 +115,133 @@ const Chatbot = () => {
   const parseApiText = (text) => {
     const text_ = text.toString().replace(/"/g, '').replace(/\\n/g, '  \n').replace(/\\/g, '');
 
+    const splitIndex = text_.indexOf('\n');
+    let firstPart = text_.substring(0, splitIndex);
+    let secondPart = text_.substring(splitIndex + 2);
+    if (text_.includes('`openbb`')) {
+      firstPart = secondPart;
+      secondPart = '';
+    }
+    console.log(text_);
+
     if (text_.startsWith('> ')) {
       return (
         <Box
           sx={{
-            backgroundColor: '#282828',
-            borderLeft: '3px solid #ffa726',
-            padding: '0.5em',
-            margin: '0.5em 0',
-            display: 'flex',
-            flexDirection: 'column',
-            [theme.breakpoints.down('sm')]: {
-              fontSize: '0.7rem',
-            },
-            [theme.breakpoints.up('md')]: {
-              fontSize: '0.8rem',
-            },
-            [theme.breakpoints.up('lg')]: {
-              fontSize: '0.85rem',
-              maxHeight: '6vh',
-            },
+            m: '0.5em 0 0.5em 0',
           }}
         >
-          <>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <Lightbulb
-                color="success"
+          <Box
+            sx={{
+              backgroundColor: '#282828',
+              borderLeft: '3px solid #ffa726',
+              padding: '0.5em',
+              margin: '0.5em 0',
+              display: 'flex',
+              flexDirection: 'column',
+              [theme.breakpoints.down('sm')]: {
+                fontSize: '0.7rem',
+              },
+              [theme.breakpoints.up('md')]: {
+                fontSize: '0.8rem',
+              },
+              [theme.breakpoints.up('lg')]: {
+                fontSize: '0.85rem',
+                maxHeight: '6vh',
+              },
+            }}
+          >
+            <>
+              <Box
                 sx={{
-                  fontSize: '1rem',
-                }}
-              ></Lightbulb>
-              <Typography
-                variant="body2"
-                color="success"
-                sx={{
-                  ml: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                Info
-              </Typography>
-            </Box>
-            <ReactMarkdown>{text_.replace('>', '')}</ReactMarkdown>
-          </>
+                <Lightbulb
+                  color="success"
+                  sx={{
+                    fontSize: '1rem',
+                  }}
+                ></Lightbulb>
+                <Typography
+                  variant="body2"
+                  color="success"
+                  sx={{
+                    ml: 1,
+                  }}
+                >
+                  Info
+                </Typography>
+              </Box>
+              <ReactMarkdown>
+                {firstPart.replace('>', '').replace('Use with caution.', '')}
+              </ReactMarkdown>
+            </>
+          </Box>
+          <ReactMarkdown className="markdown-content">{secondPart}</ReactMarkdown>
         </Box>
       );
-    } else if (text_.startsWith('\\u001b[31m')) {
+    } else if (text_.includes('OpenBBError')) {
       return (
         <Box
           sx={{
-            backgroundColor: '#282828',
-            borderLeft: '3px solid #ffa726',
-            padding: '0.5em',
-            margin: '0.5em 0',
-            display: 'flex',
-            flexDirection: 'column',
+            m: '0.5em 0 0.5em 0',
           }}
         >
-          <>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <WarningIcon
-                color="warning"
+          <Box
+            sx={{
+              backgroundColor: '#282828',
+              borderLeft: '3px solid #ffa726',
+              padding: '0.5em',
+              margin: '0.5em 0',
+              display: 'flex',
+              flexDirection: 'column',
+              [theme.breakpoints.down('sm')]: {
+                fontSize: '0.7rem',
+              },
+              [theme.breakpoints.up('md')]: {
+                fontSize: '0.8rem',
+              },
+              [theme.breakpoints.up('lg')]: {
+                fontSize: '0.85rem',
+                maxHeight: '6vh',
+              },
+            }}
+          >
+            <>
+              <Box
                 sx={{
-                  fontSize: '1.2rem',
-                }}
-              ></WarningIcon>
-              <Typography
-                variant="body1"
-                color="success"
-                sx={{
-                  ml: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                Warning
-              </Typography>
-            </Box>
-            <ReactMarkdown
-              sx={{
-                m: 0,
-              }}
-            >
-              {text_.replace('\\u001b[31m', '').replace('\\u001b[0m', '').replace('\\nNone\\n', '')}
-            </ReactMarkdown>
-          </>
+                <Warning
+                  color="warning"
+                  sx={{
+                    fontSize: '1rem',
+                  }}
+                ></Warning>
+                <Typography
+                  variant="body2"
+                  color="success"
+                  sx={{
+                    ml: 1,
+                  }}
+                >
+                  Warning
+                </Typography>
+              </Box>
+              <ReactMarkdown>
+                Some internal OpenBB error ocurred. Try again later. Sorry!
+              </ReactMarkdown>
+            </>
+          </Box>
         </Box>
       );
     } else {
-      console.log(text_);
       return (
         <Box
           sx={{
@@ -250,7 +279,6 @@ const Chatbot = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-
 
   return (
     <>
@@ -302,12 +330,10 @@ const Chatbot = () => {
             }}
           >
             {messages.map((message, index) => (
-
               <ListItem
                 key={index}
                 style={{ flexDirection: message.user === humanUser ? 'row-reverse' : 'row' }}
               >
-
                 <Avatar
                   sx={{
                     backgroundColor:
@@ -343,7 +369,7 @@ const Chatbot = () => {
                   >
                     {message.user === botUser && message.graphData && (
                       <>
-                        < Button
+                        <Button
                           sx={{
                             position: 'absolute',
                             transform: 'translate(100%, -50%)',
@@ -374,22 +400,56 @@ const Chatbot = () => {
                             },
                           }}
                           onClick={handleOpenDialog}
-
                         >
-                          <Brush fontSize='small' />
+                          <Brush fontSize="small" />
                         </Button>
                         <Dialog open={openDialog} onClose={handleCloseDialog}>
-                            <Box sx={{
+                          <Box
+                            sx={{
                               display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%',
-                              height: '100%',
-                            }}>
+                              flexDirection: 'column',
+                              position: 'fixed',
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              backgroundColor: theme.palette.background.darker,
+                              alignItems: 'center',
+                              overflowY: 'scroll',
+                              overflowX: 'hidden',
+                              margin: '1rem',
+                            }}
+                          >
+                            <IconButton
+                              sx={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                color: theme.palette.success.main,
+                              }}
+                            >
+                              <Close onClick={handleCloseDialog} />
+                            </IconButton>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                margin: '1rem',
+                              }}
+                            >
+                              <MuiTable data={message.graphData} />
+                            </Box>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                height: '90vh',
+                                width: '95vw',
+                              }}
+                            >
                               <TradingViewChart data={message.graphData} />
                             </Box>
-
+                          </Box>
                         </Dialog>
-                        < Button
+                        <Button
                           sx={{
                             position: 'absolute',
                             transform: 'translate(100%, -50%)',
@@ -420,7 +480,7 @@ const Chatbot = () => {
                             },
                           }}
                         >
-                          <Settings fontSize='small' />
+                          <Settings fontSize="small" />
                         </Button>
                       </>
                     )}
@@ -428,16 +488,20 @@ const Chatbot = () => {
                       sx={{
                         color: theme.palette.text.primary,
                         width: 'fit-content',
+
                         height: 'fit-content',
                         [theme.breakpoints.down('sm')]: {
+                          maxWidth: '70vw',
                           margin: '0 0.25rem 0 0.25rem',
                           padding: '0 0.5rem 0 0.5rem',
                         },
                         [theme.breakpoints.up('md')]: {
+                          maxWidth: '50vw',
                           margin: '0 0.5rem 0 0.5rem',
                           padding: '0 0.7rem 0 0.7rem',
                         },
                         [theme.breakpoints.up('lg')]: {
+                          maxWidth: '50vw',
                           margin: '0 1rem 0 1rem',
                           padding: '0 1rem 0 1rem',
                         },
@@ -464,8 +528,9 @@ const Chatbot = () => {
                         >
                           {parseApiText(message.text)}
                         </Typography>
+                        {console.log(message.graphData)}
                         {message.user === botUser && message.graphData && (
-                          <GruvboxGraph apiData={message.graphData} />
+                          <MuiTable data={message.graphData} />
                         )}
                       </CardContent>
                     </Card>
@@ -527,7 +592,7 @@ const Chatbot = () => {
             </IconButton>
           )}
         </Box>
-      </Box >
+      </Box>
     </>
   );
 };

@@ -5,7 +5,6 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import {
   Box,
-  CircularProgress,
   Divider,
   Drawer,
   IconButton,
@@ -100,19 +99,6 @@ function Sidebar() {
                     <Home color="secondary" />
                   </ListItemIcon>
                   <ListItemText primary="Home" />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem disablePadding>
-                <ListItemButton
-                  component={RouterLink}
-                  to="/dashboard"
-                  sx={{ '&:hover': { backgroundColor: theme.hoverBackgroundColor } }}
-                >
-                  <ListItemIcon>
-                    <Dashboard color="secondary" />
-                  </ListItemIcon>
-                  <ListItemText primary="Dashboard" />
                 </ListItemButton>
               </ListItem>
 

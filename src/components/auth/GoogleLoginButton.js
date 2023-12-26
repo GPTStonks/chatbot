@@ -1,37 +1,51 @@
-import React from 'react';
-import { GoogleLogin } from 'react-google-login';
-import { Button } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import { gruvboxTheme } from '../../theme/Theme';
+import { Button } from '@mui/material';
+import { useGoogleLogin } from '@react-oauth/google';
+import React from 'react';
+import { API_DEFAULT_URL } from '../../constants/API';
+import { useTheme } from '@emotion/react';
+import { redirect } from 'react-router-dom';
 
-const GoogleLoginButton = ({ onSuccess, onFailure }) => {
-  const renderButton = (renderProps) => (
+const GoogleLoginButton = () => {
+  const theme = useTheme();
+
+  const googleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (codeResponse) => {
+      console.log(codeResponse);
+      const tokens = await fetch(`${API_DEFAULT_URL}/auth/google/verify-token`, {
+        method: 'POST',
+        body: JSON.stringify({
+          code: codeResponse.code,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((res) => res.json());
+
+      if (tokens && tokens.access_token) {
+        localStorage.setItem('access_token', tokens.access_token);
+        console.log(tokens.access_token);
+        redirect('/home');
+      }
+    },
+    onError: (errorResponse) => console.log(errorResponse),
+  });
+  return (
     <Button
-      onClick={renderProps.onClick}
-      disabled={renderProps.disabled}
       startIcon={<GoogleIcon />}
       variant="contained"
       size="large"
       style={{
         marginTop: '10px',
         marginBottom: '10px',
-        backgroundColor: gruvboxTheme.palette.error.main,
+        backgroundColor: theme.palette.error.main,
         color: 'white',
       }}
+      onClick={() => googleLogin()}
     >
-      <strong>Log in with Google</strong>
+      <strong>Sign in with Google 🚀</strong>
     </Button>
-  );
-
-  return (
-    <GoogleLogin
-      clientId="<GOOGLE_CLIENT_ID>"
-      buttonText="Log in with Google"
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-      render={renderButton}
-      cookiePolicy={'single_host_origin'}
-    />
   );
 };
 

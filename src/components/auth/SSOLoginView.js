@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gruvboxTheme } from '../../theme/Theme';
 import GoogleLoginButton from './GoogleLoginButton';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export default function SSOLoginView() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function SSOLoginView() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: gruvboxTheme.palette.background.default,
+        backgroundColor: gruvboxTheme.palette.secondaryBackground.main,
       }}
     >
       <Card
@@ -57,7 +58,7 @@ export default function SSOLoginView() {
           transform: 'translate(-50%, -50%)',
           padding: '10px',
           boxShadow: '0 15px 25px rgba(0, 0, 0, 0.5)',
-          backgroundColor: gruvboxTheme.palette.background.default,
+          backgroundColor: gruvboxTheme.palette.secondaryBackground.main,
           width: { xs: '90%', sm: '70%', md: '50%', lg: '30%' },
         }}
       >
@@ -111,7 +112,7 @@ export default function SSOLoginView() {
           <Typography align="center" variant="body1" style={{ margin: '10px 0' }}>
             Or
           </Typography>
-          <GoogleLoginButton onClick={() => console.log('Google Login Clicked')} />
+          <GoogleLoginButton />
         </CardContent>
       </Card>
     </Box>

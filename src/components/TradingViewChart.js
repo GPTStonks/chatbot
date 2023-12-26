@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType } from 'lightweight-charts';
-import { useTheme, Box, Button } from '@mui/material';
+import { useTheme, Box, Button, Typography } from '@mui/material';
 import { Draw } from '@mui/icons-material';
 
 export const TradingViewChart = ({ data, colors = {} }) => {
   const [graphData, setGraphData] = useState([]);
   const theme = useTheme();
   const {
-    backgroundColor = theme.palette.background.darker,
+    backgroundColor = theme.palette.secondaryBackground.main,
     lineColor = '#2962FF',
     textColor = 'white',
     areaTopColor = '#2962FF',
@@ -18,123 +18,69 @@ export const TradingViewChart = ({ data, colors = {} }) => {
     console.log('Edit button clicked');
   };
 
-  const transformDataToGraph = (data) => {
-    try {
-      const timeSeries = Object.keys(data).map((key) => {
-        if (!isNaN(key)) {
-          return new Date(parseInt(key)).toISOString().split('T')[0];
-        }
-        return key;
-      });
-
-      const pandasIndices = [
-        ...new Set(Object.values(data).flatMap((serieData) => Object.keys(serieData))),
-      ];
-
-      const directValues = Object.values(data).map((row) => {
-        return pandasIndices.map((index) => {
-          return row[index] ?? null;
-        });
-      });
-
-      const rows = timeSeries.map((time, i) => {
-
-        let valuesForRow = directValues[i]
-          ? directValues[i]
-          : new Array(pandasIndices.length).fill(null);
-
-        let row = [time, ...valuesForRow];
-
-        return row;
-      });
-
-      let newHeaders = [];
-
-      if (typeof timeSeries[0] === Date) {
-        newHeaders = ['Time', ...pandasIndices];
-      } else {
-        newHeaders = ['Key', ...pandasIndices];
-      }
-      console.log(newHeaders);
-
-      let newFormattedData = rows.map(row => {
-        let obj = {};
-        newHeaders.forEach((header, index) => {
-          obj[header] = row[index];
-        });
-        return obj;
-      });
-
-      // Do this to test the graph
-      newFormattedData = rows.map(row => {
-        return {
-          time: row[0],
-          value: row[1]
-        };
-      });
-
-      // Order the data by time
-      newFormattedData.sort((a, b) => {
-        return new Date(a.time) - new Date(b.time);
-      }
-      );
-
-      console.log(newFormattedData);
-
-      return newFormattedData;
-    } catch (error) {
-      console.log(error);
-    }
-
-  };
-
   const chartContainerRef = useRef();
+
+  const transformData = (rawData) => {
+    const requiredKeys = ['time', 'open', 'high', 'low', 'close'];
+
+    let transformedData = rawData.map((item) => {
+      let transformedItem = {};
+      Object.keys(item).forEach((key) => {
+        const lowerKey = key.toLowerCase();
+        if (lowerKey === 'date') {
+          const date = new Date(item[key]);
+          const formattedDate = date.toISOString().split('T')[0];
+          transformedItem['time'] = formattedDate;
+        } else if (requiredKeys.includes(lowerKey)) {
+          transformedItem[lowerKey] = item[key];
+        }
+      });
+      return transformedItem;
+    });
+
+    transformedData.sort((a, b) => {
+      return new Date('20' + a.time) - new Date('20' + b.time);
+    });
+
+    return transformedData;
+  };
 
   useEffect(() => {
     try {
-      const handleResize = () => {
-        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-      };
-
       const chart = createChart(chartContainerRef.current, {
         layout: {
           background: { type: 'solid', color: backgroundColor },
           textColor,
         },
-        width: chartContainerRef.current.clientWidth,
-        [theme.breakpoints.down('sm')]: {
-          width: '80vw',
-          height: '60vh',
-        },
-        [theme.breakpoints.down('md')]: {
-          width: '40vw',
-          height: '40vh',
-        },
-        [theme.breakpoints.up('lg')]: {
-          width: '40vw',
-          height: '40vh',
-        },
       });
+
+      const transformedData = transformData(data);
+      console.log(transformedData);
+      const canRenderCandlestick = transformedData.every((item) =>
+        ['time', 'open', 'high', 'low', 'close'].every((key) => key in item),
+      );
+
+      if (canRenderCandlestick) {
+        const candlestickSeries = chart.addCandlestickSeries();
+        candlestickSeries.setData(transformedData);
+      } else {
+        const areaSeries = chart.addAreaSeries({
+          lineColor,
+          topColor: areaTopColor,
+          bottomColor: areaBottomColor,
+        });
+        areaSeries.setData(transformedData);
+      }
+
       chart.timeScale().fitContent();
 
-      const newSeries = chart.addAreaSeries({
-        lineColor,
-        topColor: areaTopColor,
-        bottomColor: areaBottomColor,
-      });
-      console.log(data);
-      newSeries.setData(transformDataToGraph(data));
-
-      window.addEventListener('resize', handleResize);
-
       return () => {
-        window.removeEventListener('resize', handleResize);
         chart.remove();
       };
     } catch (error) {
       console.log(error);
     }
-  }, [data, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
+  }, [data]);
 
   return (
     <Box
@@ -142,21 +88,11 @@ export const TradingViewChart = ({ data, colors = {} }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        border: '1px solid',
         borderRadius: '10px',
         overflow: 'auto',
-        [theme.breakpoints.down('sm')]: {
-          width: '80vw',
-          height: '60vh',
-        },
-        [theme.breakpoints.down('md')]: {
-          width: '40vw',
-          height: '40vh',
-        },
-        [theme.breakpoints.up('lg')]: {
-          width: '100vw',
-          height: '50vh',
-        },
-        backgroundColor: theme.palette.background.darker,
+        backgroundColor: theme.palette.secondaryBackground.main,
+        width: '100%',
       }}
     >
       <Box
@@ -167,21 +103,12 @@ export const TradingViewChart = ({ data, colors = {} }) => {
           alignItems: 'center',
         }}
       >
-        {/* <Button
-          onClick={handleEditClick}
-          sx={{ position: 'relative', top: 0, right: 0, color: theme.palette.success.main }}
+        <Typography
+          variant="caption"
+          sx={{ color: theme.palette.text.primary, m: '0.5rem', justifyContent: 'flex-end' }}
         >
-          <Draw
-            sx={{
-              position: 'relative',
-              top: 0,
-              right: 0,
-              color: theme.palette.success.main,
-              mr: '0.2rem',
-            }}
-          />
-          Edit
-        </Button> */}
+          Charts powered by TradingView
+        </Typography>
       </Box>
     </Box>
   );
