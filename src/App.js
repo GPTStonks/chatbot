@@ -42,7 +42,7 @@ function App() {
               <Route path="/" element={<SSOLoginView />} />
               <Route path="/joinwaitlist" element={<JoinWaitlist />} />
               <Route path="/login" element={<SSOLoginView />} />
-              <Route path="/home" element={<Chatbot />} />
+              <Route path="/chat" element={<Chatbot />} />
               <Route path="/apiKeyList" element={<ApikeyList />} />
               <Route path="/llmSelector" element={<LLMSelector />} />
               <Route path="/aboutus" element={<Footer />} />

@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { gruvboxTheme } from '../../theme/Theme';
 import GoogleLoginButton from './GoogleLoginButton';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -32,7 +32,7 @@ export default function SSOLoginView() {
 
   const handleLogin = () => {
     console.log(username, password);
-    navigate('/home');
+    navigate('/chat');
   };
 
   useEffect(() => {
@@ -113,6 +113,18 @@ export default function SSOLoginView() {
             Or
           </Typography>
           <GoogleLoginButton />
+          <Box sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0' }}>
+            <Typography align="center" variant="caption">
+              <Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Privacy Policy
+              </Link>
+              {" | "}
+              <Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Terms of Service
+              </Link>
+            </Typography>
+          </Box>
+
         </CardContent>
       </Card>
     </Box>

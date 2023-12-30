@@ -37,6 +37,14 @@ export const gruvboxTheme = createTheme({
       main: '#141416', // black
     },
   },
+  sectionColors: {
+    chatbot: '#fbf1c7', // Beige claro
+    everyone: '#282828', // Gris oscuro
+    design: '#fabd2f', // Naranja
+    data: '#3c3836', // Gris claro
+    responses: '#d5c4a1', // Beige
+    features: '#bdae93', // Beige oscuro
+  },
   scrollBar: {
     main: '#d5c4a1',
     width: '8px',

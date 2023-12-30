@@ -26,7 +26,7 @@ const GoogleLoginButton = () => {
       if (tokens && tokens.access_token) {
         localStorage.setItem('access_token', tokens.access_token);
         console.log(tokens.access_token);
-        redirect('/home');
+        redirect('/chat');
       }
     },
     onError: (errorResponse) => console.log(errorResponse),

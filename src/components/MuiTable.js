@@ -26,6 +26,7 @@ export default function MuiTable({ data }) {
       style={{
         height: 400,
         width: '100%',
+        maxWidth: '90vw',
         paddingBottom: '1rem',
       }}
     >

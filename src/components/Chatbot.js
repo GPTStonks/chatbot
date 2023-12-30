@@ -15,6 +15,10 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsPersonCircle, BsRobot } from 'react-icons/bs';
 
@@ -123,8 +127,70 @@ const Chatbot = () => {
       secondPart = '';
     }
     console.log(text_);
+    console.log(firstPart);
+    console.log(secondPart);
 
-    if (text_.startsWith('> ')) {
+    if (text_.startsWith('> ') && !text_.includes('OpenBBError') && text_.includes("OpenBB's functions called:")) {
+      return (
+        <Box
+          sx={{
+            m: '0.5em 0 0.5em 0',
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: '#282828',
+              borderLeft: '3px solid #ffa726',
+              padding: '0.5em',
+              margin: '0.5em 0',
+              display: 'flex',
+              flexDirection: 'column',
+              [theme.breakpoints.down('sm')]: {
+                fontSize: '0.7rem',
+              },
+              [theme.breakpoints.up('md')]: {
+                fontSize: '0.8rem',
+              },
+              [theme.breakpoints.up('lg')]: {
+                fontSize: '0.85rem',
+              },
+            }}
+          >
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <Lightbulb
+                  color="success"
+                  sx={{
+                    fontSize: '1rem',
+                  }}
+                ></Lightbulb>
+                <Typography
+                  variant="body2"
+                  color="success"
+                  sx={{
+                    ml: 1,
+                  }}
+                >
+                  Info
+                </Typography>
+              </Box>
+              <ReactMarkdown>
+                {text_.replace('>', '')}
+              </ReactMarkdown>
+            </>
+          </Box>
+        </Box>
+      );
+
+    }
+
+    else if (text_.startsWith('> ') && !text_.includes('OpenBBError')) {
       return (
         <Box
           sx={{
@@ -422,9 +488,9 @@ const Chatbot = () => {
                           >
                             <IconButton
                               sx={{
-                                position: 'absolute',
-                                top: 0,
-                                right: 0,
+                                position: 'fixed',
+                                top: '1rem',
+                                right: '1rem',
                                 color: theme.palette.success.main,
                               }}
                             >
@@ -436,13 +502,25 @@ const Chatbot = () => {
                                 margin: '1rem',
                               }}
                             >
-                              <MuiTable data={message.graphData} />
+                              <Accordion>
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel1a-content"
+                                  id="panel1a-header"
+                                >
+                                  <Typography>Raw data (table)</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  <MuiTable data={message.graphData} />
+                                </AccordionDetails>
+                              </Accordion>
+
                             </Box>
                             <Box
                               sx={{
                                 display: 'flex',
-                                height: '90vh',
-                                width: '95vw',
+                                height: '100%',
+                                width: '100%',
                               }}
                             >
                               <TradingViewChart data={message.graphData} />

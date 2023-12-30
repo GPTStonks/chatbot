@@ -92,7 +92,7 @@ function Sidebar() {
               <ListItem disablePadding>
                 <ListItemButton
                   component={RouterLink}
-                  to="/home"
+                  to="/chat"
                   sx={{ '&:hover': { backgroundColor: theme.hoverBackgroundColor } }}
                 >
                   <ListItemIcon>
