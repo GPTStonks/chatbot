@@ -1,28 +1,3 @@
-/* useEffect(() => {
-
-        fetch(`${API_DEFAULT_URL}:${API_DEFAULT_PORT}/get_all_available_models`)
-            .then(response => response.json())
-            .then(data => {
-                setModels(data.models);
-            });
-
-        fetch(`${API_DEFAULT_URL}:${API_DEFAULT_PORT}/get_current_model`)
-            .then(response => response.json())
-            .then(data => {
-                setCurrentModel(data.currentModel);
-            });
-    }, []);
-
-    const handleSetLLM = () => {
-        fetch(`${API_DEFAULT_URL}:${API_DEFAULT_PORT}/set_current_model`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ model: selectedModel }),
-        })
-    };
-    */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -72,7 +47,7 @@ const LLMSelector = () => {
             <MarkdownStack markdowns={MARKDOWN_CONTENTS} />
           </Box>
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Box
             display="flex"
             flexDirection="column"
@@ -124,7 +99,7 @@ const LLMSelector = () => {
               </DialogActions>
             </Dialog>
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

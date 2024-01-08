@@ -1,5 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { Brush, Close, Lightbulb, Send, Settings, Warning } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Avatar,
   Box,
@@ -16,15 +17,13 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsPersonCircle, BsRobot } from 'react-icons/bs';
 
 import ReactMarkdown from 'react-markdown';
 import { API_DEFAULT_PORT, API_DEFAULT_URL, NOTHING_RETURNED } from '../constants/API';
-import { OPENBB_HUB_PAT } from '../constants/env';
 import { chatbotZIndex, gruvboxTheme } from '../theme/Theme';
 import MuiTable from './MuiTable';
 import { Navbar } from './NavBar';
@@ -75,7 +74,7 @@ const Chatbot = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ query: newMessage, use_agent: true, openbb_pat: OPENBB_HUB_PAT }),
+          body: JSON.stringify({ query: newMessage, use_agent: true }),
         });
 
         if (!response.ok) {
@@ -130,7 +129,11 @@ const Chatbot = () => {
     console.log(firstPart);
     console.log(secondPart);
 
-    if (text_.startsWith('> ') && !text_.includes('OpenBBError') && text_.includes("OpenBB's functions called:")) {
+    if (
+      text_.startsWith('> ') &&
+      !text_.includes('OpenBBError') &&
+      text_.includes("OpenBB's functions called:")
+    ) {
       return (
         <Box
           sx={{
@@ -180,17 +183,12 @@ const Chatbot = () => {
                   Info
                 </Typography>
               </Box>
-              <ReactMarkdown>
-                {text_.replace('>', '')}
-              </ReactMarkdown>
+              <ReactMarkdown>{text_.replace('>', '')}</ReactMarkdown>
             </>
           </Box>
         </Box>
       );
-
-    }
-
-    else if (text_.startsWith('> ') && !text_.includes('OpenBBError')) {
+    } else if (text_.startsWith('> ') && !text_.includes('OpenBBError')) {
       return (
         <Box
           sx={{
@@ -514,7 +512,6 @@ const Chatbot = () => {
                                   <MuiTable data={message.graphData} />
                                 </AccordionDetails>
                               </Accordion>
-
                             </Box>
                             <Box
                               sx={{
