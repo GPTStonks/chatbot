@@ -10,7 +10,7 @@ export const gruvboxTheme = createTheme({
       main: '#fb4934', // red
     },
     secondary: {
-      main: '#83a598', // green
+      main: '#83a598', // blue
     },
     error: {
       main: '#fb4934', // red
@@ -19,12 +19,13 @@ export const gruvboxTheme = createTheme({
       main: '#fe8019', // orange
     },
     info: {
-      main: '#83a598', // green
+      main: '#83a598', // blue
     },
     success: {
-      main: '#b8bb26', // yellow
+      main: '#b8bb26', // green
     },
     background: {
+      darker: '#1d2021', // darkest grey
       default: '#282828', // dark grey
       paper: '#3c3836', // lighter grey
     },
@@ -32,6 +33,17 @@ export const gruvboxTheme = createTheme({
       primary: '#ebdbb2', // beige
       secondary: '#d5c4a1', // dark beige
     },
+    secondaryBackground: {
+      main: '#141416', // black
+    },
+  },
+  sectionColors: {
+    chatbot: '#fbf1c7', // Beige claro
+    everyone: '#282828', // Gris oscuro
+    design: '#fabd2f', // Naranja
+    data: '#3c3836', // Gris claro
+    responses: '#d5c4a1', // Beige
+    features: '#bdae93', // Beige oscuro
   },
   scrollBar: {
     main: '#d5c4a1',
@@ -40,7 +52,21 @@ export const gruvboxTheme = createTheme({
   table: {
     headerBackground: '#504945',
   },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        columnHeader: {
+          backgroundColor: '#1d2021',
+        },
+        root: {
+          borderColor: '#b8bb26',
+        },
+      },
+    },
+  },
 });
+
+export const hoverBackgroundColor = '#504945';
 
 // OFFSETS, LAYOUT and Z-INDEX CONSTANTS
 
