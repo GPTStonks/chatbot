@@ -3,10 +3,21 @@
 </p>
 
 <p align="center">
-  <a href="https://reactjs.org/"><img alt="React" src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white"></a>
-  <a href="https://mui.com/"><img alt="Material-UI" src="https://img.shields.io/badge/Material--UI-0081CB?logo=material-ui&logoColor=white"></a>
-  <a href="https://react-google-charts.com/"><img alt="React Google Charts" src="https://img.shields.io/badge/React_Google_Charts-4584b6?logo=google-chrome&logoColor=white"></a>
-  <a href="https://nodejs.org/"><img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white"></a>
+  <a href="https://reactjs.org/">
+    <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge">
+  </a>
+  <a href="https://mui.com/">
+    <img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white" alt="Material-UI Badge">
+  </a>
+  <a href="https://mui.com/components/data-grid/">
+    <img src="https://img.shields.io/badge/MUI_X_Data_Grid-00C853?style=for-the-badge&logo=mui&logoColor=white" alt="MUI X Data Grid Badge">
+  </a>
+  <a href="https://nodejs.org/">
+    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Badge">
+  </a>
+  <a href="https://www.docker.com/">
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge">
+  </a>
 </p>
 
 # GPTStonks Chatbot
@@ -22,26 +33,48 @@ MUI, and Emotion, this project stands as a robust solution for integrating a cha
 applications and platforms. Whether it is for retail investors, assisting other kind of users, or
 just gathering data, GPTStonks is equipped to handle a variety of tasks efficiently and effectively.
 
-### Features
+### Features 🚀
 
 - **Modern UI**: Leveraging MUI for a modern and responsive design.
 - **Customizable data**: Easy to tailor to fit the specific needs of any user to obtain the wanted
   data.
 - **Real-time Interaction with API**: Swift real-time responses to ensure user satisfaction.
 
-## Install
+## Getting Started 🛠️
 
-Before you begin the installation process, ensure you have [Node.js](https://nodejs.org/) installed
-on your system.
+### Prerequisites
 
-Clone the repository:
+- [Docker](https://www.docker.com/)
+
+> For local installation, you will need the following:
+
+- [Node.js](https://nodejs.org/en/) (v19.0.0 or higher recommended)
+- [npm](https://www.npmjs.com/) (v8.19.0 or higher recommended)
+
+### Docker Installation 🛸
+
+- Full gptstonks ecosystem installation:
+
+Go to the [gptstonks](https://github.com/GPTStonks/api?tab=readme-ov-file#getting-started-%EF%B8%8F)
+repository and follow the instructions.
+
+- Only front-end installation:
+
+```sh
+docker build -f Dockerfile.local -t gptstonks-front .
+docker run -p 3000:3000 -d gptstonks-front
+```
+
+## Local Installation
+
+1. Clone the repository:
 
 ```sh
 git clone https://github.com/GPTStonks/front-end.git
 ```
 
-To install the project and all its dependencies, navigate to the project's root directory in your
-terminal and run the following command:
+2. To install the project and all its dependencies, navigate to the project's root directory in your
+   terminal and run the following command:
 
 ```sh
 npm install
@@ -62,7 +95,21 @@ This command will start the development server and open the project in your defa
 can now interact with the GPTStonks locally, with hot reloading enabled to facilitate a smooth
 development process.
 
-## Contributing
+## Examples
 
-As we are open source, we welcome contributions from the community. Feel free to open issues and
-submit some pull requests.
+### Chat View 💬
+
+![](public/BTC_table.png)
+
+### Chart View 📈
+
+![](public/gptstonks_tview.png)
+
+## Contributing 🤝
+
+We welcome contributions from the community! If you have any suggestions, bug reports, or want to
+contribute to the project, feel free to open issues or propose changes.
+
+## License 📃
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
