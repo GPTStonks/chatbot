@@ -40,7 +40,6 @@ const humanUser = 'Me';
 /* COMPONENT */
 
 const Chatbot = () => {
-  const [filteredData, setFilteredData] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);

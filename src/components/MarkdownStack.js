@@ -1,9 +1,8 @@
 // MarkdownStack.js
-import React, { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { IconButton, Box } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box, IconButton } from '@mui/material';
+import React, { useState } from 'react';
 import LLMMarkdown from './LLMMarkdown';
 
 const MarkdownPaper = styled.div`

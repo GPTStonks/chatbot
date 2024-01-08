@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { Dashboard, Home, Key, NavigateBefore } from '@mui/icons-material';
+import { Home, Key, NavigateBefore } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';

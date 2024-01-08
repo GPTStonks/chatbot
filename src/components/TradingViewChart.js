@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createChart, ColorType } from 'lightweight-charts';
-import { useTheme, Box, Button, Typography } from '@mui/material';
-import { Draw } from '@mui/icons-material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { createChart } from 'lightweight-charts';
+import React, { useEffect, useRef } from 'react';
 
 export const TradingViewChart = ({ data, colors = {} }) => {
-  const [graphData, setGraphData] = useState([]);
   const theme = useTheme();
   const {
     backgroundColor = theme.palette.secondaryBackground.main,
@@ -13,10 +11,6 @@ export const TradingViewChart = ({ data, colors = {} }) => {
     areaTopColor = '#2962FF',
     areaBottomColor = 'rgba(41, 98, 255, 0.28)',
   } = colors;
-
-  const handleEditClick = () => {
-    console.log('Edit button clicked');
-  };
 
   const chartContainerRef = useRef();
 
@@ -80,7 +74,7 @@ export const TradingViewChart = ({ data, colors = {} }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [data]);
+  }, [data, areaBottomColor, areaTopColor, backgroundColor, lineColor, textColor]);
 
   return (
     <Box
