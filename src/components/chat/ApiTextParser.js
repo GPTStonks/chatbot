@@ -76,7 +76,6 @@ const ApiTextParser = ({ text }) => {
   );
 
   const getBoxStyle = () => ({
-    backgroundColor: theme.palette.secondaryBackground.main,
     borderLeft: '4px solid #ffa726',
     padding: '0.5em',
     margin: '0.5em 0',
