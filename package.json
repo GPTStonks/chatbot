@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
