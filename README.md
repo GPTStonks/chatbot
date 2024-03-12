@@ -1,19 +1,18 @@
 <p align="center">
-  <img src="./public/logo-chatbot.png" alt="Logo">
+  <img src="./public/logo.png" alt="Logo">
 </p>
 
 <p align="center">
+  <a href="https://nextjs.org/">
+    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge">
+  </a>
+  <a href="https://www.typescriptlang.org/">
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge">
   <a href="https://reactjs.org/">
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge">
   </a>
   <a href="https://mui.com/">
-    <img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white" alt="Material-UI Badge">
-  </a>
-  <a href="https://mui.com/components/data-grid/">
-    <img src="https://img.shields.io/badge/MUI_X_Data_Grid-00C853?style=for-the-badge&logo=mui&logoColor=white" alt="MUI X Data Grid Badge">
-  </a>
-  <a href="https://nodejs.org/">
-    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Badge">
+    <img src="https://img.shields.io/badge/Material--UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="Material-UI Badge">
   </a>
   <a href="https://www.docker.com/">
     <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge">
@@ -22,23 +21,17 @@
 
 # GPTStonks Chatbot
 
-A sleek and modern chatbot built using React, aimed to simplify user interactions and engagements
-with openbb-chat API.
+A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
 
 ## Description
 
-GPTStonks leverages the power of the latest React features and a user-friendly design to offer a
-seamless and intuitive chat experience. Utilizing a range of modern technologies such as React 18,
-MUI, and Emotion, this project stands as a robust solution for integrating a chatbot into various
-applications and platforms. Whether it is for retail investors, assisting other kind of users, or
-just gathering data, GPTStonks is equipped to handle a variety of tasks efficiently and effectively.
+GPTStonks Chatbot harnesses the capabilities of Next.js, React 18, MUI, and Emotion to offer a sleek, modern chat experience. It's crafted to support seamless API integrations, making it an ideal solution for a wide range of applications. Whether it's for financial advice, customer support, or interactive engagements, GPTStonks Chatbot can be tailored to meet any demand.
 
 ### Features 🚀
 
-- **Modern UI**: Leveraging MUI for a modern and responsive design.
-- **Customizable data**: Easy to tailor to fit the specific needs of any user to obtain the wanted
-  data.
-- **Real-time Interaction with API**: Swift real-time responses to ensure user satisfaction.
+- **Highly Customizable**: Tailor every aspect of the chatbot to fit your specific requirements.
+- **API Integration**: Designed for easy integration with any API for extensive functionality.
+- **Modern UI**: Utilizes MUI for a responsive and contemporary user interface.
 
 ## Getting Started 🛠️
 
@@ -46,19 +39,18 @@ just gathering data, GPTStonks is equipped to handle a variety of tasks efficien
 
 - [Docker](https://www.docker.com/)
 
-> For local installation, you will need the following:
+> For a local installation, you will need:
 
-- [Node.js](https://nodejs.org/en/) (v19.0.0 or higher recommended)
-- [npm](https://www.npmjs.com/) (v8.19.0 or higher recommended)
+- [Node.js](https://nodejs.org/en/) (v16.0.0 or higher recommended)
+- [npm](https://www.npmjs.com/) (v7.10.0 or higher recommended)
 
 ### Docker Installation 🛸
 
-- Full gptstonks ecosystem installation:
+- For a full GPTStonks ecosystem setup:
 
-Go to the [gptstonks](https://github.com/GPTStonks/api?tab=readme-ov-file#getting-started-%EF%B8%8F)
-repository and follow the instructions.
+Visit the [GPTStonks repository](https://github.com/GPTStonks/api?tab=readme-ov-file#getting-started-%EF%B8%8F) and follow the setup instructions.
 
-- Only front-end installation:
+- For front-end only:
 
 ```sh
 docker build -f Dockerfile.local -t gptstonks-front .
@@ -73,42 +65,54 @@ docker run -p 3000:3000 -d gptstonks-front
 git clone https://github.com/GPTStonks/front-end.git
 ```
 
-2. To install the project and all its dependencies, navigate to the project's root directory in your
-   terminal and run the following command:
+2. Install dependencies by navigating to the project's root directory and running:
 
 ```sh
 npm install
 ```
 
-This command will install all the necessary npm packages and dependencies required to run the
-project locally.
-
 ## Run
 
-To run the project locally, use the following command in the project's root directory:
+Start the development server with:
 
 ```sh
-npm start
+npm run dev
 ```
 
-This command will start the development server and open the project in your default web browser. You
-can now interact with the GPTStonks locally, with hot reloading enabled to facilitate a smooth
-development process.
+Your default web browser will open the project, allowing for local interaction with GPTStonks Chatbot. Hot reloading is enabled to streamline the development process.
 
-## Examples
+## Usage
 
-### Chat View 💬
+Execute the following command to start a demo api server:
 
-![](public/BTC_table.png)
+```bash
+uvicorn api_example:app --reload
+```
 
-### Chart View 📈
+Use the Chatbot in your component as follows:
 
-![](public/gptstonks_tview.png)
+```tsx
+<Chatbot
+  apiConfig={{
+    apiQueryEndpoint: "http://localhost:8000/ask/",
+    queryParams: {
+      query: "",
+    },
+  }}
+  themeConfig={adaptedTheme}
+/>
+```
+
+> [!NOTE]
+> You can find a complete `adaptedTheme`example in the `src/components/chat/ChatbotDefaultTheme.ts` file.
+
+## Default Theme
+
+![](./public/gptstonks_chatbot_open_source.png)
 
 ## Contributing 🤝
 
-We welcome contributions from the community! If you have any suggestions, bug reports, or want to
-contribute to the project, feel free to open issues or propose changes.
+Contributions are welcome! Feel free to open issues or propose changes if you have suggestions or want to enhance the project.
 
 ## License 📃
 
