@@ -48,10 +48,11 @@ interface ThemeConfig {
     TextField?: { label?: string, fullWidth?: boolean, style?: React.CSSProperties };
     Button?: { style: React.CSSProperties, hoverBackgroundColor: string };
     Disclaimer?: { appears?: boolean, text: string, style: React.CSSProperties };
+    Avatar?: { botAvatarUrl?: string; userAvatarUrl?: string, style?: React.CSSProperties };
+    MessageBubbleBot?: React.CSSProperties;
+    MessageBubbleUser?: React.CSSProperties;
+    Divider?: { appears?: boolean; style?: React.CSSProperties };
   };
-  avatar?: { botAvatarUrl?: string; userAvatarUrl?: string, style?: React.CSSProperties };
-  messageBubble?: React.CSSProperties;
-  divider?: { appears?: boolean; style?: React.CSSProperties };
 }
 
 interface Message {
@@ -65,8 +66,8 @@ const Chatbot: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
-  messageRender
-}) => {
+  messageRender = () => <div />,
+}: ChatbotProps) => {
   const humanUser = 'humanUser';
   const botUser = 'botUser';
   const customTheme = createTheme(themeConfig ? { palette: themeConfig.palette, typography: themeConfig.typography } : {});
@@ -81,7 +82,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
 
   useEffect(() => {
     scrollToBottom();
-    setIsAnyMessageLoading(messages.some((message) => message.loading));
+    setIsAnyMessageLoading(messages.some((message: Message) => message.loading));
   }, [messages]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -97,7 +98,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
     const userMessage: Message = { text: newMessage, user: humanUser };
     const loadingMessage: Message = { loading: true, text: 'Asking the server...', user: botUser };
 
-    setMessages((prevMessages) => [...prevMessages, userMessage, loadingMessage]);
+    setMessages((prevMessages: []) => [...prevMessages, userMessage, loadingMessage]);
     setNewMessage('');
 
     try {
@@ -118,7 +119,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
         user: botUser,
       };
 
-      setMessages((prevMessages) => {
+      setMessages((prevMessages: [Message]) => {
         const newMessages = [...prevMessages];
         newMessages.pop();
         newMessages.push(botMessage);
@@ -126,7 +127,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
       });
     } catch (error) {
       const message = (error as Error).message;
-      setMessages((prevMessages) => {
+      setMessages((prevMessages: []) => {
         const newMessages = prevMessages.slice(0, -1);
         const errorMessage: Message = { text: message, user: botUser };
         return [...newMessages, errorMessage];
@@ -144,38 +145,30 @@ const Chatbot: React.FC<ChatbotProps> = ({
             ...themeConfig.components?.ChatBox,
           }}>
           <List>
-            {messages.map((message, index) => (
+            {messages.map((message: Message, index: number) => (
               <ListItem key={index} sx={{ display: 'flex', flexDirection: message.user === botUser ? 'row' : 'row-reverse', marginBottom: '1rem' }}>
                 <Suspense fallback={<div>Loading...</div>}>
                   <Avatar
                     sx={{
-                      width: themeConfig?.avatar?.style?.width || 40,
-                      height: themeConfig?.avatar?.style?.height || 40,
-                      borderRadius: themeConfig?.avatar?.style?.borderRadius || '50%',
                       marginRight: message.user === botUser ? '1rem' : '0',
                       marginLeft: message.user === humanUser ? '1rem' : '0',
-                      backgroundColor: 'transparent',
-                      '& img': {
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      },
+                      ...themeConfig?.components?.Avatar?.style,
                     }}
-                    src={message.user === botUser ? themeConfig?.avatar?.botAvatarUrl : themeConfig?.avatar?.userAvatarUrl}
+                    src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
                   />
-                  <Box
-                    sx={{
-                      maxWidth: '70%',
-                      padding: themeConfig?.messageBubble?.padding || '0.5rem 1rem',
-                      borderRadius: themeConfig?.messageBubble?.borderRadius || '20px',
-                      backgroundColor: message.user === botUser ? themeConfig?.messageBubble?.backgroundColor || '#e0e0e0' : themeConfig?.messageBubble?.backgroundColor || '#0084ff',
-                      color: themeConfig?.messageBubble?.color || '#fff',
-                      fontSize: '0.875rem',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {message.text}
-                  </Box>
+                  {message.user == botUser ?
+                    <Box
+                      sx={themeConfig?.components?.MessageBubbleBot}
+                    >
+                      {message.text}
+                    </Box>
+                    :
+                    <Box
+                      sx={themeConfig?.components?.MessageBubbleUser}
+                    >
+                      {message.text}
+                    </Box>
+                  }
                 </Suspense>
               </ListItem>
             ))}
@@ -183,13 +176,13 @@ const Chatbot: React.FC<ChatbotProps> = ({
           </List>
         </Box>
 
-        {themeConfig?.divider?.appears && <Divider sx={themeConfig?.divider?.style} />}
+        {themeConfig?.components?.Divider?.appears && <Divider sx={themeConfig?.components?.Divider?.style} />}
 
         <Box sx={themeConfig.components?.LowPartBox}>
           <TextField
             fullWidth={themeConfig?.components?.TextField?.fullWidth || true}
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             variant="outlined"
             size="small"
