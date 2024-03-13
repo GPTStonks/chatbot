@@ -110,6 +110,14 @@ Use the Chatbot in your component as follows:
 
 ![](./public/gptstonks_chatbot_open_source.png)
 
+## Tasks 📝
+
+- [x] Create a basic chatbot UI
+- [x] Implement stable chatbot functionality
+- [x] Add a default theme configuration
+- [] Publish package to npm registry
+
+
 ## Contributing 🤝
 
 Contributions are welcome! Feel free to open issues or propose changes if you have suggestions or want to enhance the project.
