@@ -115,7 +115,8 @@ Use the Chatbot in your component as follows:
 - [x] Create a basic chatbot UI
 - [x] Implement stable chatbot functionality
 - [x] Add a default theme configuration
-- [] Publish package to npm registry
+- [ ] Develop complete documentation and use cases
+- [ ] Publish package to npm registry
 
 
 ## Contributing 🤝
