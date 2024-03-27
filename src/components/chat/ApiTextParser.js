@@ -4,6 +4,7 @@ import Lightbulb from '@mui/icons-material/Lightbulb';
 import Warning from '@mui/icons-material/Warning';
 import ReactMarkdown from 'react-markdown';
 import { useTheme } from '@mui/material/styles';
+import './markdown.css';
 
 const ApiTextParser = ({ text }) => {
   const theme = useTheme();
