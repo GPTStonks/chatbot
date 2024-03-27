@@ -26,8 +26,6 @@ import {
 import { React, useState, useEffect } from 'react';
 
 /* File download imports */
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
 import { useTheme } from '@emotion/react';
 
 export const EditGraphButton = ({ apiData, headers, columnsInView, setColumnsInView }) => {
@@ -238,7 +236,6 @@ export const EditGraphButton = ({ apiData, headers, columnsInView, setColumnsInV
         <IconButton
           aria-label="settings"
           onClick={handleClickChartSettings}
-          sx={{ color: theme.scrollBar.main }}
         >
           <SettingsIcon />
         </IconButton>
