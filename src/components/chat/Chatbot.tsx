@@ -2,19 +2,36 @@
 import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
 import '@fontsource/source-sans-pro';
+import '@fontsource-variable/saira';
+import { Brush, Close, Download } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Avatar,
   Box,
   Button,
-  CircularProgress,
-  Divider,
+  Card,
+  CardContent,
+  Dialog,
+  IconButton,
   List,
   ListItem,
-  TextField,
-  Typography
+  Typography,
 } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { EditGraphButton } from '../EditGraphButton';
+import MuiTable from '../MuiTable';
+import { TradingViewChart } from './TradingViewChart';
+import '../loaders/loader.css';
+import ApiTextParser from './ApiTextParser';
+import './markdown.css';
+import { Avatar } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import { Divider } from '@mui/material';
+import { TextField } from '@mui/material';
+
 
 interface ChatbotProps {
   className?: string;
@@ -74,12 +91,25 @@ const Chatbot: React.FC<ChatbotProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [isAnyMessageLoading, setIsAnyMessageLoading] = useState<boolean>(false);
+  const [showEditGraphButton, setShowEditGraphButton] = useState(false);
+  const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
+
+  const handleDownloadClick = () => {
+    setShowEditGraphButton(true);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  const [openDialog, setOpenDialog] = useState(false);
 
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   useEffect(() => {
     scrollToBottom();
     setIsAnyMessageLoading(messages.some((message: Message) => message.loading));
@@ -98,14 +128,14 @@ const Chatbot: React.FC<ChatbotProps> = ({
     const userMessage: Message = { text: newMessage, user: humanUser };
     const loadingMessage: Message = { loading: true, text: 'Asking the server...', user: botUser };
 
-    setMessages((prevMessages: []) => [...prevMessages, userMessage, loadingMessage]);
+    setMessages((prevMessages: Message[]) => [...prevMessages, userMessage, loadingMessage]);
     setNewMessage('');
 
     try {
       const response = await fetch(apiConfig?.apiQueryEndpoint!, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...apiConfig?.queryParams, message: newMessage }),
+        body: JSON.stringify({ query: `${newMessage}` }),
       });
 
       if (!response.ok) {
@@ -115,11 +145,12 @@ const Chatbot: React.FC<ChatbotProps> = ({
       const botMessageData = await response.json();
 
       const botMessage: Message = {
-        text: botMessageData.text,
+        text: botMessageData.body,
         user: botUser,
+        graphData: botMessageData.result_data,
       };
 
-      setMessages((prevMessages: [Message]) => {
+      setMessages((prevMessages: Message[]) => {
         const newMessages = [...prevMessages];
         newMessages.pop();
         newMessages.push(botMessage);
@@ -127,7 +158,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
       });
     } catch (error) {
       const message = (error as Error).message;
-      setMessages((prevMessages: []) => {
+      setMessages((prevMessages: Message[]) => {
         const newMessages = prevMessages.slice(0, -1);
         const errorMessage: Message = { text: message, user: botUser };
         return [...newMessages, errorMessage];
@@ -138,13 +169,20 @@ const Chatbot: React.FC<ChatbotProps> = ({
   return (
     <div className={`chatbot-default ${className}`} style={{
       ...themeConfig.style,
+      //scrollbar width and color
+      scrollbarWidth: 'thin',
+      scrollbarColor: 'yellow',
     }}>
       <ThemeProvider theme={customTheme}>
         <Box className={`chatbot-default ${className}`}
           sx={{
             ...themeConfig.components?.ChatBox,
+
           }}>
-          <List>
+          <List sx={{
+            maxWidth: '70%',
+            margin: '0 auto',
+          }}>
             {messages.map((message: Message, index: number) => (
               <ListItem key={index} sx={{ display: 'flex', flexDirection: message.user === botUser ? 'row' : 'row-reverse', marginBottom: '1rem' }}>
                 <Suspense fallback={<div>Loading...</div>}>
@@ -157,10 +195,100 @@ const Chatbot: React.FC<ChatbotProps> = ({
                     src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
                   />
                   {message.user == botUser ?
-                    <Box
-                      sx={themeConfig?.components?.MessageBubbleBot}
-                    >
-                      {message.text}
+                    <Box sx={{
+                      display: 'flex',
+                      overflow: 'auto',
+                    }}>
+                      <Dialog open={openDialog} onClose={handleCloseDialog}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: '#090909',
+                            alignItems: 'center',
+                            overflow: 'hidden',
+                            margin: '1rem',
+                            borderRadius: '1rem',
+                          }}
+                        >
+                          <IconButton
+                            sx={{
+                              position: 'fixed',
+                              top: '1rem',
+                              right: '2rem',
+                              color: '#ebdbb2',
+                              '&:hover': {
+                                color: 'red',
+                              },
+                            }}
+                          >
+                            <Close onClick={handleCloseDialog} />
+                          </IconButton>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              margin: '1rem',
+                            }}
+                          >
+                            <Accordion>
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                              >
+                                <Typography>Raw data (table)</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <MuiTable data={message.graphData} />
+                              </AccordionDetails>
+                            </Accordion>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              height: '90%',
+                              width: '90%',
+                            }}
+                          >
+                            <TradingViewChart data={message.graphData} />
+                          </Box>
+                        </Box>
+                      </Dialog>
+                      <Card
+                        sx={{
+                          width: 'fit-content',
+                          height: 'fit-content',
+                          p: '0.8rem',
+                          borderRadius: '0.8rem',
+                        }}
+                      >
+                        <CardContent
+                          sx={{
+                            padding: 0,
+                            '&:last-child': { paddingBottom: 0 },
+                          }}
+                        >
+                          <ApiTextParser text={message.text} />
+                          {message.graphData &&
+                            <MuiTable data={message.graphData} />
+                          }
+                        </CardContent>
+                      </Card>
+                      {message.graphData && (
+                        <Button
+                          onClick={handleOpenDialog}
+                        >
+                          <Brush fontSize="small" sx={{
+                            color: '#ebdbb2',
+                            borderColor: '#ebdbb2',
+                          }} />
+                        </Button>
+                      )}
                     </Box>
                     :
                     <Box
