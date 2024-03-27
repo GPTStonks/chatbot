@@ -27,7 +27,11 @@ const useChatbotDefaultTheme = {
       //backgroundPosition: 'center',
       //backgroundSize: 'small',
       //backgroundRepeat: 'no-repeat',
-      background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50C878 80%);",
+      //background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50878 80%);", green
+      //background: "linear-gradient(0deg, #000000 10%, #002233 45%, #004466 80%);",
+      background: "radial-gradient(circle at top, #ff9933 0%, #cc7833 25%, #996633 50%, #614531 75%, #332717 100%);",
+
+
       fontFamily: 'Saira Variable, sans-serif',
       maxHeight: '80vh',
       overflowY: 'auto',
@@ -83,7 +87,7 @@ const useChatbotDefaultTheme = {
     },
     Disclaimer: {
       appears: true,
-      text: 'GPTStonks x OpenBB',
+      text: 'GPTStonks, your AI financial assistant.',
       style: {
         display: 'flex',
         justifyContent: 'center',
