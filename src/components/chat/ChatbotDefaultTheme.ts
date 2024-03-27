@@ -2,7 +2,8 @@ const useChatbotDefaultTheme = {
   style: {
     justifyContent: 'center',
     alignItems: 'center',
-    background: "#080B08 "
+    background: "#070707",
+    minHeight: '100vh',
   },
   palette: {
     primary: { main: '#fac670' },
@@ -14,31 +15,24 @@ const useChatbotDefaultTheme = {
     background: { default: '#0d0d0d', paper: '#16181c' },
     text: { primary: '#ebdbb2', secondary: '#d5c4a1' },
   },
-  typography: { fontFamily: 'Fira Code Variable, monospace' },
+  typography: { fontFamily: 'Saira Variable, sans-serif' },
   components: {
     ChatBox: {
+      width: '100vw',
+      minHeight: '80vh',
       position: 'relative',
-      minHeight: '70vh',
       //backgroundColor: 'lightblue',
       //backgroundImage: 'url(gptstonks_logo_small.png)',
       // logo small centered
       //backgroundPosition: 'center',
       //backgroundSize: 'small',
       //backgroundRepeat: 'no-repeat',
-      background: "linear-gradient(0deg, #080b08, #1e7231)",
-      fontFamily: 'Exo 2 Variable, sans-serif',
+      background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50C878 80%);",
+      fontFamily: 'Saira Variable, sans-serif',
       maxHeight: '80vh',
       overflowY: 'auto',
-      '&::-webkit-scrollbar': {
-        width: '0.5em',
-      },
-      '&::-webkit-scrollbar-track': {
-        boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.3)',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#ebdbb2',
-        outline: '0.5px solid slategrey',
-      },
+      pt: '2rem'
+
     },
     LowPartBox: {
       display: 'flex',
@@ -46,13 +40,14 @@ const useChatbotDefaultTheme = {
       justifyContent: 'space-between',
       padding: '1rem',
       margin: '0 auto',
-      width: 'auto',
+      width: '60%',
+
     },
     TextField: {
       label: 'Type a message',
       fullWidth: false,
       style: {
-        backgroundColor: '#090909',
+        //backgroundColor: '#070707',
         color: '#ebdbb2',
         '& label': {
           color: '',
@@ -88,7 +83,7 @@ const useChatbotDefaultTheme = {
     },
     Disclaimer: {
       appears: true,
-      text: 'Happy Coding GPTStonks fellows! 🚀',
+      text: 'GPTStonks x OpenBB',
       style: {
         display: 'flex',
         justifyContent: 'center',
@@ -106,6 +101,16 @@ const useChatbotDefaultTheme = {
       color: 'white',
       fontSize: '0.875rem',
       wordBreak: 'break-word',
+      '&::-webkit-scrollbar': {
+        width: '0.5em',
+      },
+      '&::-webkit-scrollbar-track': {
+        boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.3)',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#ebdbb2',
+        outline: '0.5px solid slategrey',
+      },
     },
     MessageBubbleUser: {
       maxWidth: '70%',
@@ -133,10 +138,10 @@ const useChatbotDefaultTheme = {
       }
     },
     Divider: {
-      appears: false,
+      appears: true,
       style: {
         backgroundColor: '#b8bb26',
-        width: '50%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
       },
