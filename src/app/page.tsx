@@ -15,6 +15,7 @@ export default function Home() {
       }}>
         <Chatbot
           apiConfig={{
+            fetchFunction: "",
             apiQueryEndpoint: "http://localhost:8000/process_query_async",
             queryParams: {},
           }}

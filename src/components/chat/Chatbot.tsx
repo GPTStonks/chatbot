@@ -42,6 +42,7 @@ interface ChatbotProps {
 }
 
 interface APIConfig {
+  fetchFunction: string;
   apiQueryEndpoint: string;
   queryParams?: Record<string, any>;
 }
