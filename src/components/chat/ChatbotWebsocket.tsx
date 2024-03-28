@@ -140,6 +140,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     };
 
     useEffect(() => {
+        scrollToBottom();
         if (lastMessage !== null) {
             let messageData = JSON.parse(lastMessage.data);
             let body = messageData.body;
@@ -158,7 +159,6 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             }
         }
     }, [lastMessage]);
-
 
 
     return (
@@ -207,9 +207,9 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                         )}
                     </List>
 
-                </Box>
-
                 <div ref={messagesEndRef} />
+
+                </Box>
 
                 {themeConfig?.components?.Divider?.appears && <Divider sx={themeConfig?.components?.Divider?.style} />}
 
