@@ -30,13 +30,10 @@ const useChatbotDefaultTheme = {
       //background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50878 80%);", green
       //background: "linear-gradient(0deg, #000000 10%, #002233 45%, #004466 80%);",
       background: "radial-gradient(circle at top, #ff9933 0%, #cc7833 25%, #996633 50%, #614531 75%, #332717 100%);",
-
-
       fontFamily: 'Saira Variable, sans-serif',
       maxHeight: '80vh',
       overflowY: 'auto',
-      pt: '2rem'
-
+      pt: '2rem',
     },
     LowPartBox: {
       display: 'flex',
@@ -124,6 +121,10 @@ const useChatbotDefaultTheme = {
       color: 'white',
       fontSize: '0.875rem',
       wordBreak: 'break-word',
+      loader: {
+        color: '#b8bb26',
+        backgroundColor: '#121214',
+      }
     },
     Avatar: {
       botAvatarUrl: 'bytebard.png',

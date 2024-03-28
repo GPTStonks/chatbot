@@ -1,36 +1,34 @@
 'use client'
 import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
-import '@fontsource/source-sans-pro';
 import '@fontsource-variable/saira';
-import { Brush, Close, Download } from '@mui/icons-material';
+import '@fontsource/source-sans-pro';
+import { Brush, Close } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
+  Avatar,
   Box,
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Dialog,
+  Divider,
   IconButton,
   List,
   ListItem,
+  TextField,
   Typography,
 } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { EditGraphButton } from '../EditGraphButton';
 import MuiTable from '../MuiTable';
-import { TradingViewChart } from './TradingViewChart';
-import '../loaders/loader.css';
 import ApiTextParser from './ApiTextParser';
+import { TradingViewChart } from './TradingViewChart';
 import './markdown.css';
-import { Avatar } from '@mui/material';
-import { CircularProgress } from '@mui/material';
-import { Divider } from '@mui/material';
-import { TextField } from '@mui/material';
 
 
 interface ChatbotProps {
