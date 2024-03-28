@@ -10,7 +10,7 @@ const ApiTextParser = ({ text }) => {
   const theme = useTheme();
 
   const parseText = (inputText) => {
-    let text_ = inputText.toString().replace(/"/g, '').replace(/\\n/g, '  \n').replace(/\\/g, '');
+    let text_ = inputText?.toString().replace(/"/g, '').replace(/\\n/g, '  \n').replace(/\\/g, '');
     const splitIndex = text_.indexOf('\n');
     let firstPart = text_.substring(0, splitIndex);
     let secondPart = text_.substring(splitIndex + 2);
