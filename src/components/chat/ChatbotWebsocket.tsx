@@ -31,7 +31,8 @@ import ApiTextParser from './ApiTextParser';
 import { TradingViewChart } from './TradingViewChart';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './markdown.css';
-import Loader from 'react-loaders';
+import { DNA } from 'react-loader-spinner';
+import LinearBuffer from './LinearBuffer';
 
 
 interface ChatbotProps {
@@ -96,6 +97,8 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [showEditGraphButton, setShowEditGraphButton] = useState(false);
     const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
+    const [showLinearLoader, setShowLinearLoader] = useState(false);
+
     const socketUrl = 'ws://localhost:8000/chatws';
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const connectionStatus = {
@@ -140,7 +143,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     };
 
     useEffect(() => {
-        scrollToBottom();
+
         if (lastMessage !== null) {
             let messageData = JSON.parse(lastMessage.data);
             let body = messageData.body;
@@ -153,13 +156,19 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                     user: 'botUser',
                     loading: true
                 }));
+            } else if (!isLoading && !showLinearLoader) {
+                setShowLinearLoader(true);
             } else {
+                setShowLinearLoader(false);
                 setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', loading: false }]);
                 setBotMessage(null);
             }
         }
-    }, [lastMessage]);
+    }, [lastMessage, showLinearLoader]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     return (
         <div className={`chatbot-default ${className}`} style={{
@@ -190,7 +199,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                 </Box>
                             </ListItem>
                         ))}
-                        {botMessage && isAnyMessageLoading && (
+                        {botMessage && isAnyMessageLoading && !showLinearLoader && (
                             <ListItem sx={{ display: 'flex', flexDirection: 'row' }}>
                                 <Avatar
                                     sx={{
@@ -199,15 +208,31 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     }}
                                     src={themeConfig?.components?.Avatar?.botAvatarUrl}
                                 />
-                                <Box sx={{ ...themeConfig?.components?.MessageBubbleUser }}>
-                                    <CircularProgress size={20} />
-                                    {botMessage.text}
+                                <Box sx={{ ...themeConfig?.components?.MessageBubbleBot }}>
+                                    <DNA
+                                        visible={true}
+                                        height="60"
+                                        width="60"
+                                        ariaLabel="dna-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClass="dna-wrapper"
+                                    />
+                                    <Typography sx={{
+                                        marginLeft: '1rem',
+                                    }}>
+                                        {botMessage.text}
+                                    </Typography>
                                 </Box>
+
+
                             </ListItem>
+                        )}
+                        {showLinearLoader && (
+                            <LinearBuffer />
                         )}
                     </List>
 
-                <div ref={messagesEndRef} />
+                    <div ref={messagesEndRef} />
 
                 </Box>
 
