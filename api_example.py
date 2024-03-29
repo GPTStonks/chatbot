@@ -79,7 +79,7 @@ async def chat_websocket(websocket: WebSocket):
             for i in range(3):
                 message = random.choice(phrases)
                 await manager.send_personal_message({"body": message, "loading": i != 2}, websocket)
-                await asyncio.sleep(1)  
+                await asyncio.sleep(5)  
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 

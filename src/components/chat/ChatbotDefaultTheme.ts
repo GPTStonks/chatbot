@@ -95,10 +95,13 @@ const useChatbotDefaultTheme = {
       }
     },
     MessageBubbleBot: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       maxWidth: '70%',
       padding: '0.5rem 1rem',
       borderRadius: '10px',
-      backgroundColor: '#121214',
+      //backgroundColor: '#121214',
       color: 'white',
       fontSize: '0.875rem',
       wordBreak: 'break-word',
