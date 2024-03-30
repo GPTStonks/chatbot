@@ -1,6 +1,8 @@
 'use client'
 import Chatbot from "@/components/chat/Chatbot";
 import { useChatbotDefaultTheme, ChatbotWebsocket } from "../chatbot";
+import ApiTextParser from "@/components/chat/ApiTextParser";
+import MuiTable from "@/components/MuiTable";
 
 export default function Home() {
 
@@ -15,11 +17,19 @@ export default function Home() {
       }}>
         <ChatbotWebsocket
           apiConfig={{
+            isWebsocket: true,
+            auth: false,
             fetchFunction: "",
-            apiQueryEndpoint: "http://localhost:8000/process_query_async",
-            queryParams: {},
+            apiQueryEndpoint: "ws://localhost:8000/chatws",
+            queryParams: {
+              'type' : 'type',
+              'data' : 'result_data',
+              'text' : 'body'
+            },
           }}
           themeConfig={useChatbotDefaultTheme}
+          messageRenderFunction={(text: string) => <ApiTextParser text={text} />}
+          dataRenderFunction={(data: any) => <MuiTable data={data} />}
         />
       </div>
 
