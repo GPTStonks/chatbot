@@ -7,18 +7,19 @@ import MuiTable from "@/components/MuiTable";
 export default function Home() {
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 ">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24"
 
-      <div style={{
+      style={{
         position: 'absolute',
         bottom: '0',
         height: '100vh',
-
+        backgroundColor: '#080808'
       }}>
         <ChatbotWebsocket
           apiConfig={{
             isWebsocket: true,
             auth: false,
+            tokenName: "userToken",
             fetchFunction: "",
             apiQueryEndpoint: "ws://localhost:8000/chatws",
             queryParams: {
@@ -29,9 +30,8 @@ export default function Home() {
           }}
           themeConfig={useChatbotDefaultTheme}
           messageRenderFunction={(text: string) => <ApiTextParser text={text} />}
-          dataRenderFunction={(data: any) => <MuiTable data={data} />}
+          dataRenderFunction={(data: any) => <MuiTable data={data[0]} />}
         />
-      </div>
 
     </main >
   );
