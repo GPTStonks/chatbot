@@ -40,11 +40,14 @@ interface ChatbotProps {
     style?: React.CSSProperties;
     apiConfig: APIConfig;
     themeConfig: ThemeConfig;
-    messageRender?: (message: Message, index: number) => JSX.Element;
+    messageRenderFunction?: (text: string) => JSX.Element;
+    dataRenderFunction?: (data: any) => JSX.Element;
 }
 
 interface APIConfig {
-    fetchFunction: string;
+    isWebsocket: boolean;
+    auth?: boolean;
+    fetchFunction?: string;
     apiQueryEndpoint: string;
     queryParams?: Record<string, any>;
 }
@@ -86,8 +89,18 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     className,
     apiConfig,
     themeConfig,
-    messageRender = () => <div />,
+    messageRenderFunction,
+    dataRenderFunction,
 }: ChatbotProps) => {
+
+    const MessageRender = useCallback((text: string) => {
+        return messageRenderFunction ? messageRenderFunction(text) : <Typography>{text}</Typography>;
+    }, [messageRenderFunction]);
+
+    const DataRender = useCallback((data: any) => {
+        return dataRenderFunction ? dataRenderFunction(data) : <MuiTable data={data} />;
+    }, [dataRenderFunction]);
+
     const humanUser = 'humanUser';
     const botUser = 'botUser';
     const customTheme = createTheme(themeConfig ? { palette: themeConfig.palette, typography: themeConfig.typography } : {});
@@ -95,12 +108,70 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const [newMessage, setNewMessage] = useState<string>('');
     const [botMessage, setBotMessage] = useState<Message | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const [showEditGraphButton, setShowEditGraphButton] = useState(false);
     const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
     const [showLinearLoader, setShowLinearLoader] = useState(false);
+    const [token, setToken] = useState<string | null>(null);
 
-    const socketUrl = 'ws://localhost:8000/chatws';
-    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+
+    if (apiConfig.isWebsocket && !apiConfig.apiQueryEndpoint.startsWith('ws')) {
+        throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
+    } else if (!apiConfig.isWebsocket && !apiConfig.apiQueryEndpoint.startsWith('http')) {
+        throw new Error('apiQueryEndpoint should start with http:// or https:// for fetch');
+    }
+
+    useEffect(() => {
+        const fetchedToken = localStorage.getItem('token');
+        setToken(fetchedToken);
+    }, []);
+
+    // If it is not Websocket
+    const customFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> = typeof apiConfig.fetchFunction === 'function' ? apiConfig.fetchFunction : fetch;
+
+    const handleFetchMessage = async () => {
+        if (apiConfig.auth && token) {
+            const response = await customFetch(apiConfig.apiQueryEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ query: newMessage }),
+            } as RequestInit);
+
+            const lastMessage = JSON.parse(await response.text());
+
+            const botMessage = { text: lastMessage.text, user: 'botUser', loading: false };
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
+        } else {
+            const response = await customFetch(apiConfig.apiQueryEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: newMessage }),
+            } as RequestInit);
+
+            const lastMessage = JSON.parse(await response.text());
+
+            const botMessage = { text: lastMessage.text, user: 'botUser', loading: false };
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
+        }
+    }
+
+    // Is Websocket
+    let wsUrl = '';
+    if (apiConfig.auth && token) {
+        wsUrl = `${apiConfig.apiQueryEndpoint}?token=${token}`;
+    } else {
+        wsUrl = apiConfig.apiQueryEndpoint;
+    }
+    const { sendMessage, lastMessage, readyState } = useWebSocket(
+        wsUrl,
+        {
+            shouldReconnect: (closeEvent) => true,
+            reconnectAttempts: 10,
+            reconnectInterval: 1000,
+        });
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
         [ReadyState.OPEN]: 'Open',
@@ -109,30 +180,66 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
         [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
 
-    const handleDownloadClick = () => {
-        setShowEditGraphButton(true);
-    };
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-    const [openDialog, setOpenDialog] = useState(false);
-
-    const handleOpenDialog = () => {
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-    };
-
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
-        sendMessage(newMessage);
+        if (apiConfig.isWebsocket) {
+            sendMessage(JSON.stringify({ query: newMessage }));
+        } else {
+            handleFetchMessage();
+        }
+
         console.log('newMessage:', newMessage);
         const userMessage = { text: newMessage, user: 'humanUser', loading: false };
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
+    };
+
+    useEffect(() => {
+
+        if (lastMessage !== null) {
+
+            let messageData = JSON.parse(lastMessage.data);
+            let mappedData: { [key: string]: any } = {};
+
+            if (apiConfig.queryParams) {
+                Object.entries(apiConfig.queryParams).forEach(([key, value]) => {
+                    mappedData[key] = messageData[value];
+                });
+            }
+
+            let body = mappedData.text;
+            let type = mappedData.type;
+            let data = mappedData.data;
+            console.log('body:', body);
+            console.log('type:', type);
+            console.log('data:', data);
+            let queryLoading = type !== 'data';
+            setIsAnyMessageLoading(queryLoading);
+
+            if (queryLoading && type === 'model_step') {
+                setBotMessage(prevBotMessage => ({
+                    text: body,
+                    user: 'botUser',
+                    loading: true
+                }));
+            } else if (type === 'data') {
+                setShowLinearLoader(true);
+
+                setTimeout(() => {
+                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', loading: false }]);
+                    setShowLinearLoader(false);
+                    setBotMessage(null);
+                }, 3000);
+            }
+        }
+    }, [lastMessage]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, lastMessage]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -141,34 +248,6 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             event.preventDefault();
         }
     };
-
-    useEffect(() => {
-
-        if (lastMessage !== null) {
-            let messageData = JSON.parse(lastMessage.data);
-            let body = messageData.body;
-            let isLoading = messageData.loading;
-            setIsAnyMessageLoading(isLoading);
-
-            if (isLoading) {
-                setBotMessage(prevBotMessage => ({
-                    text: body,
-                    user: 'botUser',
-                    loading: true
-                }));
-            } else if (!isLoading && !showLinearLoader) {
-                setShowLinearLoader(true);
-            } else {
-                setShowLinearLoader(false);
-                setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', loading: false }]);
-                setBotMessage(null);
-            }
-        }
-    }, [lastMessage, showLinearLoader]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
 
     return (
         <div className={`chatbot-default ${className}`} style={{
@@ -191,16 +270,17 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                         marginRight: message.user === botUser ? '1rem' : '0',
                                         marginLeft: message.user === humanUser ? '1rem' : '0',
                                         ...themeConfig?.components?.Avatar?.style,
+                                        transition: 'opacity 0.5s ease-in-out',
                                     }}
                                     src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
                                 />
                                 <Box sx={themeConfig?.components?.MessageBubbleUser}>
-                                    {message.text}
+                                    {MessageRender(message.text)}
                                 </Box>
                             </ListItem>
                         ))}
                         {botMessage && isAnyMessageLoading && !showLinearLoader && (
-                            <ListItem sx={{ display: 'flex', flexDirection: 'row' }}>
+                            <ListItem sx={{ display: 'flex', flexDirection: 'row', transition: 'opacity 0.5s ease-in-out' }}>
                                 <Avatar
                                     sx={{
                                         marginRight: '1rem',
@@ -220,15 +300,23 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     <Typography sx={{
                                         marginLeft: '1rem',
                                     }}>
-                                        {botMessage.text}
+                                        {botMessage.text === 'world_knowledge' ? 'Retrieving information...' : botMessage.text}
                                     </Typography>
                                 </Box>
-
 
                             </ListItem>
                         )}
                         {showLinearLoader && (
-                            <LinearBuffer />
+                            <ListItem sx={{ display: 'flex', flexDirection: 'row', maxWidth: '30vw' }}>
+                                <Avatar
+                                    sx={{
+                                        marginRight: '1rem',
+                                        ...themeConfig?.components?.Avatar?.style,
+                                    }}
+                                    src={themeConfig?.components?.Avatar?.botAvatarUrl}
+                                />
+                                <LinearBuffer />
+                            </ListItem>
                         )}
                     </List>
 
