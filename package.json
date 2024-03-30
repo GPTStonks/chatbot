@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "GPTStonks Open-source Chatbot",
   "main": "src/app/chatbot.tsx",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",

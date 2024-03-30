@@ -23,106 +23,93 @@
 
 A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
 
-## Description
+---
 
-GPTStonks Chatbot harnesses the capabilities of Next.js, React 18, MUI, and Emotion to offer a sleek, modern chat experience. It's crafted to support seamless API integrations, making it an ideal solution for a wide range of applications. Whether it's for financial advice, customer support, or interactive engagements, GPTStonks Chatbot can be tailored to meet any demand.
+# ChatbotWebsocket Package
 
-### Features 🚀
+The `ChatbotWebsocket` package provides a powerful and customizable chatbot UI component for React applications, featuring WebSocket support for real-time messaging and full styling capabilities to match your app's look and feel.
 
-- **Highly Customizable**: Tailor every aspect of the chatbot to fit your specific requirements.
-- **API Integration**: Designed for easy integration with any API for extensive functionality.
-- **Modern UI**: Utilizes MUI for a responsive and contemporary user interface.
+## Features
 
-## Getting Started 🛠️
+- **WebSocket Support**: Seamlessly integrate real-time messaging into your application using WebSocket.
+- **Full Styling Customization**: Customize every part of the chat interface with detailed theme configuration.
+- **API Integration**: Easy setup for both WebSocket and traditional HTTP API endpoints.
+- **Extensible Rendering**: Customize how messages and data are rendered within the chat interface.
 
-### Prerequisites
+## Installation
 
-- [Docker](https://www.docker.com/)
-
-> For a local installation, you will need:
-
-- [Node.js](https://nodejs.org/en/) (v16.0.0 or higher recommended)
-- [npm](https://www.npmjs.com/) (v7.10.0 or higher recommended)
-
-### Docker Installation 🛸
-
-- For a full GPTStonks ecosystem setup:
-
-Visit the [GPTStonks repository](https://github.com/GPTStonks/api?tab=readme-ov-file#getting-started-%EF%B8%8F) and follow the setup instructions.
-
-- For front-end only:
-
-```sh
-docker build -f Dockerfile.local -t gptstonks-front .
-docker run -p 3000:3000 -d gptstonks-front
+```bash
+npm install gptstonks-chatbot
 ```
 
-## Local Installation
+Ensure you have React and @mui/material installed as they are peer dependencies.
 
-1. Clone the repository:
+## Package Exports
 
-```sh
-git clone https://github.com/GPTStonks/front-end.git
-```
-
-2. Install dependencies by navigating to the project's root directory and running:
-
-```sh
-npm install
-```
-
-## Run
-
-Start the development server with:
-
-```sh
-npm run dev
-```
-
-Your default web browser will open the project, allowing for local interaction with GPTStonks Chatbot. Hot reloading is enabled to streamline the development process.
+- `useChatbotDefaultTheme`: A hook providing default theme configuration.
+- `ChatbotWebsocket`: The main chatbot component.
 
 ## Usage
 
-Execute the following command to start a demo api server:
+Below is an example of how to integrate the `ChatbotWebsocket` component into a real project:
 
-```bash
-uvicorn api_example:app --reload
+```jsx
+import React from 'react';
+import { ChatbotWebsocket, useChatbotDefaultTheme } from 'your-package-name';
+import ApiTextParser from './ApiTextParser'; // Your custom component
+import MuiTable from './MuiTable'; // Your custom component
+
+function App() {
+  return (
+    <ChatbotWebsocket
+      apiConfig={{
+        isWebsocket: true,
+        auth: false,
+        tokenName: "userToken",
+        fetchFunction: "",
+        apiQueryEndpoint: "ws://localhost:8000/chatws",
+        queryParams: {
+          'type': 'type',
+          'data': 'result_data',
+          'text': 'body',
+        },
+      }}
+      themeConfig={useChatbotDefaultTheme()}
+      messageRenderFunction={(text: string) => <ApiTextParser text={text} />}
+      dataRenderFunction={(data: any) => <MuiTable data={data} />}
+    />
+  );
+}
+
+export default App;
 ```
 
-Use the Chatbot in your component as follows:
+## Configuration
 
-```tsx
-<Chatbot
-  apiConfig={{
-    apiQueryEndpoint: "http://localhost:8000/ask/",
-    queryParams: {
-      query: "",
-    },
-  }}
-  themeConfig={adaptedTheme}
-/>
-```
+### APIConfig
 
-> [!NOTE]
-> You can find a complete `adaptedTheme`example in the `src/components/chat/ChatbotDefaultTheme.ts` file.
+Configure the API endpoints and authentication for the chatbot:
 
-## Default Theme
+- `isWebsocket`: Specify whether to use WebSocket for real-time communication.
+- `auth`: Enable authentication.
+- `tokenName`: The localStorage key name for the authentication token.
+- `fetchFunction`: Custom fetch function for API calls (optional).
+- `apiQueryEndpoint`: API endpoint URL.
+- `queryParams`: Mapping of response object keys to internal keys.
 
-![](./public/gptstonks_chatbot_open_source.png)
+### ThemeConfig
 
-## Tasks 📝
+Customize the appearance of your chatbot:
 
-- [x] Create a basic chatbot UI
-- [x] Implement stable chatbot functionality
-- [x] Add a default theme configuration
-- [ ] Develop complete documentation and use cases
-- [ ] Publish package to npm registry
+- `style`: CSSProperties for the overall chatbot container.
+- `palette`: Define the color scheme.
+- `typography`: Customize the font settings.
+- `components`: Style individual components like ChatBox, TextField, Button, etc.
 
+## Styling
 
-## Contributing 🤝
+This package leverages `@mui/material` for UI components and `@fontsource-variable` fonts for typography, allowing for deep customization of the chat interface's look and feel. Use the `themeConfig` prop to tailor the chat UI to match your application's design.
 
-Contributions are welcome! Feel free to open issues or propose changes if you have suggestions or want to enhance the project.
+## WebSocket and API Integration
 
-## License 📃
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The component intelligently handles both WebSocket and traditional HTTP API communications based on the `apiConfig` provided. Ensure the `apiQueryEndpoint` starts with `ws://` or `wss://` for WebSocket and `http://` or `https://` for HTTP APIs.
