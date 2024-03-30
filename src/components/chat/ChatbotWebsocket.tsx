@@ -3,36 +3,24 @@ import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
 import '@fontsource-variable/saira';
 import '@fontsource/source-sans-pro';
-import { useCallback } from 'react';
-import { Brush, Close } from '@mui/icons-material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
     Avatar,
     Box,
     Button,
-    Card,
-    CardContent,
     CircularProgress,
-    Dialog,
     Divider,
-    IconButton,
     List,
     ListItem,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
-import MuiTable from '../MuiTable';
-import ApiTextParser from './ApiTextParser';
-import { TradingViewChart } from './TradingViewChart';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import './markdown.css';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DNA } from 'react-loader-spinner';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import MuiTable from '../MuiTable';
 import LinearBuffer from './LinearBuffer';
+import './markdown.css';
 
 
 interface ChatbotProps {
@@ -47,35 +35,80 @@ interface ChatbotProps {
 interface APIConfig {
     isWebsocket: boolean;
     auth?: boolean;
+    tokenName?: string;
     fetchFunction?: string;
     apiQueryEndpoint: string;
     queryParams?: Record<string, any>;
 }
 
+interface PaletteColor {
+    main: string;
+}
+
+interface Palette {
+    primary: PaletteColor;
+    secondary: PaletteColor;
+    error: PaletteColor;
+    warning: PaletteColor;
+    info: PaletteColor;
+    success: PaletteColor;
+    background: { default: string; paper: string };
+    text: { primary: string; secondary: string };
+}
+
+interface Typography {
+    fontFamily: string;
+}
+
+interface ComponentStyle extends React.CSSProperties {
+    '& img'?: React.CSSProperties;
+    '& label'?: React.CSSProperties;
+    '& label.Mui-focused'?: React.CSSProperties;
+    '& .MuiInput-underline:after'?: React.CSSProperties;
+    '& .MuiOutlinedInput-root'?: {
+        '& fieldset'?: React.CSSProperties;
+        '&:hover fieldset'?: React.CSSProperties;
+        '&.Mui-focused fieldset'?: React.CSSProperties;
+    };
+    '&::-webkit-scrollbar'?: React.CSSProperties;
+    '&::-webkit-scrollbar-track'?: React.CSSProperties;
+    '&::-webkit-scrollbar-thumb'?: React.CSSProperties;
+}
+
+interface LoaderConfig {
+    color: string;
+    backgroundColor: string;
+}
+
+interface ComponentConfig {
+    style?: ComponentStyle;
+    label?: string;
+    fullWidth?: boolean;
+    hoverBackgroundColor?: string;
+    appears?: boolean;
+    text?: string;
+    botAvatarUrl?: string;
+    userAvatarUrl?: string;
+    loader?: LoaderConfig;
+}
+
+interface Components {
+    ChatBox?: ComponentConfig;
+    LowPartBox?: ComponentConfig;
+    TextField?: ComponentConfig;
+    Button?: ComponentConfig;
+    Disclaimer?: ComponentConfig;
+    MessageBubbleBot?: ComponentConfig;
+    MessageBubbleUser?: ComponentConfig;
+    Avatar?: ComponentConfig;
+    Divider?: ComponentConfig;
+}
+
 interface ThemeConfig {
-    style?: React.CSSProperties;
-    palette?: {
-        primary?: { main: string };
-        secondary?: { main: string };
-        error: { main: string };
-        warning: { main: string };
-        info: { main: string };
-        success: { main: string };
-        background: { default: string; paper: string };
-        text: { primary: string; secondary: string };
-    };
-    typography?: { fontFamily?: string };
-    components?: {
-        ChatBox?: React.CSSProperties;
-        LowPartBox?: React.CSSProperties;
-        TextField?: { label?: string, fullWidth?: boolean, style?: React.CSSProperties };
-        Button?: { style: React.CSSProperties, hoverBackgroundColor: string };
-        Disclaimer?: { appears?: boolean, text: string, style: React.CSSProperties };
-        Avatar?: { botAvatarUrl?: string; userAvatarUrl?: string, style?: React.CSSProperties };
-        MessageBubbleBot?: React.CSSProperties;
-        MessageBubbleUser?: React.CSSProperties;
-        Divider?: { appears?: boolean; style?: React.CSSProperties };
-    };
+    style: React.CSSProperties;
+    palette: Palette;
+    typography: Typography;
+    components: Components;
 }
 
 interface Message {
@@ -111,6 +144,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
     const [showLinearLoader, setShowLinearLoader] = useState(false);
     const [token, setToken] = useState<string | null>(null);
+    const [graphData, setGraphData] = useState<any>(null);
 
 
     if (apiConfig.isWebsocket && !apiConfig.apiQueryEndpoint.startsWith('ws')) {
@@ -120,8 +154,13 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     }
 
     useEffect(() => {
-        const fetchedToken = localStorage.getItem('token');
-        setToken(fetchedToken);
+        if (apiConfig.auth) {
+            if (!apiConfig.tokenName) {
+                throw new Error('tokenName should be provided for auth');
+            }
+            const fetchedToken = localStorage.getItem(apiConfig.tokenName);
+            setToken(fetchedToken);
+        }
     }, []);
 
     // If it is not Websocket
@@ -159,26 +198,16 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     }
 
     // Is Websocket
-    let wsUrl = '';
-    if (apiConfig.auth && token) {
-        wsUrl = `${apiConfig.apiQueryEndpoint}?token=${token}`;
-    } else {
-        wsUrl = apiConfig.apiQueryEndpoint;
-    }
+    const wsUrl = useMemo(() => {
+        if (apiConfig.auth && token) {
+            return `${apiConfig.apiQueryEndpoint}?token=${token}`;
+        }
+        return apiConfig.apiQueryEndpoint;
+    }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
+
     const { sendMessage, lastMessage, readyState } = useWebSocket(
         wsUrl,
-        {
-            shouldReconnect: (closeEvent) => true,
-            reconnectAttempts: 10,
-            reconnectInterval: 1000,
-        });
-    const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-    }[readyState];
+        );
 
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
@@ -213,6 +242,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             console.log('body:', body);
             console.log('type:', type);
             console.log('data:', data);
+
+            if (type === 'data' && data) {
+                setGraphData(data);
+            }
+
             let queryLoading = type !== 'data';
             setIsAnyMessageLoading(queryLoading);
 
@@ -220,13 +254,14 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                 setBotMessage(prevBotMessage => ({
                     text: body,
                     user: 'botUser',
+                    graphData: graphData,
                     loading: true
                 }));
             } else if (type === 'data') {
                 setShowLinearLoader(true);
 
                 setTimeout(() => {
-                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', loading: false }]);
+                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', graphData: graphData, loading: false }]);
                     setShowLinearLoader(false);
                     setBotMessage(null);
                 }, 3000);
@@ -259,7 +294,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             <ThemeProvider theme={customTheme}>
                 <Box className={`chatbot-default ${className}`}
                     sx={{
-                        ...themeConfig.components?.ChatBox,
+                        ...themeConfig.components?.ChatBox?.style,
 
                     }}>
                     <List sx={{ maxWidth: '70%', margin: '0 auto' }}>
@@ -274,9 +309,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     }}
                                     src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
                                 />
-                                <Box sx={themeConfig?.components?.MessageBubbleUser}>
+                                <Box sx={themeConfig?.components?.MessageBubbleUser?.style}>
                                     {MessageRender(message.text)}
+                                    {message.graphData && DataRender(message.graphData)}
                                 </Box>
+
                             </ListItem>
                         ))}
                         {botMessage && isAnyMessageLoading && !showLinearLoader && (
@@ -288,7 +325,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     }}
                                     src={themeConfig?.components?.Avatar?.botAvatarUrl}
                                 />
-                                <Box sx={{ ...themeConfig?.components?.MessageBubbleBot }}>
+                                <Box sx={{ ...themeConfig?.components?.MessageBubbleBot?.style }}>
                                     <DNA
                                         visible={true}
                                         height="60"
@@ -326,7 +363,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
 
                 {themeConfig?.components?.Divider?.appears && <Divider sx={themeConfig?.components?.Divider?.style} />}
 
-                <Box sx={themeConfig.components?.LowPartBox}>
+                <Box sx={themeConfig.components?.LowPartBox?.style}>
                     <TextField
                         fullWidth={themeConfig?.components?.TextField?.fullWidth || true}
                         value={newMessage}
