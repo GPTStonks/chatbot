@@ -6,18 +6,18 @@ export default function LinearBuffer() {
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(10);
 
-  const intervalDuration = 100; 
-  const totalDuration = 3000; 
-  const steps = totalDuration / intervalDuration; 
+  const intervalDuration = 100;
+  const totalDuration = 3000;
+  const steps = totalDuration / intervalDuration;
 
-  const calculateIncrement = (currentValue) => {
-    const minIncrement = 1; 
-    const maxIncrement = 10; 
+  const calculateIncrement = (currentValue: number) => {
+    const minIncrement = 1;
+    const maxIncrement = 10;
     let increment = Math.random() * (maxIncrement - minIncrement) + minIncrement;
 
-    if (currentValue > 80) { 
+    if (currentValue > 80) {
       const decelerationFactor = (100 - currentValue) / 20;
-      increment *= decelerationFactor; 
+      increment *= decelerationFactor;
     }
 
     return increment;
