@@ -19,7 +19,7 @@
     "AI"
   ],
   "description": "GPTStonks Open-source Chatbot",
-  "main": "out/src/app/chatbot.jsx",
+  "main": "out/src/app/chatbot.js",
   "private": false,
   "files": [
     "out/**/*"
