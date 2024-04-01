@@ -3,14 +3,13 @@ import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
 import '@fontsource-variable/saira';
 import '@fontsource/source-sans-pro';
-import { ArrowUpward, GraphicEq, QueryStatsOutlined } from '@mui/icons-material';
+import { ArrowUpward } from '@mui/icons-material';
 import {
     Avatar,
     Box,
     Button,
     CircularProgress,
     Divider,
-    IconButton,
     List,
     ListItem,
     TextField,
@@ -22,8 +21,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DNA } from 'react-loader-spinner';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import LinearBuffer from './LinearBuffer';
-import './markdown.css';
-
 
 interface ChatbotProps {
     className?: string;
