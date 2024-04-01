@@ -1,6 +1,23 @@
 {
-  "name": "gptstonks-chatbot",
-  "version": "0.0.1",
+  "name": "@gptstonks/chatbot",
+  "version": "0.0.6",
+  "author": {
+    "name": "GPTStonks",
+    "email": "gptstonks@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GPTStonks/chatbot.git"
+  },
+  "homepage": "https://gptstonks.net",
+  "license": "MIT",
+  "keywords": [
+    "chatbot",
+    "websocket",
+    "react",
+    "nextjs",
+    "AI"
+  ],
   "description": "GPTStonks Open-source Chatbot",
   "main": "src/app/chatbot.tsx",
   "private": false,
@@ -16,18 +33,14 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource-variable/exo-2": "^5.0.18",
     "@fontsource-variable/fira-code": "^5.0.17",
-    "@fontsource-variable/saira": "^5.0.28",
     "@fontsource/source-sans-pro": "^5.0.8",
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.12",
-    "@mui/x-data-grid": "^6.19.6",
-    "lightweight-charts": "^4.1.3",
     "lint-staged": "^15.2.2",
     "next": "14.1.3",
     "react": "^18",
     "react-dom": "^18",
     "react-loader-spinner": "^6.1.6",
-    "react-markdown": "^9.0.1",
     "react-use-websocket": "^3.0.0"
   },
   "devDependencies": {
