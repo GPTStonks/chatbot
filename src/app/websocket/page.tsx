@@ -1,5 +1,6 @@
 'use client'
 import { useChatbotDefaultTheme, ChatbotWebsocket } from "../chatbot";
+import React from "react";
 
 export default function Home() {
 
