@@ -17,6 +17,24 @@
 A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
 
 ---
+## Status
+
+### Work in Progress
+
+The `GPTStonks Chatbot` is currently under active development. We are working tirelessly to enhance its capabilities, aiming to include a wide range of features that will cater to various use cases and applications. Our goal is to make `GPTStonks Chatbot` the go-to solution for developers looking for a highly customizable, efficient, and easy-to-integrate chatbot.
+
+### Upcoming Features
+
+- **Improved AI Integration**: Plans are in place to integrate more advanced AI and natural language processing (NLP) capabilities, allowing for more sophisticated and nuanced conversations with users.
+- **Enhanced Customization Options**: We are expanding the customization options available to developers, making it easier to tailor the chatbot's appearance and functionality to fit the specific needs of any application.
+- **Increased Accessibility Features**: Accessibility is a priority, and upcoming releases will focus on making `GPTStonks Chatbot` more accessible to users with disabilities, ensuring a broader range of individuals can interact with the chatbot seamlessly.
+- **Seamless Integration with External Services**: We are working on integrations with popular external services and platforms, enabling developers to leverage the full potential of the chatbot in their applications.
+- **More Comprehensive Documentation**: As new features are added, our documentation will grow to include detailed guides, tutorials, and examples to help developers make the most of the `GPTStonks Chatbot`.
+
+### Real Examples
+We are currently using this package in a production environment in [GPTStonks](https://gptstonks.net/), our AI financial assistant. The chatbot is an integral part of the user experience, allowing users to interact with the AI and receive personalized insights and recommendations.
+
+---
 
 # ChatbotWebsocket Package
 
@@ -154,6 +172,7 @@ The package utilizes `@mui/material` for UI components and supports extensive cu
 
 `ChatbotWebsocket` intelligently handles both WebSocket and traditional HTTP API communications, ensuring that your chatbot can interact with users in real-time or through standard request-response cycles, depending on your configuration.
 
----
-
-Este ejemplo actualizado refleja los cambios en la interfaz `ChatbotProps`, mostrando cómo configurar el componente `ChatbotWebsocket` para un uso efectivo en un proyecto real, incluyendo la personalización del tema y el manejo de diferentes tipos de contenido y errores.
+## External dependencies
+- `@mui/material`: Material-UI components for building the chatbot UI (https://mui.com/).
+- `react`: Core library for building React applications.
+- `useWebSocket`: A custom hook for managing WebSocket connections in React applications (https://www.npmjs.com/package/use-websocket). Will try to implement a workaround for this dependency in the future so that it is not required.
