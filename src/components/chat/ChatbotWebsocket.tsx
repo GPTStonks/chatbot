@@ -21,7 +21,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DNA } from 'react-loader-spinner';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import MuiTable from '../MuiTable';
 import LinearBuffer from './LinearBuffer';
 import './markdown.css';
 
