@@ -1,115 +1,178 @@
 <p align="center">
-  <img src="./public/logo-chatbot.png" alt="Logo">
-</p>
-
-<p align="center">
+  <a href="https://nextjs.org/">
+    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge">
+  </a>
+  <a href="https://www.typescriptlang.org/">
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge">
   <a href="https://reactjs.org/">
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge">
   </a>
   <a href="https://mui.com/">
-    <img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white" alt="Material-UI Badge">
-  </a>
-  <a href="https://mui.com/components/data-grid/">
-    <img src="https://img.shields.io/badge/MUI_X_Data_Grid-00C853?style=for-the-badge&logo=mui&logoColor=white" alt="MUI X Data Grid Badge">
-  </a>
-  <a href="https://nodejs.org/">
-    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Badge">
-  </a>
-  <a href="https://www.docker.com/">
-    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge">
+    <img src="https://img.shields.io/badge/Material--UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="Material-UI Badge">
   </a>
 </p>
 
 # GPTStonks Chatbot
 
-A sleek and modern chatbot built using React, aimed to simplify user interactions and engagements
-with openbb-chat API.
+A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
 
-## Description
+---
+## Status
 
-GPTStonks leverages the power of the latest React features and a user-friendly design to offer a
-seamless and intuitive chat experience. Utilizing a range of modern technologies such as React 18,
-MUI, and Emotion, this project stands as a robust solution for integrating a chatbot into various
-applications and platforms. Whether it is for retail investors, assisting other kind of users, or
-just gathering data, GPTStonks is equipped to handle a variety of tasks efficiently and effectively.
+### Work in Progress
 
-### Features 🚀
+The `GPTStonks Chatbot` is currently under active development. We are working tirelessly to enhance its capabilities, aiming to include a wide range of features that will cater to various use cases and applications. Our goal is to make `GPTStonks Chatbot` the go-to solution for developers looking for a highly customizable, efficient, and easy-to-integrate chatbot.
 
-- **Modern UI**: Leveraging MUI for a modern and responsive design.
-- **Customizable data**: Easy to tailor to fit the specific needs of any user to obtain the wanted
-  data.
-- **Real-time Interaction with API**: Swift real-time responses to ensure user satisfaction.
+### Upcoming Features
 
-## Getting Started 🛠️
+- **Improved AI Integration**: Plans are in place to integrate more advanced AI and natural language processing (NLP) capabilities, allowing for more sophisticated and nuanced conversations with users.
+- **Enhanced Customization Options**: We are expanding the customization options available to developers, making it easier to tailor the chatbot's appearance and functionality to fit the specific needs of any application.
+- **Increased Accessibility Features**: Accessibility is a priority, and upcoming releases will focus on making `GPTStonks Chatbot` more accessible to users with disabilities, ensuring a broader range of individuals can interact with the chatbot seamlessly.
+- **Seamless Integration with External Services**: We are working on integrations with popular external services and platforms, enabling developers to leverage the full potential of the chatbot in their applications.
+- **More Comprehensive Documentation**: As new features are added, our documentation will grow to include detailed guides, tutorials, and examples to help developers make the most of the `GPTStonks Chatbot`.
 
-### Prerequisites
+### Real Examples
+We are currently using this package in a production environment in [GPTStonks](https://gptstonks.net/), our AI financial assistant. The chatbot is an integral part of the user experience, allowing users to interact with the AI and receive personalized insights and recommendations.
 
-- [Docker](https://www.docker.com/)
+---
 
-> For local installation, you will need the following:
+# ChatbotWebsocket Package
 
-- [Node.js](https://nodejs.org/en/) (v19.0.0 or higher recommended)
-- [npm](https://www.npmjs.com/) (v8.19.0 or higher recommended)
+The `ChatbotWebsocket` package provides a powerful and customizable chatbot UI component for React applications, featuring WebSocket support for real-time messaging and full styling capabilities to match your app's look and feel.
 
-### Docker Installation 🛸
+## Features
 
-- Full gptstonks ecosystem installation:
+- **WebSocket Support**: Seamlessly integrate real-time messaging into your application using WebSocket.
+- **Full Styling Customization**: Customize every part of the chat interface with detailed theme configuration.
+- **API Integration**: Easy setup for both WebSocket and traditional HTTP API endpoints.
+- **Extensible Rendering**: Customize how messages and data are rendered within the chat interface.
 
-Go to the [gptstonks](https://github.com/GPTStonks/api?tab=readme-ov-file#getting-started-%EF%B8%8F)
-repository and follow the instructions.
+## Installation
 
-- Only front-end installation:
-
-```sh
-docker build -f Dockerfile.local -t gptstonks-front .
-docker run -p 3000:3000 -d gptstonks-front
+```bash
+npm install @gptstonks-chatbot
 ```
 
-## Local Installation
+Ensure you have React and @mui/material installed as they are peer dependencies.
 
-1. Clone the repository:
+## Package Exports
 
-```sh
-git clone https://github.com/GPTStonks/front-end.git
+- `useChatbotDefaultTheme`: A hook providing default theme configuration. This can be overridden with custom settings.
+- `ChatbotWebsocket`: The main chatbot component.
+
+## Usage
+
+Below is an example of how to integrate the `ChatbotWebsocket` component into a real project:
+
+```jsx
+import React from 'react';
+import { ChatbotWebsocket, useChatbotDefaultTheme } from '@gptstonks/chatbot';
+import CustomTextComponent from './CustomTextComponent'; // Your custom text renderer component
+import CustomDataTableComponent from './CustomDataTableComponent'; // Your custom data table renderer
+import CustomGraphComponent from './CustomGraphComponent'; // Your custom graphical data renderer
+import CustomErrorComponent from './CustomErrorComponent'; // Your custom error renderer
+
+function App() {
+
+  return (
+    <ChatbotWebsocket
+      apiConfig={{
+        isWebsocket: true,
+        apiQueryEndpoint: "ws://localhost:8000/chatws",
+      }}
+      themeConfig={{
+        style: {},
+        palette: {
+          primary: { main: '#ff0000' },
+          secondary: { main: '#00ff00' },
+          // Define other colors as needed
+        },
+        typography: {
+          fontFamily: 'Arial, sans-serif',
+        },
+        components: {
+          ChatBox: { style: { backgroundColor: '#f0f0f0' } },
+          // Configure other components as needed
+        },
+      }}
+      messageRenderFunction={CustomTextComponent}
+      dataRenderFunction={CustomDataTableComponent}
+      graphicalDataRenderFunction={CustomGraphComponent}
+      errorRenderFunction={CustomErrorComponent}
+      onApiResponseCode={(responseCode) => {
+        // Handle API response codes as needed
+        console.log(`API responded with code: ${responseCode}`);
+      }}
+    />
+  );
+}
+
+export default App;
 ```
 
-2. To install the project and all its dependencies, navigate to the project's root directory in your
-   terminal and run the following command:
+In this example, the `ChatbotWebsocket` component is configured with WebSocket support and a custom API endpoint. The theme is customized with specific colors, typography, and component styles. Custom renderers are provided for text messages, data tables, graphical data, and error messages. An `onApiResponseCode` callback function is included to handle API response codes.
 
-```sh
-npm install
+**Using default theme configuration:** If you want to use the default theme configuration provided by the package, you can use the `useChatbotDefaultTheme` hook and override specific settings as needed:
+
+```jsx
+import React from 'react';
+import { ChatbotWebsocket, useChatbotDefaultTheme } from '@gptstonks/chatbot';
+
+function App() {
+  const themeConfig = useChatbotDefaultTheme();
+  themeConfig.palette.primary.main = '#ff0000'; // Override primary color and other settings as needed
+
+  return (
+    <ChatbotWebsocket
+      apiConfig={{
+        isWebsocket: true,
+        apiQueryEndpoint: "ws://localhost:8000/chatws",
+      }}
+      themeConfig={themeConfig}
+    />
+  );
+}
 ```
 
-This command will install all the necessary npm packages and dependencies required to run the
-project locally.
+## Configuration
 
-## Run
+### APIConfig
 
-To run the project locally, use the following command in the project's root directory:
+Customize the chatbot's API endpoints and authentication settings:
 
-```sh
-npm start
-```
+- `isWebsocket`: Determines whether to use WebSocket for real-time communication.
+- `apiQueryEndpoint`: The endpoint URL for the API or WebSocket connection.
+- `auth` (optional): Enables authentication.
+- `tokenName` (optional): The key name for the authentication token in localStorage.
+- `fetchFunction` (optional): A custom fetch function for API calls.
+- `queryParams` (optional): Maps response object keys to internal keys for processing.
 
-This command will start the development server and open the project in your default web browser. You
-can now interact with the GPTStonks locally, with hot reloading enabled to facilitate a smooth
-development process.
+### ThemeConfig
 
-## Examples
+Adjust the chatbot's appearance:
 
-### Chat View 💬
+- `style`: General CSSProperties for the chatbot's container.
+- `palette`: Defines the color scheme, including primary, secondary, and other states like error, warning, info, and success.
+- `typography`: Configures font settings.
+- `components`: Allows styling of individual components such as the chat box, text field, button, etc.
 
-![](public/BTC_table.png)
+### Handling Data and Errors
 
-### Chart View 📈
+- `messageRenderFunction`: Custom renderer for text messages.
+- `dataRenderFunction`: Custom renderer for displaying data tables or lists.
+- `graphicalDataRenderFunction`: Custom renderer for displaying graphical data, such as charts or graphs.
+- `errorRenderFunction`: Custom renderer for displaying error messages.
+- `onApiResponseCode`: A callback function for handling API response codes, allowing you to react to specific server responses, such as authentication failures or rate limits.
 
-![](public/gptstonks_tview.png)
+## Customization
 
-## Contributing 🤝
+The package utilizes `@mui/material` for UI components and supports extensive customization through the `themeConfig` prop. You can tailor the chat UI to seamlessly integrate with your application's design, ensuring a consistent user experience.
 
-We welcome contributions from the community! If you have any suggestions, bug reports, or want to
-contribute to the project, feel free to open issues or propose changes.
+## Real-Time and API Communication
 
-## License 📃
+`ChatbotWebsocket` intelligently handles both WebSocket and traditional HTTP API communications, ensuring that your chatbot can interact with users in real-time or through standard request-response cycles, depending on your configuration.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## External dependencies
+- `@mui/material`: Material-UI components for building the chatbot UI (https://mui.com/).
+- `react`: Core library for building React applications.
+- `useWebSocket`: A custom hook for managing WebSocket connections in React applications (https://www.npmjs.com/package/use-websocket). Will try to implement a workaround for this dependency in the future so that it is not required.
