@@ -1,0 +1,14 @@
+node_modules
+tests
+.env
+.dockerignore
+.husky/
+docs/
+public/
+Dockerfile*
+api_example.py
+.github/
+gptstonks-test-package/
+npm_package_test/
+__pycache__/
+.next/
