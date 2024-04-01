@@ -1,25 +1,24 @@
-#name: Node.js CI
-#
-#on:
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#
-#    strategy:
-#      matrix:
-#        node-version: [19.0.0]
-#
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Use Node.js ${{ matrix.node-version }}
-#      uses: actions/setup-node@v1
-#      with:
-#        node-version: ${{ matrix.node-version }}
-#    - run: npm ci
-#    - run: npm run build
-#    - run: npm test
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [21.0.0]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build
