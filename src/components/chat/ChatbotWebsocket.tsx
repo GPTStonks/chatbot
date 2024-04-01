@@ -3,16 +3,19 @@ import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
 import '@fontsource-variable/saira';
 import '@fontsource/source-sans-pro';
+import { ArrowUpward, GraphicEq, QueryStatsOutlined } from '@mui/icons-material';
 import {
     Avatar,
     Box,
     Button,
     CircularProgress,
     Divider,
+    IconButton,
     List,
     ListItem,
     TextField,
-    Typography
+    Typography,
+    useMediaQuery
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -28,8 +31,11 @@ interface ChatbotProps {
     style?: React.CSSProperties;
     apiConfig: APIConfig;
     themeConfig: ThemeConfig;
+    onApiResponseCode?: (responseCode: number) => void;
     messageRenderFunction?: (text: string) => JSX.Element;
     dataRenderFunction?: (data: any) => JSX.Element;
+    graphicalDataRenderFunction?: (data: any) => JSX.Element;
+    errorRenderFunction?: (error: any) => JSX.Element;
 }
 
 interface APIConfig {
@@ -99,6 +105,7 @@ interface Components {
     Button?: ComponentConfig;
     Disclaimer?: ComponentConfig;
     MessageBubbleBot?: ComponentConfig;
+    LoaderBot?: ComponentConfig;
     MessageBubbleUser?: ComponentConfig;
     Avatar?: ComponentConfig;
     Divider?: ComponentConfig;
@@ -122,8 +129,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     className,
     apiConfig,
     themeConfig,
+    onApiResponseCode,
     messageRenderFunction,
     dataRenderFunction,
+    graphicalDataRenderFunction,
+    errorRenderFunction
 }: ChatbotProps) => {
 
     const MessageRender = useCallback((text: string) => {
@@ -131,11 +141,20 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     }, [messageRenderFunction]);
 
     const DataRender = useCallback((data: any) => {
-        return dataRenderFunction ? dataRenderFunction(data) : <MuiTable data={data} />;
+        return dataRenderFunction ? dataRenderFunction(data) : null;
     }, [dataRenderFunction]);
+
+    const GraphicalRender = useCallback((data: any) => {
+        return graphicalDataRenderFunction ? graphicalDataRenderFunction(data) : null;
+    }, [graphicalDataRenderFunction]);
+
+    const ErrorRender = useCallback((error: any) => {
+        return errorRenderFunction ? errorRenderFunction(error) : <Typography>{error}</Typography>;
+    }, [errorRenderFunction]);
 
     const humanUser = 'humanUser';
     const botUser = 'botUser';
+    const isMobile = useMediaQuery('(max-width:750px)');
     const customTheme = createTheme(themeConfig ? { palette: themeConfig.palette, typography: themeConfig.typography } : {});
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
@@ -145,7 +164,6 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const [showLinearLoader, setShowLinearLoader] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [graphData, setGraphData] = useState<any>(null);
-
 
     if (apiConfig.isWebsocket && !apiConfig.apiQueryEndpoint.startsWith('ws')) {
         throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
@@ -207,7 +225,16 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(
         wsUrl,
-        );
+    );
+
+    const connectionStatus = {
+        [ReadyState.CONNECTING]: 'Connecting',
+        [ReadyState.OPEN]: 'Open',
+        [ReadyState.CLOSING]: 'Closing',
+        [ReadyState.CLOSED]: 'Closed',
+        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+    }[readyState];
+
 
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
@@ -254,14 +281,14 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                 setBotMessage(prevBotMessage => ({
                     text: body,
                     user: 'botUser',
-                    graphData: graphData,
+                    graphData: data,
                     loading: true
                 }));
             } else if (type === 'data') {
                 setShowLinearLoader(true);
 
                 setTimeout(() => {
-                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', graphData: graphData, loading: false }]);
+                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', graphData: data, loading: false }]);
                     setShowLinearLoader(false);
                     setBotMessage(null);
                 }, 3000);
@@ -271,7 +298,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, lastMessage]);
+    }, [messages, lastMessage, isAnyMessageLoading]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -287,32 +314,67 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     return (
         <div className={`chatbot-default ${className}`} style={{
             ...themeConfig.style,
-            //scrollbar width and color
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'yellow',
         }}>
             <ThemeProvider theme={customTheme}>
                 <Box className={`chatbot-default ${className}`}
                     sx={{
                         ...themeConfig.components?.ChatBox?.style,
-
                     }}>
-                    <List sx={{ maxWidth: '70%', margin: '0 auto' }}>
+                    {connectionStatus === 'Closed' && (
+                        <div>
+                            {ErrorRender('Connection is closed. Please refresh the page.')}
+                        </div>
+                    )}
+                    <List sx={{ maxWidth: isMobile ? '100%' : '70%', margin: '0 auto' }}>
                         {messages.map((message, index) => (
                             <ListItem key={index} sx={{ display: 'flex', flexDirection: message.user === botUser ? 'row' : 'row-reverse', marginBottom: '1rem' }}>
-                                <Avatar
-                                    sx={{
-                                        marginRight: message.user === botUser ? '1rem' : '0',
-                                        marginLeft: message.user === humanUser ? '1rem' : '0',
-                                        ...themeConfig?.components?.Avatar?.style,
-                                        transition: 'opacity 0.5s ease-in-out',
-                                    }}
-                                    src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
-                                />
-                                <Box sx={themeConfig?.components?.MessageBubbleUser?.style}>
-                                    {MessageRender(message.text)}
-                                    {message.graphData && DataRender(message.graphData)}
-                                </Box>
+                                {!isMobile &&
+                                    < Avatar
+                                        sx={{
+                                            marginRight: message.user === botUser ? '1rem' : '0',
+                                            marginLeft: message.user === humanUser ? '1rem' : '0',
+                                            ...themeConfig?.components?.Avatar?.style,
+                                            transition: 'opacity 0.5s ease-in-out',
+                                        }}
+                                        src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
+                                    />
+                                }
+                                {isMobile && (
+                                    < Avatar
+                                        sx={{
+                                            ...themeConfig?.components?.Avatar?.style,
+                                            width: '20px',
+                                            height: '20px',
+                                            position: 'absolute',
+                                            top: '0',
+                                            outline: '1px solid #b8bb26',
+
+                                        }}
+                                        src={message.user === botUser ? themeConfig?.components?.Avatar?.botAvatarUrl : themeConfig?.components?.Avatar?.userAvatarUrl}
+                                    />
+                                )}
+                                {message.user === botUser ? (
+                                    <Box sx={{
+                                        ...themeConfig?.components?.MessageBubbleBot?.style,
+                                        maxWidth: isMobile ? '100%' : '70%'
+                                    }}>
+                                        <Box sx={{ display: 'flex' }}>
+
+                                            {MessageRender(message.text)}
+                                            {
+                                                message.graphData &&
+                                                GraphicalRender(message.graphData)
+                                            }
+                                        </Box>
+                                        <Divider />
+                                        {message.graphData && DataRender(message.graphData)}
+                                    </Box>
+                                ) : (
+                                    <Box sx={themeConfig?.components?.MessageBubbleUser?.style}>
+                                        {MessageRender(message.text)}
+                                    </Box>
+                                )
+                                }
 
                             </ListItem>
                         ))}
@@ -325,7 +387,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     }}
                                     src={themeConfig?.components?.Avatar?.botAvatarUrl}
                                 />
-                                <Box sx={{ ...themeConfig?.components?.MessageBubbleBot?.style }}>
+                                <Box sx={{ ...themeConfig?.components?.LoaderBot?.style }}>
                                     <DNA
                                         visible={true}
                                         height="60"
@@ -337,14 +399,14 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     <Typography sx={{
                                         marginLeft: '1rem',
                                     }}>
-                                        {botMessage.text === 'world_knowledge' ? 'Retrieving information...' : botMessage.text}
+                                        Retrieving information from {botMessage.text} ...
                                     </Typography>
                                 </Box>
 
                             </ListItem>
                         )}
                         {showLinearLoader && (
-                            <ListItem sx={{ display: 'flex', flexDirection: 'row', maxWidth: '30vw' }}>
+                            <ListItem sx={{ display: 'flex', flexDirection: 'row', maxWidth: isMobile ? '70vw' : '40vw' }}>
                                 <Avatar
                                     sx={{
                                         marginRight: '1rem',
@@ -363,11 +425,19 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
 
                 {themeConfig?.components?.Divider?.appears && <Divider sx={themeConfig?.components?.Divider?.style} />}
 
-                <Box sx={themeConfig.components?.LowPartBox?.style}>
+                <Box sx={{
+                    ...themeConfig.components?.LowPartBox?.style,
+                    width: isMobile ? '100vw' : themeConfig.components?.LowPartBox?.style?.width || '60%',
+                }}>
                     <TextField
                         fullWidth={themeConfig?.components?.TextField?.fullWidth || true}
+                        multiline
+                        minRows={1}
+                        maxRows={2}
                         value={newMessage}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setNewMessage(e.target.value)
+                        }}
                         onKeyDown={handleKeyDown}
                         variant="outlined"
                         size="small"
@@ -381,6 +451,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                             variant="outlined"
                             onClick={handleSendMessage}
                             disabled={isAnyMessageLoading}
+                            size={isMobile ? 'small' : 'medium'}
                             sx={{
                                 marginLeft: '1rem',
                                 ...themeConfig?.components?.Button?.style,
@@ -389,8 +460,9 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                 },
                             }}
                         >
-                            Send
+                            <ArrowUpward fontSize={isMobile ? 'small' : 'medium'} />
                         </Button>
+
                     }
                 </Box>
                 {themeConfig?.components?.Disclaimer?.appears && (
