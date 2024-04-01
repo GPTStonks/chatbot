@@ -1,7 +1,6 @@
 'use client'
 import '@fontsource-variable/exo-2';
 import '@fontsource-variable/fira-code';
-import '@fontsource-variable/saira';
 import '@fontsource/source-sans-pro';
 import { ArrowUpward } from '@mui/icons-material';
 import {
