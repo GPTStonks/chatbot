@@ -58,6 +58,7 @@ interface Components {
   Button?: ComponentConfig;
   Disclaimer?: ComponentConfig;
   MessageBubbleBot?: ComponentConfig;
+  LoaderBot?: ComponentConfig;
   MessageBubbleUser?: ComponentConfig;
   Avatar?: ComponentConfig;
   Divider?: ComponentConfig;
@@ -75,6 +76,8 @@ const useChatbotDefaultTheme: ChatbotTheme = {
     justifyContent: 'center',
     alignItems: 'center',
     background: "#080808",
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'yellow',
   },
   palette: {
     primary: { main: '#fac670' },
@@ -91,10 +94,10 @@ const useChatbotDefaultTheme: ChatbotTheme = {
     ChatBox: {
       style: {
         width: '100vw',
-        minHeight: '80vh',
         position: 'relative',
         background: "radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);",
         fontFamily: 'Saira Variable, sans-serif',
+        minHeight: '80vh',
         maxHeight: '80vh',
         overflowY: 'auto',
         paddingTop: '2rem',
@@ -151,9 +154,12 @@ const useChatbotDefaultTheme: ChatbotTheme = {
     },
     Button: {
       style: {
-        backgroundColor: '#b8bb26',
+        minWidth: 'fit-content',
+        padding: '6px 8px',
+        marginTop: '0.5rem',
         color: '#fff',
         borderColor: "#b8bb26",
+        width: 'fit-content',
       },
       hoverBackgroundColor: '#fabd2f',
     },
@@ -173,10 +179,10 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        maxWidth: '70%',
         padding: '0.5rem 1rem',
         borderRadius: '10px',
-        //backgroundColor: '#121214',
+        flexDirection: 'column',
+        backgroundColor: '#121214',
         color: 'white',
         fontSize: '0.875rem',
         wordBreak: 'break-word',
@@ -193,12 +199,23 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         },
       }
     },
+    LoaderBot: {
+      style: {
+        backgroundColor: 'transparent',
+        display: 'flex',
+        color: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0.5rem 1rem',
+      }
+    },
     MessageBubbleUser: {
       style: {
-        maxWidth: '70%',
+        display: 'flex',
         padding: '0.5rem 1rem',
         borderRadius: '10px',
         backgroundColor: '#121214',
+        flexDirection: 'row-reverse',
         color: 'white',
         fontSize: '0.875rem',
         transition: 'opacity 0.5s ease-in-out',
