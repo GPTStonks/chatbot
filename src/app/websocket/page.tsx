@@ -4,9 +4,7 @@ import React from "react";
 
 export default function Home() {
 
-  function handleApiResponseCode(statusCode: number) {
-    console.log(`API response status code: ${statusCode}`);
-  }
+  const [initializedChat, setInitializedChat] = React.useState(false);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24"
@@ -31,7 +29,11 @@ export default function Home() {
           },
         }}
         themeConfig={useChatbotDefaultTheme}
-        onApiResponseCode={handleApiResponseCode}
+        onApiResponseCode={(bool: boolean) => { setInitializedChat(bool); }}
+        dataRenderFunction={(data: any) => <div>{data}</div>}
+        graphicalDataRenderFunction={(data: any) => <div>{data}</div>}
+        referenceRenderFunction={(reference: string) => <div>{reference}</div>}
+        relatedQuestionsRenderFunction={(relatedQuestions: string[]) => <div>{relatedQuestions}</div>}
         errorRenderFunction={(error: string) => <div>{error}</div>}
       />
 
