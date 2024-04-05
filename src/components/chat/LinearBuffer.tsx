@@ -6,7 +6,7 @@ export default function LinearBuffer() {
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(10);
 
-  const progressRef = React.useRef(() => { });
+  const progressRef = React.useRef(() => {});
   React.useEffect(() => {
     progressRef.current = () => {
       if (progress > 200) {
@@ -33,11 +33,15 @@ export default function LinearBuffer() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{
-        height: '5px',
-        borderRadius: 5,
-      }} />
+      <LinearProgress
+        variant="buffer"
+        value={progress}
+        valueBuffer={buffer}
+        sx={{
+          height: '5px',
+          borderRadius: 5,
+        }}
+      />
     </Box>
   );
 }
-

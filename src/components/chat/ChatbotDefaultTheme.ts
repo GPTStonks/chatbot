@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface PaletteColor {
   main: string;
@@ -75,7 +75,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
   style: {
     justifyContent: 'center',
     alignItems: 'center',
-    background: "#080808",
+    background: '#080808',
     scrollbarWidth: 'thin',
     scrollbarColor: 'yellow',
   },
@@ -95,7 +95,8 @@ const useChatbotDefaultTheme: ChatbotTheme = {
       style: {
         width: '100vw',
         position: 'relative',
-        background: "radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);",
+        background:
+          'radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);',
         fontFamily: 'Saira Variable, sans-serif',
         minHeight: '80vh',
         maxHeight: '80vh',
@@ -109,7 +110,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         //backgroundRepeat: 'no-repeat',
         //background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50878 80%);", green
         //background: "linear-gradient(0deg, #000000 10%, #002233 45%, #004466 80%);",
-      }
+      },
     },
     LowPartBox: {
       style: {
@@ -119,7 +120,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         padding: '1rem',
         margin: '0 auto',
         width: '60%',
-      }
+      },
     },
     TextField: {
       label: 'Type a message',
@@ -150,7 +151,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
             borderColor: '#ebdbb2',
           },
         },
-      }
+      },
     },
     Button: {
       style: {
@@ -158,7 +159,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         padding: '6px 8px',
         marginTop: '0.5rem',
         color: '#fff',
-        borderColor: "#b8bb26",
+        borderColor: '#b8bb26',
         width: 'fit-content',
       },
       hoverBackgroundColor: '#fabd2f',
@@ -172,7 +173,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         alignItems: 'center',
         color: '#ebdbb2',
         fontSize: '0.75rem',
-      }
+      },
     },
     MessageBubbleBot: {
       style: {
@@ -197,7 +198,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
           backgroundColor: '#ebdbb2',
           outline: '0.5px solid slategrey',
         },
-      }
+      },
     },
     LoaderBot: {
       style: {
@@ -207,7 +208,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '0.5rem 1rem',
-      }
+      },
     },
     MessageBubbleUser: {
       style: {
@@ -224,7 +225,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
       loader: {
         color: '#b8bb26',
         backgroundColor: '#121214',
-      }
+      },
     },
     Avatar: {
       botAvatarUrl: 'bytebard.png',
@@ -239,7 +240,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
           height: '100%',
           objectFit: 'cover',
         },
-      }
+      },
     },
     Divider: {
       appears: true,
@@ -249,7 +250,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         display: 'flex',
         justifyContent: 'center',
       },
-    }
+    },
   },
 };
 
