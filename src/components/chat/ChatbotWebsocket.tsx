@@ -30,6 +30,8 @@ interface ChatbotProps {
     messageRenderFunction?: (text: string) => JSX.Element;
     dataRenderFunction?: (data: any) => JSX.Element;
     graphicalDataRenderFunction?: (data: any) => JSX.Element;
+    referenceRenderFunction?: (reference: any) => JSX.Element;
+    relatedQuestionsRenderFunction?: (relatedQuestions: any) => JSX.Element;
     errorRenderFunction?: (error: any) => JSX.Element;
 }
 
@@ -118,6 +120,8 @@ interface Message {
     user: string;
     loading?: boolean;
     graphData?: any;
+    relatedQuestions?: any;
+    reference?: any;
 }
 
 const ChatbotWebsocket: React.FC<ChatbotProps> = ({
@@ -128,6 +132,8 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     messageRenderFunction,
     dataRenderFunction,
     graphicalDataRenderFunction,
+    referenceRenderFunction,
+    relatedQuestionsRenderFunction,
     errorRenderFunction
 }: ChatbotProps) => {
 
@@ -142,6 +148,14 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const GraphicalRender = useCallback((data: any) => {
         return graphicalDataRenderFunction ? graphicalDataRenderFunction(data) : null;
     }, [graphicalDataRenderFunction]);
+
+    const ReferenceRender = useCallback((reference: any) => {
+        return referenceRenderFunction ? referenceRenderFunction(reference) : null;
+    }, [referenceRenderFunction]);
+
+    const RelatedQuestionsRender = useCallback((relatedQuestions: any) => {
+        return relatedQuestionsRenderFunction ? relatedQuestionsRenderFunction(relatedQuestions) : null;
+    }, [relatedQuestionsRenderFunction]);
 
     const ErrorRender = useCallback((error: any) => {
         return errorRenderFunction ? errorRenderFunction(error) : <Typography>{error}</Typography>;
@@ -261,9 +275,13 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             let body = mappedData.text;
             let type = mappedData.type;
             let data = mappedData.data;
-            console.log('body:', body);
+            let related = mappedData.related;
+            let reference = mappedData.reference;
+            /* console.log('body:', body);
             console.log('type:', type);
             console.log('data:', data);
+            console.log('related:', related);
+            console.log('reference:', reference); */
 
             if (type === 'data' && data) {
                 setGraphData(data);
@@ -276,14 +294,13 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                 setBotMessage(prevBotMessage => ({
                     text: body,
                     user: 'botUser',
-                    graphData: data,
                     loading: true
                 }));
             } else if (type === 'data') {
                 setShowLinearLoader(true);
 
                 setTimeout(() => {
-                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', graphData: data, loading: false }]);
+                    setMessages(prevMessages => [...prevMessages, { text: body, user: 'botUser', graphData: data, relatedQuestions: related, reference: reference, loading: false }]);
                     setShowLinearLoader(false);
                     setBotMessage(null);
                 }, 3000);
@@ -349,21 +366,37 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
                                     />
                                 )}
                                 {message.user === botUser ? (
-                                    <Box sx={{
-                                        ...themeConfig?.components?.MessageBubbleBot?.style,
-                                        maxWidth: isMobile ? '100%' : '70%'
-                                    }}>
-                                        <Box sx={{ display: 'flex' }}>
+                                    <React.Fragment>
+                                        <Box sx={{
+                                            display: 'flex',
+                                            maxWidth: isMobile ? '100%' : '70%'
+                                        }}>
+                                            {message.reference && ReferenceRender(message.reference)}
 
-                                            {MessageRender(message.text)}
-                                            {
-                                                message.graphData &&
-                                                GraphicalRender(message.graphData)
-                                            }
                                         </Box>
-                                        <Divider />
-                                        {message.graphData && DataRender(message.graphData)}
-                                    </Box>
+                                        <Box sx={{
+                                            ...themeConfig?.components?.MessageBubbleBot?.style,
+                                            maxWidth: isMobile ? '100%' : '70%'
+                                        }}>
+                                            <Box sx={{ display: 'flex' }}>
+                                                {message.reference && ReferenceRender(message.reference)}
+
+                                                {MessageRender(message.text)}
+                                                {
+                                                    message.graphData &&
+                                                    GraphicalRender(message.graphData) // Button to show graph
+                                                }
+                                            </Box>
+                                            <Divider />
+                                            {message.graphData && DataRender(message.graphData)}
+                                        </Box>
+                                        <Box sx={{
+                                            display: 'flex',
+                                            maxWidth: isMobile ? '100%' : '70%'
+                                        }}>
+                                            {message.relatedQuestions && RelatedQuestionsRender(message.relatedQuestions)}
+                                        </Box>
+                                    </React.Fragment>
                                 ) : (
                                     <Box sx={themeConfig?.components?.MessageBubbleUser?.style}>
                                         {MessageRender(message.text)}
