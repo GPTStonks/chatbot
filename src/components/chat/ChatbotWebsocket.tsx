@@ -26,7 +26,7 @@ interface ChatbotProps {
     style?: React.CSSProperties;
     apiConfig: APIConfig;
     themeConfig: ThemeConfig;
-    onApiResponseCode?: (responseCode: number) => void;
+    onApiResponseCode?: (bool: boolean) => void;
     messageRenderFunction?: (text: string) => JSX.Element;
     dataRenderFunction?: (data: any) => JSX.Element;
     graphicalDataRenderFunction?: (data: any) => JSX.Element;
@@ -244,7 +244,6 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
         [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
 
-
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
         if (apiConfig.isWebsocket) {
@@ -258,6 +257,12 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
     };
+
+    useEffect(() => {
+        if (onApiResponseCode && messages.length > 0) {
+            onApiResponseCode(true);
+        }
+    }, [messages]);
 
     useEffect(() => {
 
