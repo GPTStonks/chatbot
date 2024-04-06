@@ -21,7 +21,6 @@ gptstonks-test-package/
 
 # next.js
 /.next/
-/out/
 
 # production
 /build
