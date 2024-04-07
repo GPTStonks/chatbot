@@ -30,5 +30,5 @@ def get_random_phrase() -> str:
 def generate_related_questions() -> list:
     return related_questions
 
-def generate_reference() -> str:
-    return [f"https://gptstonks.net/", "https://wikipedia.org/wiki/Stock_market", "https://www.investopedia.com/terms/s/stockmarket.asp", "https://tradingview.com/"]
+def generate_reference() -> list:
+    return ["https://gptstonks.net/", "https://wikipedia.org/wiki/Stock_market", "https://www.investopedia.com/terms/s/stockmarket.asp", "https://tradingview.com/"]

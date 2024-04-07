@@ -16,5 +16,5 @@ async def ask(query_params: QueryParams):
         "result_data": result_data,
         "body": get_random_phrase(),
         "reference": reference,
-        "related_questions": related_questions,
+        "related": related_questions,
     }
