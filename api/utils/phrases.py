@@ -17,11 +17,18 @@ phrases = [ "The global economy is absolutely thriving, and there's an electrify
         "NFTs are transforming the digital landscape, and I'm all in! Investing in unique NFTs is not just exciting; it's a way to support and be part of the digital art revolution!"
 ]
 
+related_questions = [
+    "How does BTC halving affect the market and what are the implications for investors?",
+    "What are the key factors to consider when investing in real estate?",
+    "How do I choose the right ETFs for my investment portfolio and what are the benefits of diversification?",
+    "What are the risks and rewards of options trading, and how can I mitigate potential losses?",
+]
+
 def get_random_phrase() -> str:
     return random.choice(phrases)
 
 def generate_related_questions() -> list:
-    return ["Question 1?", "Question 2?", "Question 3?"]
+    return related_questions
 
 def generate_reference() -> str:
     return [f"https://gptstonks.net/", "https://wikipedia.org/wiki/Stock_market", "https://www.investopedia.com/terms/s/stockmarket.asp", "https://tradingview.com/"]
