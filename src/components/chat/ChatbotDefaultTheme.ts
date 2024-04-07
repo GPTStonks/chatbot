@@ -1,77 +1,7 @@
 import React from 'react';
+import { ThemeConfig } from '@/types/chatbot';
 
-interface PaletteColor {
-  main: string;
-}
-
-interface Palette {
-  primary: PaletteColor;
-  secondary: PaletteColor;
-  error: PaletteColor;
-  warning: PaletteColor;
-  info: PaletteColor;
-  success: PaletteColor;
-  background: { default: string; paper: string };
-  text: { primary: string; secondary: string };
-}
-
-interface Typography {
-  fontFamily: string;
-}
-
-interface ComponentStyle extends React.CSSProperties {
-  '& img'?: React.CSSProperties;
-  '& label'?: React.CSSProperties;
-  '& label.Mui-focused'?: React.CSSProperties;
-  '& .MuiInput-underline:after'?: React.CSSProperties;
-  '& .MuiOutlinedInput-root'?: {
-    '& fieldset'?: React.CSSProperties;
-    '&:hover fieldset'?: React.CSSProperties;
-    '&.Mui-focused fieldset'?: React.CSSProperties;
-  };
-  '&::-webkit-scrollbar'?: React.CSSProperties;
-  '&::-webkit-scrollbar-track'?: React.CSSProperties;
-  '&::-webkit-scrollbar-thumb'?: React.CSSProperties;
-}
-
-interface LoaderConfig {
-  color: string;
-  backgroundColor: string;
-}
-
-interface ComponentConfig {
-  style?: ComponentStyle;
-  label?: string;
-  fullWidth?: boolean;
-  hoverBackgroundColor?: string;
-  appears?: boolean;
-  text?: string;
-  botAvatarUrl?: string;
-  userAvatarUrl?: string;
-  loader?: LoaderConfig;
-}
-
-interface Components {
-  ChatBox?: ComponentConfig;
-  LowPartBox?: ComponentConfig;
-  TextField?: ComponentConfig;
-  Button?: ComponentConfig;
-  Disclaimer?: ComponentConfig;
-  MessageBubbleBot?: ComponentConfig;
-  LoaderBot?: ComponentConfig;
-  MessageBubbleUser?: ComponentConfig;
-  Avatar?: ComponentConfig;
-  Divider?: ComponentConfig;
-}
-
-interface ChatbotTheme {
-  style: React.CSSProperties;
-  palette: Palette;
-  typography: Typography;
-  components: Components;
-}
-
-const useChatbotDefaultTheme: ChatbotTheme = {
+const useChatbotDefaultTheme: ThemeConfig = {
   style: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -89,7 +19,7 @@ const useChatbotDefaultTheme: ChatbotTheme = {
     background: { default: '#080808', paper: '#16181c' },
     text: { primary: '#ebdbb2', secondary: '#d5c4a1' },
   },
-  typography: { fontFamily: 'Saira Variable, sans-serif' },
+  //typography: { fontFamily: 'Saira Variable, sans-serif' },
   components: {
     ChatBox: {
       style: {
@@ -97,19 +27,11 @@ const useChatbotDefaultTheme: ChatbotTheme = {
         position: 'relative',
         background:
           'radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);',
-        fontFamily: 'Saira Variable, sans-serif',
+        //fontFamily: 'Saira Variable, sans-serif',
         minHeight: '80vh',
         maxHeight: '80vh',
         overflowY: 'auto',
         paddingTop: '2rem',
-        //backgroundColor: 'lightblue',
-        //backgroundImage: 'url(gptstonks_logo_small.png)',
-        // logo small centered
-        //backgroundPosition: 'center',
-        //backgroundSize: 'small',
-        //backgroundRepeat: 'no-repeat',
-        //background: "linear-gradient(300deg, #070707 10%, #005221 45%, #50878 80%);", green
-        //background: "linear-gradient(0deg, #000000 10%, #002233 45%, #004466 80%);",
       },
     },
     LowPartBox: {
