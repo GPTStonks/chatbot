@@ -3,6 +3,6 @@ export interface Message {
   user: string;
   loading?: boolean;
   graphData?: any;
-  relatedQuestions?: any;
+  related?: any;
   reference?: any;
 }
