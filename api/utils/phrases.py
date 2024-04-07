@@ -24,4 +24,4 @@ def generate_related_questions() -> list:
     return ["Question 1?", "Question 2?", "Question 3?"]
 
 def generate_reference() -> str:
-    return "https://gptstonks.net"
+    return [f"https://gptstonks.net/", "https://wikipedia.org/wiki/Stock_market", "https://www.investopedia.com/terms/s/stockmarket.asp", "https://tradingview.com/"]
