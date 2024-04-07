@@ -1,3 +1,4 @@
+import time
 from fastapi import WebSocket
 from .utils.phrases import get_random_phrase, generate_related_questions, generate_reference
 import asyncio
@@ -22,18 +23,28 @@ class ConnectionManager:
             await connection.send_text(message)
 
     async def send_random_messages(self, websocket: WebSocket):
-        response_type = "data"
         result_data = get_random_phrase()
         related_questions = generate_related_questions()
         reference = generate_reference()
 
-        message = {
-            "type": response_type,
+        message_1 = {
+            "type": "model_step",
             "result_data": result_data,
             "body": get_random_phrase(),
             "reference": reference,
             "related": related_questions,
         }
-        await self.send_personal_message(message, websocket)
+        await self.send_personal_message(message_1, websocket)
+
+        message_2 = {
+            "type": "data",
+            "result_data": get_random_phrase(),
+            "body": get_random_phrase(),
+            "reference": reference,
+            "related": related_questions,
+        }
+        time.sleep(2)
+
+        await self.send_personal_message(message_2, websocket)
 
 manager = ConnectionManager()
