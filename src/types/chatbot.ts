@@ -11,13 +11,14 @@ export interface APIConfig {
 }
 
 export interface ChatLayoutConfig {
-  chatOrientation: 'horizontal' | 'vertical';
-  avatarPosition: 'left' | 'right' | 'top' | 'bottom';
-  mobileLayout: {
+  chatOrientation?: 'horizontal' | 'vertical';
+  avatarPosition?: 'left' | 'right' | 'top' | 'bottom';
+  mobileLayout?: {
     hideAvatar: boolean;
     messageMaxWidth: string;
   };
-  infiniteScroll: boolean;
+  infiniteScroll?: boolean;
+  botMessageStackDirection?: 'row' | 'column';
 }
 
 export interface ThemeConfig {
@@ -33,6 +34,7 @@ export interface ChatbotProps {
   style?: React.CSSProperties;
   apiConfig: APIConfig;
   themeConfig: ThemeConfig;
+  setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
   messageRenderFunction?: (text: string) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
