@@ -2,7 +2,6 @@ import { Palette, Typography } from './styles';
 import { Components } from './component';
 
 export interface APIConfig {
-  isWebsocket: boolean;
   auth?: boolean;
   tokenName?: string;
   fetchFunction?: string;
