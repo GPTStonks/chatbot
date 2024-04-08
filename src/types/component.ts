@@ -7,7 +7,8 @@ export interface ComponentConfig {
   hoverBackgroundColor?: string;
   appears?: boolean;
   text?: string;
-  showUserAvatar?: boolean;
+  showSideUserAvatar?: 'visible' | 'hidden';
+  showSideBotAvatar?: 'visible' | 'hidden';
   botAvatarUrl?: string;
   userAvatarUrl?: string;
   loader?: LoaderConfig;
