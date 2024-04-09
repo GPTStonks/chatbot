@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ChatbotDefaultTheme_1 = __importDefault(require("@/components/chat/ChatbotDefaultTheme"));
-const ChatbotWebsocket_1 = __importDefault(require("@/layouts/ChatbotWebsocket"));
+const ChatbotHttp_1 = __importDefault(require("@/layouts/ChatbotHttp"));
 const material_1 = require("@mui/material");
 const react_1 = __importDefault(require("react"));
 function Home() {
@@ -17,16 +17,16 @@ function Home() {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100vh',
-            width: '100vw',
             backgroundColor: '#080808',
+            position: 'relative',
         } },
-        react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
-        react_1.default.createElement("div", { style: { width: '100%', height: '100%' } },
-            react_1.default.createElement(ChatbotWebsocket_1.default, { apiConfig: {
+        react_1.default.createElement("div", { style: { width: '13vw', height: '100%' } }),
+        react_1.default.createElement("div", { style: { width: '74vw', height: '100%' } },
+            react_1.default.createElement(ChatbotHttp_1.default, { apiConfig: {
                     auth: false,
                     tokenName: 'userToken',
                     fetchFunction: '',
-                    apiQueryEndpoint: 'ws://localhost:5000/chatws',
+                    apiQueryEndpoint: 'http://localhost:5000/ask',
                     queryParams: {
                         type: 'type',
                         data: 'result_data',
@@ -38,13 +38,11 @@ function Home() {
                     setChatData(data);
                 }, onApiResponseCode: (bool) => {
                     setInitializedChat(bool);
-                }, botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, { sx: {
-                        maxWidth: '100%',
-                        overflowWrap: 'break-word',
-                    } },
-                    react_1.default.createElement(material_1.Typography, { sx: {
-                            wordWrap: 'break-word',
-                        } }, text))) })),
-        react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } })));
+                }, botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, null,
+                    react_1.default.createElement(material_1.Typography, null, text))), 
+                //dataRenderFunction={(data: any) => <div>{data}</div>}
+                //graphicalDataRenderFunction={(data: any) => <div>{data}</div>}
+                errorRenderFunction: (error) => react_1.default.createElement("div", null, error) })),
+        react_1.default.createElement("div", { style: { width: '13vw', height: '100%' } })));
 }
 exports.default = Home;

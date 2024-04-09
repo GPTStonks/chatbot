@@ -1,20 +1,4 @@
-from typing import List
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import random
-import time
-import asyncio
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 phrases = [ "The global economy is absolutely thriving, and there's an electrifying opportunity to dive into the stock market like never before! Let's ride the wave of prosperity together!",
         "Today's the day I'm supercharging my portfolio with some incredibly promising stocks! The future's bright, and the potential for growth is sky-high!",
@@ -32,54 +16,29 @@ phrases = [ "The global economy is absolutely thriving, and there's an electrify
         "Cryptocurrencies are the vanguard of the digital finance revolution. I'm not just participating; I'm eagerly investing in the cryptocurrencies that are shaping our future!",
         "NFTs are transforming the digital landscape, and I'm all in! Investing in unique NFTs is not just exciting; it's a way to support and be part of the digital art revolution!"
 ]
-class QueryParams(BaseModel):
-    query: str
 
-@app.post("/ask")
-async def ask(query_params: QueryParams):
+related_questions = [
+    "How does BTC halving affect the market and what are the implications for investors?",
+    "What are the key factors to consider when investing in real estate?",
+    "How do I choose the right ETFs for my investment portfolio and what are the benefits of diversification?",
+    "What are the risks and rewards of options trading, and how can I mitigate potential losses?",
+]
 
-    return {"text": random.choice(phrases)}
+references = [
+    "https://gptstonks.net/",
+    "https://wikipedia.org/wiki/Stock_market",
+    "https://www.investopedia.com/terms/s/stockmarket.asp",
+    "https://tradingview.com/",
+    "https://www.bloomberg.com/markets",
+    "https://www.cnbc.com/markets",
+    "https://www.reuters.com/finance/markets",
+]
 
-# Run the server with uvicorn
-# uvicorn api_example:app --reload
+def get_random_phrase() -> str:
+    return random.choice(phrases)
 
-from fastapi import WebSocket
-from pydantic import BaseModel, ConfigDict
+def generate_related_questions() -> list:
+    return related_questions
 
-
-import json  
-
-class ConnectionManager:
-    active_connections: list[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-    async def send_personal_message(self, message: dict, websocket: WebSocket):
-        message_json = json.dumps(message)
-        await websocket.send_text(message_json)
-
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-
-manager = ConnectionManager()
-
-@app.websocket("/chatws")
-async def chat_websocket(websocket: WebSocket):
-    await manager.connect(websocket)
-    try:
-        while True:
-            await websocket.receive_text()
-            
-            for i in range(3):
-                message = random.choice(phrases)
-                await manager.send_personal_message({"body": message, "loading": i != 2}, websocket)
-                await asyncio.sleep(5)  
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-
+def generate_reference() -> list:
+    return references

@@ -1,0 +1,20 @@
+export default ChatbotCore;
+declare function ChatbotCore({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, graphicalDataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }: {
+    messages: any;
+    themeConfig: any;
+    isMobile: any;
+    botUser: any;
+    humanUser: any;
+    botMessage: any;
+    messagesEndRef: any;
+    isAnyMessageLoading: any;
+    showLinearLoader: any;
+    botMessageRenderFunction: any;
+    userMessageRenderFunction: any;
+    dataRenderFunction: any;
+    graphicalDataRenderFunction: any;
+    referenceRenderFunction: any;
+    relatedQuestionsRenderFunction: any;
+    errorRenderFunction: any;
+}): React.JSX.Element;
+import React from 'react';

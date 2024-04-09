@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeConfig } from '@/types/chatbot';
 
-const useChatbotDefaultTheme: ThemeConfig = {
+const useGptstonksChatbotTheme: ThemeConfig = {
   chatLayoutConfig: {
     chatOrientation: 'vertical',
     avatarPosition: 'left',
@@ -14,6 +14,7 @@ const useChatbotDefaultTheme: ThemeConfig = {
   },
   style: {
     justifyContent: 'center',
+    height: '100%',
     alignItems: 'center',
     background: '#080808',
     scrollbarWidth: 'thin',
@@ -29,38 +30,44 @@ const useChatbotDefaultTheme: ThemeConfig = {
     background: { default: '#080808', paper: '#16181c' },
     text: { primary: '#ebdbb2', secondary: '#d5c4a1' },
   },
-  //typography: { fontFamily: 'Saira Variable, sans-serif' },
+  typography: { fontFamily: 'Poppins, sans-serif' },
   components: {
     ChatBox: {
       style: {
-        width: '100vw',
-        position: 'relative',
-        background:
-          'radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);',
-        //fontFamily: 'Saira Variable, sans-serif',
-        minHeight: '80vh',
-        maxHeight: '80vh',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'transparent',
+        fontFamily: 'Poppins, sans-serif',
+        textAlign: 'left',
+        alignItems: 'center',
+        justifyContent: 'left',
         overflowY: 'auto',
+        maxWidth: '100%',
         paddingTop: '2rem',
       },
     },
     LowPartBox: {
       style: {
         display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        bottom: '30px',
+        right: 0,
+        left: 0,
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '1rem',
         margin: '0 auto',
-        width: '60%',
+        width: '70%',
+        backgroundColor: 'transparent',
       },
     },
     TextField: {
       label: 'Type a message',
       fullWidth: false,
       style: {
-        //backgroundColor: '#070707',
+        borderRadius: '30px',
+        backgroundColor: '#1f1f1f',
         color: '#ebdbb2',
-        marginTop: '0.5rem',
         '& label': {
           color: 'white',
         },
@@ -87,14 +94,11 @@ const useChatbotDefaultTheme: ThemeConfig = {
     },
     Button: {
       style: {
-        minWidth: 'fit-content',
-        padding: '6px 8px',
-        marginTop: '0.5rem',
-        color: '#fff',
-        borderColor: '#b8bb26',
+        padding: '6px 6px',
+        color: '#ebdbb2',
         width: 'fit-content',
       },
-      hoverBackgroundColor: '#fabd2f',
+      hoverBackgroundColor: '#efbd6b',
     },
     Disclaimer: {
       appears: true,
@@ -105,18 +109,20 @@ const useChatbotDefaultTheme: ThemeConfig = {
         alignItems: 'center',
         color: '#ebdbb2',
         fontSize: '0.75rem',
+        marginTop: '0.5rem',
       },
     },
     MessageBubbleBot: {
       style: {
         display: 'flex',
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '0.5rem 1rem',
+        justifyContent: 'left',
+        //padding: '0.5rem 1rem',
         borderRadius: '10px',
         flexDirection: 'column',
-        backgroundColor: '#121214',
-        color: 'white',
+        //backgroundColor: '#121214',
+        color: 'lightgray',
         fontSize: '0.875rem',
         wordBreak: 'break-word',
         transition: 'opacity 0.5s ease-in-out',
@@ -145,12 +151,13 @@ const useChatbotDefaultTheme: ThemeConfig = {
     MessageBubbleUser: {
       style: {
         display: 'flex',
-        padding: '0.5rem 1rem',
-        borderRadius: '10px',
-        backgroundColor: '#121214',
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
+        justifyContent: 'left',
+        textAlign: 'left',
+        alignItems: 'center',
         color: 'white',
-        fontSize: '0.875rem',
+        width: '100%',
+        fontSize: '1.5rem',
         transition: 'opacity 0.5s ease-in-out',
         wordBreak: 'break-word',
       },
@@ -162,10 +169,12 @@ const useChatbotDefaultTheme: ThemeConfig = {
     Avatar: {
       botAvatarUrl: 'bytebard.png',
       userAvatarUrl: 'gptstonks_logo_small.png',
+      showSideUserAvatar: 'hidden',
+      showSideBotAvatar: 'hidden',
       style: {
-        width: 40,
-        height: 40,
-        borderRadius: '50%',
+        marginRight: '0.5em',
+        width: 25,
+        height: 25,
         backgroundColor: 'transparent',
         '& img': {
           width: '100%',
@@ -175,7 +184,7 @@ const useChatbotDefaultTheme: ThemeConfig = {
       },
     },
     Divider: {
-      appears: true,
+      appears: false,
       style: {
         backgroundColor: '#b8bb26',
         width: '100%',
@@ -186,4 +195,4 @@ const useChatbotDefaultTheme: ThemeConfig = {
   },
 };
 
-export default useChatbotDefaultTheme;
+export default useGptstonksChatbotTheme;

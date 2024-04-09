@@ -1,6 +1,6 @@
 'use client';
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
-import ChatbotWebsocket from '@/layouts/ChatbotWebsocket';
+import ChatbotHttp from '@/layouts/ChatbotHttp';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -17,18 +17,18 @@ export default function Home() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        width: '100vw',
         backgroundColor: '#080808',
+        position: 'relative',
       }}
     >
-      <div style={{ width: '20vw', height: '100%' }}></div>
-      <div style={{ width: '100%', height: '100%' }}>
-        <ChatbotWebsocket
+      <div style={{ width: '13vw', height: '100%' }}></div>
+      <div style={{ width: '74vw', height: '100%' }}>
+        <ChatbotHttp
           apiConfig={{
             auth: false,
             tokenName: 'userToken',
             fetchFunction: '',
-            apiQueryEndpoint: 'ws://localhost:5000/chatws',
+            apiQueryEndpoint: 'http://localhost:5000/ask',
             queryParams: {
               type: 'type',
               data: 'result_data',
@@ -45,24 +45,16 @@ export default function Home() {
             setInitializedChat(bool);
           }}
           botMessageRenderFunction={(text: string) => (
-            <Box
-              sx={{
-                maxWidth: '100%',
-                overflowWrap: 'break-word',
-              }}
-            >
-              <Typography
-                sx={{
-                  wordWrap: 'break-word',
-                }}
-              >
-                {text}
-              </Typography>
+            <Box>
+              <Typography>{text}</Typography>
             </Box>
           )}
+          //dataRenderFunction={(data: any) => <div>{data}</div>}
+          //graphicalDataRenderFunction={(data: any) => <div>{data}</div>}
+          errorRenderFunction={(error: string) => <div>{error}</div>}
         />
       </div>
-      <div style={{ width: '20vw', height: '100%' }}></div>
+      <div style={{ width: '13vw', height: '100%' }}></div>
     </main>
   );
 }
