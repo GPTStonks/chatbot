@@ -35,7 +35,8 @@ export interface ChatbotProps {
   themeConfig: ThemeConfig;
   setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
-  messageRenderFunction?: (text: string) => JSX.Element;
+  userMessageRenderFunction?: (text: string) => JSX.Element;
+  botMessageRenderFunction?: (text: string) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
   graphicalDataRenderFunction?: (data: any) => JSX.Element;
   referenceRenderFunction?: (reference: any) => JSX.Element;
