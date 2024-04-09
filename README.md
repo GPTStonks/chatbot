@@ -77,7 +77,6 @@ function App() {
   return (
     <ChatbotWebsocket
       apiConfig={{
-        isWebsocket: true,
         apiQueryEndpoint: "ws://localhost:8000/chatws",
       }}
       themeConfig={{
@@ -95,14 +94,11 @@ function App() {
           // Configure other components as needed
         },
       }}
-      messageRenderFunction={CustomTextComponent}
+      botMessageRenderFunction={CustomTextComponent}
+      userMessageRenderFunction={CustomTextComponent}
       dataRenderFunction={CustomDataTableComponent}
       graphicalDataRenderFunction={CustomGraphComponent}
       errorRenderFunction={CustomErrorComponent}
-      onApiResponseCode={(responseCode) => {
-        // Handle API response codes as needed
-        console.log(`API responded with code: ${responseCode}`);
-      }}
     />
   );
 }
@@ -125,7 +121,6 @@ function App() {
   return (
     <ChatbotWebsocket
       apiConfig={{
-        isWebsocket: true,
         apiQueryEndpoint: "ws://localhost:8000/chatws",
       }}
       themeConfig={themeConfig}
@@ -158,7 +153,7 @@ Adjust the chatbot's appearance:
 
 ### Handling Data and Errors
 
-- `messageRenderFunction`: Custom renderer for text messages.
+- `botMessageRenderFunction`: Custom renderer for text messages.
 - `dataRenderFunction`: Custom renderer for displaying data tables or lists.
 - `graphicalDataRenderFunction`: Custom renderer for displaying graphical data, such as charts or graphs.
 - `errorRenderFunction`: Custom renderer for displaying error messages.
