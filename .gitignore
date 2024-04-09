@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Python cache
 __pycache__/
+
+# Private
+gptstonks/
