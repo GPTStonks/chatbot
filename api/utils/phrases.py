@@ -24,6 +24,16 @@ related_questions = [
     "What are the risks and rewards of options trading, and how can I mitigate potential losses?",
 ]
 
+references = [
+    "https://gptstonks.net/",
+    "https://wikipedia.org/wiki/Stock_market",
+    "https://www.investopedia.com/terms/s/stockmarket.asp",
+    "https://tradingview.com/",
+    "https://www.bloomberg.com/markets",
+    "https://www.cnbc.com/markets",
+    "https://www.reuters.com/finance/markets",
+]
+
 def get_random_phrase() -> str:
     return random.choice(phrases)
 
@@ -31,4 +41,4 @@ def generate_related_questions() -> list:
     return related_questions
 
 def generate_reference() -> list:
-    return ["https://gptstonks.net/", "https://wikipedia.org/wiki/Stock_market", "https://www.investopedia.com/terms/s/stockmarket.asp", "https://tradingview.com/"]
+    return references
