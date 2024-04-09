@@ -2,6 +2,16 @@ import React from 'react';
 import { ThemeConfig } from '@/types/chatbot';
 
 const useChatbotDefaultTheme: ThemeConfig = {
+  chatLayoutConfig: {
+    chatOrientation: 'vertical',
+    avatarPosition: 'left',
+    mobileLayout: {
+      hideAvatar: false,
+      messageMaxWidth: '100%',
+    },
+    infiniteScroll: true,
+    botMessageStackDirection: 'column',
+  },
   style: {
     justifyContent: 'center',
     alignItems: 'center',
