@@ -67,7 +67,7 @@ Below is an example of how to integrate the `ChatbotHttp` component into a real 
 
 ```jsx
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
-import ChatbotHttp from '@/layouts/ChatbotHttp';
+import ChatbotWebsocket from '@/layouts/ChatbotWebsocket';
 import React from 'react';
 
 export default function Home() {
