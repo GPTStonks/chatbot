@@ -3,9 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatbotInput = exports.ChatbotCore = exports.useGptstonksChatbotTheme = exports.useChatbotDefaultTheme = exports.ChatbotHttp = exports.ChatbotWebsocket = void 0;
+exports.ChatbotInput = exports.ChatbotCore = exports.useGptstonksChatbotTheme = exports.useChatbotDefaultTheme = exports.ChatbotHttp = exports.ChatbotWebsocketStreaming = exports.ChatbotWebsocket = void 0;
 var ChatbotWebsocket_1 = require("./layouts/ChatbotWebsocket");
 Object.defineProperty(exports, "ChatbotWebsocket", { enumerable: true, get: function () { return __importDefault(ChatbotWebsocket_1).default; } });
+var ChatbotWebsocketStreaming_1 = require("./layouts/ChatbotWebsocketStreaming");
+Object.defineProperty(exports, "ChatbotWebsocketStreaming", { enumerable: true, get: function () { return __importDefault(ChatbotWebsocketStreaming_1).default; } });
 var ChatbotHttp_1 = require("./layouts/ChatbotHttp");
 Object.defineProperty(exports, "ChatbotHttp", { enumerable: true, get: function () { return __importDefault(ChatbotHttp_1).default; } });
 var ChatbotDefaultTheme_1 = require("./components/chat/ChatbotDefaultTheme");

@@ -149,7 +149,8 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, setDataF
                 const accumulatedStreamData = streamData + body;
                 setStreamData(accumulatedStreamData);
                 console.log('accumulatedStreamData:', accumulatedStreamData);
-                if (accumulatedStreamData.includes('"response": "') && !(accumulatedStreamData.includes('",'))) {
+                if (accumulatedStreamData.includes('"response": "') &&
+                    !accumulatedStreamData.includes('",')) {
                     const copyMessages = [...messages];
                     if (copyMessages.length % 2 != 0) {
                         copyMessages.push({
@@ -162,9 +163,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, setDataF
                         .replace('{', '')
                         .replace('}', '')
                         .replace('"response": "', '');
-                    setMessages(() => [
-                        ...copyMessages
-                    ]);
+                    setMessages(() => [...copyMessages]);
                     setBotMessage(null);
                 }
             }
