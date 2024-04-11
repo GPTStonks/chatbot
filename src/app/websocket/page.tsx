@@ -22,7 +22,7 @@ export default function Home() {
       }}
     >
       <div style={{ width: '20vw', height: '100%' }}></div>
-      <div style={{ width: '100%', height: '100%'}}>
+      <div style={{ width: '100%', height: '100%' }}>
         <ChatbotWebsocket
           apiConfig={{
             auth: true,

@@ -169,7 +169,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
         setStreamData(accumulatedStreamData);
         console.log('accumulatedStreamData:', accumulatedStreamData);
 
-        if (accumulatedStreamData.includes('"response": "') && !(accumulatedStreamData.includes('",'))) {
+        if (
+          accumulatedStreamData.includes('"response": "') &&
+          !accumulatedStreamData.includes('",')
+        ) {
           const copyMessages = [...messages];
           if (copyMessages.length % 2 != 0) {
             copyMessages.push({
@@ -181,10 +184,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           copyMessages[copyMessages.length - 1].text = accumulatedStreamData
             .replace('{', '')
             .replace('}', '')
-            .replace('"response": "', '')
-          setMessages(() => [
-            ...copyMessages
-          ]);
+            .replace('"response": "', '');
+          setMessages(() => [...copyMessages]);
           setBotMessage(null);
         }
       }

@@ -57,10 +57,7 @@ export default function Home() {
                 overflowWrap: 'break-word',
               }}
             >
-              <Typography
-                >
-                  {text}
-              </Typography>
+              <Typography>{text}</Typography>
             </Box>
           )}
         />
