@@ -18,11 +18,10 @@ export default function Home() {
         alignItems: 'center',
         height: '100vh',
         backgroundColor: '#080808',
-        position: 'relative',
       }}
     >
-      <div style={{ width: '13vw', height: '100%' }}></div>
-      <div style={{ width: '74vw', height: '100%' }}>
+      <div style={{ width: '20vw', height: '100%' }}></div>
+      <div style={{ width: '60vw', height: '100%' }}>
         <ChatbotHttp
           apiConfig={{
             auth: false,
@@ -44,6 +43,11 @@ export default function Home() {
           onApiResponseCode={(bool: boolean) => {
             setInitializedChat(bool);
           }}
+          userMessageRenderFunction={(text: string) => (
+            <Box>
+              <Typography>{text}</Typography>
+            </Box>
+          )}
           botMessageRenderFunction={(text: string) => (
             <Box>
               <Typography>{text}</Typography>
@@ -54,7 +58,7 @@ export default function Home() {
           errorRenderFunction={(error: string) => <div>{error}</div>}
         />
       </div>
-      <div style={{ width: '13vw', height: '100%' }}></div>
+      <div style={{ width: '20vw', height: '100%' }}></div>
     </main>
   );
 }

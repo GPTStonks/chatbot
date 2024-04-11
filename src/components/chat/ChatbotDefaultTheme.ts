@@ -11,12 +11,14 @@ const useChatbotDefaultTheme: ThemeConfig = {
     },
     infiniteScroll: true,
     botMessageStackDirection: 'column',
+    responseHeader: false,
   },
   style: {
     justifyContent: 'center',
     alignItems: 'center',
     background: '#080808',
     scrollbarWidth: 'thin',
+    width: '100%',
     scrollbarColor: 'yellow',
   },
   palette: {
@@ -33,25 +35,25 @@ const useChatbotDefaultTheme: ThemeConfig = {
   components: {
     ChatBox: {
       style: {
-        width: '100vw',
         position: 'relative',
         background:
           'radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);',
         //fontFamily: 'Saira Variable, sans-serif',
         minHeight: '80vh',
-        maxHeight: '80vh',
         overflowY: 'auto',
         paddingTop: '2rem',
+        paddingRight: '4rem',
       },
     },
     LowPartBox: {
       style: {
         display: 'flex',
         alignItems: 'center',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '1rem',
         margin: '0 auto',
-        width: '60%',
+        width: '80%',
       },
     },
     TextField: {
@@ -60,7 +62,6 @@ const useChatbotDefaultTheme: ThemeConfig = {
       style: {
         //backgroundColor: '#070707',
         color: '#ebdbb2',
-        marginTop: '0.5rem',
         '& label': {
           color: 'white',
         },
@@ -88,8 +89,7 @@ const useChatbotDefaultTheme: ThemeConfig = {
     Button: {
       style: {
         minWidth: 'fit-content',
-        padding: '6px 8px',
-        marginTop: '0.5rem',
+        padding: '6px 6px',
         color: '#fff',
         borderColor: '#b8bb26',
         width: 'fit-content',
@@ -98,13 +98,14 @@ const useChatbotDefaultTheme: ThemeConfig = {
     },
     Disclaimer: {
       appears: true,
-      text: 'GPTStonks, your AI financial assistant.',
+      text: 'GPTStonks Chatbot - your open-source AI chatbot.',
       style: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         color: '#ebdbb2',
         fontSize: '0.75rem',
+        padding: '0.5rem',
       },
     },
     MessageBubbleBot: {
@@ -162,9 +163,13 @@ const useChatbotDefaultTheme: ThemeConfig = {
     Avatar: {
       botAvatarUrl: 'bytebard.png',
       userAvatarUrl: 'gptstonks_logo_small.png',
+      showSideUserAvatar: 'visible',
+      showSideBotAvatar: 'visible',
       style: {
         width: 40,
         height: 40,
+        marginRight: '0.5em',
+        marginLeft: '0.5em',
         borderRadius: '50%',
         backgroundColor: 'transparent',
         '& img': {

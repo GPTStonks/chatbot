@@ -10,6 +10,7 @@ const useGptstonksChatbotTheme = {
         },
         infiniteScroll: true,
         botMessageStackDirection: 'column',
+        responseHeader: true,
     },
     style: {
         justifyContent: 'center',

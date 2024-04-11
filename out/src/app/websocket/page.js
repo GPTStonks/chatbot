@@ -38,7 +38,8 @@ function Home() {
                     setChatData(data);
                 }, onApiResponseCode: (bool) => {
                     setInitializedChat(bool);
-                }, botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, { sx: {
+                }, userMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, null,
+                    react_1.default.createElement(material_1.Typography, null, text))), botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, { sx: {
                         maxWidth: '100%',
                         overflowWrap: 'break-word',
                     } },

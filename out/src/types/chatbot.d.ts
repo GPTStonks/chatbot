@@ -17,6 +17,7 @@ export interface ChatLayoutConfig {
     };
     infiniteScroll?: boolean;
     botMessageStackDirection?: 'row' | 'column';
+    responseHeader?: boolean;
 }
 export interface ThemeConfig {
     style?: React.CSSProperties;

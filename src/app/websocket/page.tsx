@@ -44,6 +44,11 @@ export default function Home() {
           onApiResponseCode={(bool: boolean) => {
             setInitializedChat(bool);
           }}
+          userMessageRenderFunction={(text: string) => (
+            <Box>
+              <Typography>{text}</Typography>
+            </Box>
+          )}
           botMessageRenderFunction={(text: string) => (
             <Box
               sx={{
