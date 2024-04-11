@@ -1,18 +1,11 @@
-# GPTStonks Chatbot
+# 📦 GPTStonks Chatbot 🚀
+
+<div align="center">
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-
-[contributors-shield]: https://img.shields.io/github/contributors/GPTStonks/chatbot.git.svg?style=for-the-badge
-[contributors-url]: https://github.com/GPTStonks/chatbot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/GPTStonks/chatbot.git.svg?style=for-the-badge
-[forks-url]: https://github.com/GPTStonks/chatbot/network/members
-[stars-shield]: https://img.shields.io/github/stars/GPTStonks/chatbot.git.svg?style=for-the-badge
-[stars-url]: https://github.com/GPTStonks/chatbot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/GPTStonks/chatbot.git.svg?style=for-the-badge
-[issues-url]: https://github.com/GPTStonks/chatbot/issues
 
 <p align="center">
 
@@ -29,10 +22,13 @@
   </a>
 </p>
 
-
-A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
+</div>
 
 ---
+## What is GPTStonks Chatbot?
+
+`GPTStonks Chatbot` is a versatile and customizable chatbot solution designed to enhance user interactions with AI in web applications and other platforms. Built with React and TypeScript, the chatbot offers a range of features, including WebSocket support for real-time messaging and streaming, full styling customization, and API REST integration. Developers can easily integrate the chatbot into their applications, tailoring its appearance and functionality to meet specific requirements. The chatbot is designed to be extensible, allowing for custom renderers and data handling functions to be implemented as needed.
+
 ## Status
 
 ### Work in Progress
@@ -214,3 +210,11 @@ The package utilizes `@mui/material` for UI components and supports extensive cu
 - `useWebSocket`: A custom hook for managing WebSocket connections in React applications (https://www.npmjs.com/package/use-websocket). Will try to implement a workaround for this dependency in the future so that it is not required.
 
 
+[contributors-shield]: https://img.shields.io/github/contributors/GPTStonks/chatbot.svg?style=for-the-badge
+[contributors-url]: https://github.com/GPTStonks/chatbot/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/GPTStonks/chatbot.svg?style=for-the-badge
+[forks-url]: https://github.com/GPTStonks/chatbot/network/members
+[stars-shield]: https://img.shields.io/github/stars/GPTStonks/chatbot.svg?style=for-the-badge
+[stars-url]: https://github.com/GPTStonks/chatbot/stargazers
+[issues-shield]: https://img.shields.io/github/issues/GPTStonks/chatbot.svg?style=for-the-badge
+[issues-url]: https://github.com/GPTStonks/chatbot/issues
