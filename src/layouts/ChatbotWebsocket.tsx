@@ -93,8 +93,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     if (!newMessage.trim()) return;
     sendMessage(JSON.stringify({ query: newMessage }));
 
-    console.log('newMessage:', newMessage);
-    const userMessage = { text: newMessage, user: 'humanUser', loading: false };
+    const userMessage = { text: newMessage, user: humanUser, loading: false };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setNewMessage('');
   };
@@ -121,11 +120,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
       let data = mappedData.data;
       let related = mappedData.related;
       let reference = mappedData.reference;
-      console.log('body:', body);
+      /* console.log('body:', body);
       console.log('type:', type);
       console.log('data:', data);
       console.log('related:', related);
-      console.log('reference:', reference);
+      console.log('reference:', reference); */
 
       if (setDataForParent) {
         setDataForParent(mappedData);
@@ -141,7 +140,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
       if (queryLoading && type === 'model_step') {
         setBotMessage((prevBotMessage) => ({
           text: body,
-          user: 'botUser',
+          user: botUser,
           loading: true,
         }));
       } else if (type === 'data') {
@@ -152,7 +151,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             ...prevMessages,
             {
               text: body,
-              user: 'botUser',
+              user: botUser,
               graphData: data,
               related: related,
               reference: reference,
