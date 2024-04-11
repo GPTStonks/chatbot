@@ -18,10 +18,9 @@ function Home() {
             alignItems: 'center',
             height: '100vh',
             backgroundColor: '#080808',
-            position: 'relative',
         } },
-        react_1.default.createElement("div", { style: { width: '13vw', height: '100%' } }),
-        react_1.default.createElement("div", { style: { width: '74vw', height: '100%' } },
+        react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
+        react_1.default.createElement("div", { style: { width: '60vw', height: '100%' } },
             react_1.default.createElement(ChatbotHttp_1.default, { apiConfig: {
                     auth: false,
                     tokenName: 'userToken',
@@ -38,11 +37,12 @@ function Home() {
                     setChatData(data);
                 }, onApiResponseCode: (bool) => {
                     setInitializedChat(bool);
-                }, botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, null,
+                }, userMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, null,
+                    react_1.default.createElement(material_1.Typography, null, text))), botMessageRenderFunction: (text) => (react_1.default.createElement(material_1.Box, null,
                     react_1.default.createElement(material_1.Typography, null, text))), 
                 //dataRenderFunction={(data: any) => <div>{data}</div>}
                 //graphicalDataRenderFunction={(data: any) => <div>{data}</div>}
                 errorRenderFunction: (error) => react_1.default.createElement("div", null, error) })),
-        react_1.default.createElement("div", { style: { width: '13vw', height: '100%' } })));
+        react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } })));
 }
 exports.default = Home;

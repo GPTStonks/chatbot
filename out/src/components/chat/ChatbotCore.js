@@ -64,7 +64,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
     return (react_1.default.createElement(material_1.Box, { sx: Object.assign({}, (_b = (_a = themeConfig.components) === null || _a === void 0 ? void 0 : _a.ChatBox) === null || _b === void 0 ? void 0 : _b.style) },
         react_1.default.createElement(material_1.List, { sx: { width: '100%', margin: 'auto' } },
             messages.map((message, index) => {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
                 return (react_1.default.createElement(material_1.ListItem, { key: index, sx: {
                         display: 'flex',
                         flexDirection: message.user === botUser
@@ -92,17 +92,17 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
                             } }, message.reference && ReferenceRender(message.reference)),
-                        react_1.default.createElement(material_1.Box, { sx: {
+                        ((_z = themeConfig.chatLayoutConfig) === null || _z === void 0 ? void 0 : _z.responseHeader) && (react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
                                 alignItems: 'center',
                                 marginBottom: '1em',
                             } },
-                            react_1.default.createElement(material_1.Avatar, { sx: Object.assign({}, (_0 = (_z = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _z === void 0 ? void 0 : _z.Avatar) === null || _0 === void 0 ? void 0 : _0.style), src: (_2 = (_1 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _1 === void 0 ? void 0 : _1.Avatar) === null || _2 === void 0 ? void 0 : _2.botAvatarUrl }),
-                            react_1.default.createElement(material_1.Typography, { variant: "h6", color: (_5 = (_4 = (_3 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _3 === void 0 ? void 0 : _3.MessageBubbleBot) === null || _4 === void 0 ? void 0 : _4.style) === null || _5 === void 0 ? void 0 : _5.color },
+                            react_1.default.createElement(material_1.Avatar, { sx: Object.assign({}, (_1 = (_0 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _0 === void 0 ? void 0 : _0.Avatar) === null || _1 === void 0 ? void 0 : _1.style), src: (_3 = (_2 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _2 === void 0 ? void 0 : _2.Avatar) === null || _3 === void 0 ? void 0 : _3.botAvatarUrl }),
+                            react_1.default.createElement(material_1.Typography, { variant: "h6", color: (_6 = (_5 = (_4 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _4 === void 0 ? void 0 : _4.MessageBubbleBot) === null || _5 === void 0 ? void 0 : _5.style) === null || _6 === void 0 ? void 0 : _6.color },
                                 ' ',
                                 "Response",
-                                ' ')),
-                        react_1.default.createElement(material_1.Box, { sx: Object.assign({}, (_7 = (_6 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _6 === void 0 ? void 0 : _6.MessageBubbleBot) === null || _7 === void 0 ? void 0 : _7.style) },
+                                ' '))),
+                        react_1.default.createElement(material_1.Box, { sx: Object.assign({}, (_8 = (_7 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _7 === void 0 ? void 0 : _7.MessageBubbleBot) === null || _8 === void 0 ? void 0 : _8.style) },
                             react_1.default.createElement(material_1.Box, { sx: { display: 'flex', justifyContent: 'left', textAlign: 'left' } },
                                 message.text && BotMessageRender(message.text),
                                 message.graphData && GraphicalRender(message.graphData) // Button to show graph
@@ -111,7 +111,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                             message.graphData && DataRender(message.graphData)),
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
-                            } }, message.related && RelatedQuestionsRender(message.related)))) : (react_1.default.createElement(material_1.Box, { sx: (_9 = (_8 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _8 === void 0 ? void 0 : _8.MessageBubbleUser) === null || _9 === void 0 ? void 0 : _9.style }, UserMessageRender(message.text)))));
+                            } }, message.related && RelatedQuestionsRender(message.related)))) : (react_1.default.createElement(material_1.Box, { sx: (_10 = (_9 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _9 === void 0 ? void 0 : _9.MessageBubbleUser) === null || _10 === void 0 ? void 0 : _10.style }, UserMessageRender(message.text)))));
             }),
             botMessage && isAnyMessageLoading && !showLinearLoader && (react_1.default.createElement(material_1.ListItem, { sx: {
                     display: 'flex',
