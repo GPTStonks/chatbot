@@ -1,6 +1,21 @@
 # GPTStonks Chatbot
 
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+
+[contributors-shield]: https://img.shields.io/github/contributors/GPTStonks/chatbot.git.svg?style=for-the-badge
+[contributors-url]: https://github.com/GPTStonks/chatbot/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/GPTStonks/chatbot.git.svg?style=for-the-badge
+[forks-url]: https://github.com/GPTStonks/chatbot/network/members
+[stars-shield]: https://img.shields.io/github/stars/GPTStonks/chatbot.git.svg?style=for-the-badge
+[stars-url]: https://github.com/GPTStonks/chatbot/stargazers
+[issues-shield]: https://img.shields.io/github/issues/GPTStonks/chatbot.git.svg?style=for-the-badge
+[issues-url]: https://github.com/GPTStonks/chatbot/issues
+
 <p align="center">
+
   <a href="https://nextjs.org/">
     <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge">
   </a>
@@ -188,7 +203,14 @@ The package utilizes `@mui/material` for UI components and supports extensive cu
 
 `ChatbotWebsocket` intelligently handles both WebSocket and traditional HTTP API communications, ensuring that your chatbot can interact with users in real-time or through standard request-response cycles, depending on your configuration.
 
+## 🛠️ Stack
+
+- [![Typescript][typescript-badge]][typescript-url] - JavaScript with syntax for types.
+- [![Tailwind CSS][tailwind-badge]][tailwind-url] - A utility-first CSS framework for rapidly building custom designs.
+
 ## External dependencies
 - `@mui/material`: Material-UI components for building the chatbot UI (https://mui.com/).
 - `react`: Core library for building React applications.
 - `useWebSocket`: A custom hook for managing WebSocket connections in React applications (https://www.npmjs.com/package/use-websocket). Will try to implement a workaround for this dependency in the future so that it is not required.
+
+
