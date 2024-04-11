@@ -1,3 +1,5 @@
+# GPTStonks Chatbot
+
 <p align="center">
   <a href="https://nextjs.org/">
     <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge">
@@ -12,7 +14,6 @@
   </a>
 </p>
 
-# GPTStonks Chatbot
 
 A fully customizable, open-source chatbot solution powered by the latest features of Next.js, TypeScript, and React. Designed for seamless integration with any API, GPTStonks Chatbot stands as a robust platform for developing diverse chatbot applications.
 
@@ -62,48 +63,69 @@ Ensure you have React and @mui/material installed as they are peer dependencies.
 
 ## Usage
 
-Below is an example of how to integrate the `ChatbotWebsocket` component into a real project:
+Below is an example of how to integrate the `ChatbotHttp` component into a real project:
 
 ```jsx
+import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
+import ChatbotHttp from '@/layouts/ChatbotHttp';
 import React from 'react';
-import { ChatbotWebsocket, useChatbotDefaultTheme } from '@gptstonks/chatbot';
-import CustomTextComponent from './CustomTextComponent'; // Your custom text renderer component
-import CustomDataTableComponent from './CustomDataTableComponent'; // Your custom data table renderer
-import CustomGraphComponent from './CustomGraphComponent'; // Your custom graphical data renderer
-import CustomErrorComponent from './CustomErrorComponent'; // Your custom error renderer
 
-function App() {
+export default function Home() {
+  const [initializedChat, setInitializedChat] = React.useState(false);
+  const [chatData, setChatData] = React.useState<any>(null);
+
+  const themeConfig = useChatbotDefaultTheme;
 
   return (
-    <ChatbotWebsocket
-      apiConfig={{
-        apiQueryEndpoint: "ws://localhost:8000/chatws",
+    <main
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#080808',
       }}
-      themeConfig={{
-        style: {},
-        palette: {
-          primary: { main: '#ff0000' },
-          secondary: { main: '#00ff00' },
-          // Define other colors as needed
-        },
-        typography: {
-          fontFamily: 'Arial, sans-serif',
-        },
-        components: {
-          ChatBox: { style: { backgroundColor: '#f0f0f0' } },
-          // Configure other components as needed
-        },
-      }}
-      botMessageRenderFunction={CustomTextComponent}
-      userMessageRenderFunction={CustomTextComponent}
-      dataRenderFunction={CustomDataTableComponent}
-      graphicalDataRenderFunction={CustomGraphComponent}
-      errorRenderFunction={CustomErrorComponent}
-    />
+    >
+      <div style={{ width: '20vw', height: '100%' }}></div>
+      <div style={{ width: '60vw', height: '100%' }}>
+        <ChatbotWebsocket
+          apiConfig={{
+            auth: false,
+            tokenName: 'userToken',
+            fetchFunction: '',
+            apiQueryEndpoint: 'ws://localhost:5000/chatws',
+            queryParams: {
+              type: 'type',
+              data: 'result_data',
+              text: 'body',
+              reference: 'reference',
+              related: 'related',
+            },
+          }}
+          themeConfig={themeConfig}
+          setDataForParent={(data: any) => {
+            setChatData(data);
+          }}
+          onApiResponseCode={(bool: boolean) => {
+            setInitializedChat(bool);
+          }}
+          userMessageRenderFunction={(text: string) => (
+            <YourCustomComponent>{text}</YourCustomComponent>
+          )}
+          botMessageRenderFunction={(text: string) => (
+            <YourCustomComponent>{text}</YourCustomComponent>
+          )}
+          dataRenderFunction={(data: any) => <YourCustomComponent>{data}</YourCustomComponent>}
+          graphicalDataRenderFunction={(data: any) => (
+            <YourCustomComponent>{data}</YourCustomComponent>
+          )}
+          errorRenderFunction={(error: string) => <YourCustomComponent>{error}</YourCustomComponent>}
+        />
+      </div>
+      <div style={{ width: '20vw', height: '100%' }}></div>
+    </main>
   );
 }
-
-export default App;
 ```
 
 In this example, the `ChatbotWebsocket` component is configured with WebSocket support and a custom API endpoint. The theme is customized with specific colors, typography, and component styles. Custom renderers are provided for text messages, data tables, graphical data, and error messages. An `onApiResponseCode` callback function is included to handle API response codes.
@@ -128,7 +150,6 @@ function App() {
   );
 }
 ```
-
 ## Configuration
 
 ### APIConfig
