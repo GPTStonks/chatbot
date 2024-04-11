@@ -33,7 +33,7 @@ const react_1 = __importStar(require("react"));
 const react_use_websocket_1 = __importStar(require("react-use-websocket"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, graphicalDataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
+const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, graphicalDataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
     var _a, _b, _c, _d;
     const ErrorRender = (0, react_1.useCallback)((error) => {
         return errorRenderFunction ? (errorRenderFunction(error)) : (react_1.default.createElement(material_1.Dialog, { open: true },
@@ -57,6 +57,7 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
     const [showLinearLoader, setShowLinearLoader] = (0, react_1.useState)(false);
     const [token, setToken] = (0, react_1.useState)(null);
     const [graphData, setGraphData] = (0, react_1.useState)(null);
+    const [streamData, setStreamData] = (0, react_1.useState)('');
     if (!apiConfig.apiQueryEndpoint.startsWith('ws')) {
         throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
     }
@@ -87,7 +88,8 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
         if (!newMessage.trim())
             return;
         sendMessage(JSON.stringify({ query: newMessage }));
-        const userMessage = { text: newMessage, user: humanUser, loading: false };
+        console.log('newMessage:', newMessage);
+        const userMessage = { text: newMessage, user: 'humanUser', loading: false };
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
     };
@@ -114,7 +116,8 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
             console.log('type:', type);
             console.log('data:', data);
             console.log('related:', related);
-            console.log('reference:', reference); */
+            console.log('reference:', reference);
+       */
             if (setDataForParent) {
                 setDataForParent(mappedData);
             }
@@ -124,29 +127,46 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
             let queryLoading = type !== 'data';
             setIsAnyMessageLoading(queryLoading);
             if (queryLoading && type === 'model_step') {
-                setBotMessage((prevBotMessage) => ({
+                setBotMessage(() => ({
                     text: body,
-                    user: botUser,
+                    user: 'botUser',
                     loading: true,
                 }));
             }
             else if (type === 'data') {
-                setShowLinearLoader(true);
-                setTimeout(() => {
-                    setMessages((prevMessages) => [
-                        ...prevMessages,
-                        {
-                            text: body,
+                setStreamData('');
+                setMessages((prevMessages) => {
+                    const updatedMessages = [...prevMessages];
+                    const lastIndex = updatedMessages.length - 1;
+                    if (lastIndex >= 0) {
+                        updatedMessages[lastIndex] = Object.assign(Object.assign({}, updatedMessages[lastIndex]), { text: updatedMessages[lastIndex].text + '.', related: related, reference: reference, graphData: data, loading: false });
+                    }
+                    return updatedMessages;
+                });
+                setBotMessage(null);
+            }
+            else if (type === 'stream_step') {
+                const accumulatedStreamData = streamData + body;
+                setStreamData(accumulatedStreamData);
+                console.log('accumulatedStreamData:', accumulatedStreamData);
+                if (accumulatedStreamData.includes('"response": "') && !(accumulatedStreamData.includes('",'))) {
+                    const copyMessages = [...messages];
+                    if (copyMessages.length % 2 != 0) {
+                        copyMessages.push({
+                            text: '',
                             user: botUser,
-                            graphData: data,
-                            related: related,
-                            reference: reference,
-                            loading: false,
-                        },
+                            loading: true,
+                        });
+                    }
+                    copyMessages[copyMessages.length - 1].text = accumulatedStreamData
+                        .replace('{', '')
+                        .replace('}', '')
+                        .replace('"response": "', '');
+                    setMessages(() => [
+                        ...copyMessages
                     ]);
-                    setShowLinearLoader(false);
                     setBotMessage(null);
-                }, 3000);
+                }
             }
         }
     }, [lastMessage]);
@@ -172,4 +192,4 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
             ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
             react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));
 };
-exports.default = ChatbotWebsocket;
+exports.default = ChatbotWebsocketStreaming;

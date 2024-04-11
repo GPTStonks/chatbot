@@ -40,6 +40,7 @@ const useChatbotDefaultTheme: ThemeConfig = {
           'radial-gradient(circle at top, #fffff0 0%, #e0e0d1 2.55%, #c1c1a3 7.5%, #a2a275 20%, #8b8b60 30%, #73734c 40%, #5b5b38 60%, #000000 100%);',
         //fontFamily: 'Saira Variable, sans-serif',
         minHeight: '80vh',
+        maxHeight: '85vh',
         overflowY: 'auto',
         paddingTop: '2rem',
         paddingRight: '4rem',

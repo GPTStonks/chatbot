@@ -1,6 +1,6 @@
 'use client';
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
-import ChatbotWebsocket from '@/layouts/ChatbotWebsocket';
+import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -23,7 +23,7 @@ export default function Home() {
     >
       <div style={{ width: '20vw', height: '100%' }}></div>
       <div style={{ width: '100%', height: '100%' }}>
-        <ChatbotWebsocket
+        <ChatbotWebsocketStreaming
           apiConfig={{
             auth: true,
             tokenName: 'userToken',
@@ -57,13 +57,7 @@ export default function Home() {
                 overflowWrap: 'break-word',
               }}
             >
-              <Typography
-                sx={{
-                  wordWrap: 'break-word',
-                }}
-              >
-                {text}
-              </Typography>
+              <Typography>{text}</Typography>
             </Box>
           )}
         />

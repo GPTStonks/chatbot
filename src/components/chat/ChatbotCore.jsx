@@ -106,7 +106,7 @@ const ChatbotCore = ({
                 message.user === botUser
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
-                  'row-reverse',
+                    'row-reverse',
               marginBottom: '1rem',
             }}
           >
@@ -163,31 +163,29 @@ const ChatbotCore = ({
                 >
                   {message.reference && ReferenceRender(message.reference)}
                 </Box>
-                {
-                  themeConfig.chatLayoutConfig?.responseHeader && (
-                    <Box
+                {themeConfig.chatLayoutConfig?.responseHeader && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '1em',
+                    }}
+                  >
+                    <Avatar
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginBottom: '1em',
+                        ...themeConfig?.components?.Avatar?.style,
                       }}
+                      src={themeConfig?.components?.Avatar?.botAvatarUrl}
+                    />
+                    <Typography
+                      variant="h6"
+                      color={themeConfig?.components?.MessageBubbleBot?.style?.color}
                     >
-                      <Avatar
-                        sx={{
-                          ...themeConfig?.components?.Avatar?.style,
-                        }}
-                        src={themeConfig?.components?.Avatar?.botAvatarUrl}
-                      />
-                      <Typography
-                        variant="h6"
-                        color={themeConfig?.components?.MessageBubbleBot?.style?.color}
-                      >
-                        {' '}
-                        Response{' '}
-                      </Typography>
-                    </Box>
-                  )
-                }
+                      {' '}
+                      Response{' '}
+                    </Typography>
+                  </Box>
+                )}
 
                 <Box
                   sx={{

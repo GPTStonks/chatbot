@@ -8,7 +8,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
 
-const ChatbotWebsocket: React.FC<ChatbotProps> = ({
+const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
@@ -57,6 +57,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   const [showLinearLoader, setShowLinearLoader] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [graphData, setGraphData] = useState<any>(null);
+  const [streamData, setStreamData] = useState<string>('');
 
   if (!apiConfig.apiQueryEndpoint.startsWith('ws')) {
     throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
@@ -93,7 +94,8 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     if (!newMessage.trim()) return;
     sendMessage(JSON.stringify({ query: newMessage }));
 
-    const userMessage = { text: newMessage, user: humanUser, loading: false };
+    console.log('newMessage:', newMessage);
+    const userMessage = { text: newMessage, user: 'humanUser', loading: false };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setNewMessage('');
   };
@@ -124,8 +126,8 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
       console.log('type:', type);
       console.log('data:', data);
       console.log('related:', related);
-      console.log('reference:', reference); */
-
+      console.log('reference:', reference);
+ */
       if (setDataForParent) {
         setDataForParent(mappedData);
       }
@@ -138,29 +140,54 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
       setIsAnyMessageLoading(queryLoading);
 
       if (queryLoading && type === 'model_step') {
-        setBotMessage((prevBotMessage) => ({
+        setBotMessage(() => ({
           text: body,
-          user: botUser,
+          user: 'botUser',
           loading: true,
         }));
       } else if (type === 'data') {
-        setShowLinearLoader(true);
-
-        setTimeout(() => {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              text: body,
-              user: botUser,
-              graphData: data,
+        setStreamData('');
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          const lastIndex = updatedMessages.length - 1;
+          if (lastIndex >= 0) {
+            updatedMessages[lastIndex] = {
+              ...updatedMessages[lastIndex],
+              text: updatedMessages[lastIndex].text + '.',
               related: related,
               reference: reference,
+              graphData: data,
               loading: false,
-            },
-          ]);
-          setShowLinearLoader(false);
+            };
+          }
+          return updatedMessages;
+        });
+        setBotMessage(null);
+      } else if (type === 'stream_step') {
+        const accumulatedStreamData = streamData + body;
+
+        setStreamData(accumulatedStreamData);
+        console.log('accumulatedStreamData:', accumulatedStreamData);
+
+        if (
+          accumulatedStreamData.includes('"response": "') &&
+          !accumulatedStreamData.includes('",')
+        ) {
+          const copyMessages = [...messages];
+          if (copyMessages.length % 2 != 0) {
+            copyMessages.push({
+              text: '',
+              user: botUser,
+              loading: true,
+            });
+          }
+          copyMessages[copyMessages.length - 1].text = accumulatedStreamData
+            .replace('{', '')
+            .replace('}', '')
+            .replace('"response": "', '');
+          setMessages(() => [...copyMessages]);
           setBotMessage(null);
-        }, 3000);
+        }
       }
     }
   }, [lastMessage]);
@@ -229,4 +256,4 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   );
 };
 
-export default ChatbotWebsocket;
+export default ChatbotWebsocketStreaming;

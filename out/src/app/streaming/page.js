@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ChatbotDefaultTheme_1 = __importDefault(require("@/components/chat/ChatbotDefaultTheme"));
-const ChatbotWebsocket_1 = __importDefault(require("@/layouts/ChatbotWebsocket"));
+const ChatbotWebsocketStreaming_1 = __importDefault(require("@/layouts/ChatbotWebsocketStreaming"));
 const material_1 = require("@mui/material");
 const react_1 = __importDefault(require("react"));
 function Home() {
@@ -22,7 +22,7 @@ function Home() {
         } },
         react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
         react_1.default.createElement("div", { style: { width: '100%', height: '100%' } },
-            react_1.default.createElement(ChatbotWebsocket_1.default, { apiConfig: {
+            react_1.default.createElement(ChatbotWebsocketStreaming_1.default, { apiConfig: {
                     auth: true,
                     tokenName: 'userToken',
                     fetchFunction: '',
@@ -44,9 +44,7 @@ function Home() {
                         maxWidth: '100%',
                         overflowWrap: 'break-word',
                     } },
-                    react_1.default.createElement(material_1.Typography, { sx: {
-                            wordWrap: 'break-word',
-                        } }, text))) })),
+                    react_1.default.createElement(material_1.Typography, null, text))) })),
         react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } })));
 }
 exports.default = Home;

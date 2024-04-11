@@ -90,17 +90,17 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, onAp
             let data = mappedData.data;
             let related = mappedData.related;
             let reference = mappedData.reference;
-            console.log('body:', body);
+            /* console.log('body:', body);
             console.log('type:', type);
             console.log('data:', data);
             console.log('related:', related);
-            console.log('reference:', reference);
+            console.log('reference:', reference); */
             if (setDataForParent) {
                 setDataForParent(mappedData);
             }
             const botMessage = {
                 text: body,
-                user: 'botUser',
+                user: botUser,
                 data: data,
                 reference: reference,
                 related: related,
@@ -128,17 +128,17 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, onAp
             let data = mappedData.data;
             let related = mappedData.related;
             let reference = mappedData.reference;
-            console.log('body:', body);
+            /* console.log('body:', body);
             console.log('type:', type);
             console.log('data:', data);
             console.log('related:', related);
-            console.log('reference:', reference);
+            console.log('reference:', reference); */
             if (setDataForParent) {
                 setDataForParent(mappedData);
             }
             const botMessage = {
                 text: body,
-                user: 'botUser',
+                user: botUser,
                 data: data,
                 reference: reference,
                 related: related,
@@ -150,7 +150,7 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, onAp
     const handleSendMessage = () => {
         handleFetchMessage();
         console.log('newMessage:', newMessage);
-        const userMessage = { text: newMessage, user: 'humanUser', loading: false };
+        const userMessage = { text: newMessage, user: humanUser, loading: false };
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
     };

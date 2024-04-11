@@ -5,4 +5,5 @@ export interface Message {
     graphData?: any;
     related?: any;
     reference?: any;
+    stream?: any;
 }

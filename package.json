@@ -22,7 +22,11 @@
   "main": "out/src/index.js",
   "private": false,
   "files": [
-    "out/**/*"
+    "out/src/components/**/*",
+    "out/src/layouts/**/*",
+    "out/src/types/**/*",
+    "out/index.d.ts",
+    "out/index.js"
   ],
   "scripts": {
     "dev": "next dev",
