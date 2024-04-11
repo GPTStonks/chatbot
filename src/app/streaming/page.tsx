@@ -3,8 +3,6 @@ import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'
 
 export default function Home() {
   const [initializedChat, setInitializedChat] = React.useState(false);
@@ -59,10 +57,10 @@ export default function Home() {
                 overflowWrap: 'break-word',
               }}
             >
-              <Markdown
+              <Typography
                 >
                   {text}
-              </Markdown>
+              </Typography>
             </Box>
           )}
         />
