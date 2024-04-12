@@ -64,7 +64,7 @@ const useChatbotDefaultTheme = {
                 '& label': {
                     color: 'white',
                 },
-                '& label.Mui-focused': {
+                '& label.MuiFocused': {
                     color: 'white',
                 },
                 '& .MuiInput-underline:after': {
@@ -79,7 +79,7 @@ const useChatbotDefaultTheme = {
                         borderColor: 'white',
                         opacity: '0.8',
                     },
-                    '&.Mui-focused fieldset': {
+                    '&.MuiFocused fieldset': {
                         borderColor: '#ebdbb2',
                     },
                 },
