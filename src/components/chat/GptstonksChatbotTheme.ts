@@ -35,16 +35,18 @@ const useGptstonksChatbotTheme: ThemeConfig = {
   components: {
     ChatBox: {
       style: {
-        width: '100%',
         height: '100%',
+        width: '100%',
         backgroundColor: 'transparent',
         fontFamily: 'Poppins, sans-serif',
         textAlign: 'left',
         alignItems: 'center',
         justifyContent: 'left',
         overflowY: 'auto',
-        maxWidth: '100%',
         paddingTop: '2rem',
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
       },
     },
     LowPartBox: {
@@ -72,13 +74,13 @@ const useGptstonksChatbotTheme: ThemeConfig = {
         '& label': {
           color: 'white',
         },
-        '& label.Mui-focused': {
+        '& label.MuiFocused': {
           color: 'white',
         },
-        '& .MuiInput-underline:after': {
+        '& .MuiInputUnderline:after': {
           borderBottomColor: 'yellow',
         },
-        '& .MuiOutlinedInput-root': {
+        '& .MuiOutlinedInputRoot': {
           '& fieldset': {
             borderColor: 'white',
             opacity: '0.5',
@@ -87,7 +89,7 @@ const useGptstonksChatbotTheme: ThemeConfig = {
             borderColor: 'white',
             opacity: '0.8',
           },
-          '&.Mui-focused fieldset': {
+          '&.MuiFocused fieldset': {
             borderColor: '#ebdbb2',
           },
         },
@@ -99,7 +101,7 @@ const useGptstonksChatbotTheme: ThemeConfig = {
         color: '#ebdbb2',
         width: 'fit-content',
       },
-      hoverBackgroundColor: '#efbd6b',
+      hoverBackgroundColor: '#6b6b6b',
     },
     Disclaimer: {
       appears: true,
@@ -116,27 +118,15 @@ const useGptstonksChatbotTheme: ThemeConfig = {
     MessageBubbleBot: {
       style: {
         display: 'flex',
-        width: '100%',
         alignItems: 'center',
         justifyContent: 'left',
-        //padding: '0.5rem 1rem',
         borderRadius: '10px',
         flexDirection: 'column',
-        //backgroundColor: '#121214',
-        color: 'lightgray',
+        color: 'white',
         fontSize: '0.875rem',
         wordBreak: 'break-word',
         transition: 'opacity 0.5s ease-in-out',
-        '&::-webkit-scrollbar': {
-          width: '0.5em',
-        },
-        '&::-webkit-scrollbar-track': {
-          boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.3)',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#ebdbb2',
-          outline: '0.5px solid slategrey',
-        },
+        maxWidth: '100%',
       },
     },
     LoaderBot: {
@@ -157,7 +147,6 @@ const useGptstonksChatbotTheme: ThemeConfig = {
         textAlign: 'left',
         alignItems: 'center',
         color: 'white',
-        width: '100%',
         fontSize: '1.5rem',
         transition: 'opacity 0.5s ease-in-out',
         wordBreak: 'break-word',
@@ -170,8 +159,8 @@ const useGptstonksChatbotTheme: ThemeConfig = {
     Avatar: {
       botAvatarUrl: 'bytebard.png',
       userAvatarUrl: 'gptstonks_logo_small.png',
-      showSideUserAvatar: 'hidden',
-      showSideBotAvatar: 'hidden',
+      showSideUserAvatar: false,
+      showSideBotAvatar: false,
       style: {
         marginRight: '0.5em',
         width: 25,
