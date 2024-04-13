@@ -96,7 +96,7 @@ const ChatbotCore = ({
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
-      <List sx={{ width: '100%', margin: 'auto' }}>
+      <List>
         {messages.map((message, index) => (
           <ListItem
             key={index}
@@ -106,48 +106,45 @@ const ChatbotCore = ({
                 message.user === botUser
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
-                    'row-reverse',
-              marginBottom: '1rem',
+                  'row-reverse',
             }}
           >
             {!isMobile && (
-              <Avatar // Side avatar (outside of message bubble)
-                sx={{
-                  ...themeConfig?.components?.Avatar?.style,
-                  transition: 'opacity 0.5s ease-in-out',
-                  visibility:
-                    message.user === humanUser
-                      ? themeConfig?.components?.Avatar?.showSideUserAvatar
-                      : themeConfig.components?.Avatar?.showSideBotAvatar,
-                }}
-                src={
-                  message.user === botUser
-                    ? themeConfig?.components?.Avatar?.botAvatarUrl
-                    : themeConfig?.components?.Avatar?.userAvatarUrl
-                }
-              />
-            )}
+              themeConfig?.components?.Avatar?.showSideUserAvatar && message.user === humanUser ||
+              themeConfig?.components?.Avatar?.showSideBotAvatar && message.user === botUser
+            ) && (
+                <Avatar // Side avatar (outside of message bubble)
+                  sx={{
+                    ...themeConfig?.components?.Avatar?.style,
+                    transition: 'opacity 0.5s ease-in-out',
+                  }}
+                  src={
+                    message.user === botUser
+                      ? themeConfig?.components?.Avatar?.botAvatarUrl
+                      : themeConfig?.components?.Avatar?.userAvatarUrl
+                  }
+                />
+              )}
             {isMobile && (
-              <Avatar // Side avatar (outside of message bubble)
-                sx={{
-                  ...themeConfig?.components?.Avatar?.style,
-                  width: '20px',
-                  height: '20px',
-                  position: 'absolute',
-                  top: '0',
-                  outline: '1px solid #b8bb26',
-                  visibility:
-                    message.user === humanUser
-                      ? themeConfig?.components?.Avatar?.showSideUserAvatar
-                      : themeConfig.components?.Avatar?.showSideBotAvatar,
-                }}
-                src={
-                  message.user === botUser
-                    ? themeConfig?.components?.Avatar?.botAvatarUrl
-                    : themeConfig?.components?.Avatar?.userAvatarUrl
-                }
-              />
-            )}
+              themeConfig?.components?.Avatar?.showSideUserAvatar && message.user === humanUser ||
+              themeConfig?.components?.Avatar?.showSideBotAvatar && message.user === botUser
+            ) && (
+                <Avatar // Side avatar (outside of message bubble) for mobile
+                  sx={{
+                    ...themeConfig?.components?.Avatar?.style,
+                    width: '20px',
+                    height: '20px',
+                    position: 'absolute',
+                    top: '0',
+                    outline: '1px solid #b8bb26',
+                  }}
+                  src={
+                    message.user === botUser
+                      ? themeConfig?.components?.Avatar?.botAvatarUrl
+                      : themeConfig?.components?.Avatar?.userAvatarUrl
+                  }
+                />
+              )}
             {message.user === botUser ? (
               <Box
                 sx={{
