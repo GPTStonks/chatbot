@@ -22,11 +22,11 @@ const ChatbotCore = ({
   errorRenderFunction,
 }) => {
   const BotMessageRender = useCallback(
-    (text) => {
+    (message) => {
       return botMessageRenderFunction ? (
-        botMessageRenderFunction(text)
+        botMessageRenderFunction(message)
       ) : (
-        <Typography>{text}</Typography>
+        <Typography>{message.text}</Typography>
       );
     },
     [botMessageRenderFunction],
@@ -90,6 +90,7 @@ const ChatbotCore = ({
     },
     [errorRenderFunction],
   );
+
   return (
     <Box
       sx={{
@@ -106,13 +107,14 @@ const ChatbotCore = ({
                 message.user === botUser
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
-                  'row-reverse',
+                    'row-reverse',
             }}
           >
-            {!isMobile && (
-              themeConfig?.components?.Avatar?.showSideUserAvatar && message.user === humanUser ||
-              themeConfig?.components?.Avatar?.showSideBotAvatar && message.user === botUser
-            ) && (
+            {!isMobile &&
+              ((themeConfig?.components?.Avatar?.showSideUserAvatar &&
+                message.user === humanUser) ||
+                (themeConfig?.components?.Avatar?.showSideBotAvatar &&
+                  message.user === botUser)) && (
                 <Avatar // Side avatar (outside of message bubble)
                   sx={{
                     ...themeConfig?.components?.Avatar?.style,
@@ -125,10 +127,11 @@ const ChatbotCore = ({
                   }
                 />
               )}
-            {isMobile && (
-              themeConfig?.components?.Avatar?.showSideUserAvatar && message.user === humanUser ||
-              themeConfig?.components?.Avatar?.showSideBotAvatar && message.user === botUser
-            ) && (
+            {isMobile &&
+              ((themeConfig?.components?.Avatar?.showSideUserAvatar &&
+                message.user === humanUser) ||
+                (themeConfig?.components?.Avatar?.showSideBotAvatar &&
+                  message.user === botUser)) && (
                 <Avatar // Side avatar (outside of message bubble) for mobile
                   sx={{
                     ...themeConfig?.components?.Avatar?.style,
@@ -158,7 +161,7 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {message.reference && ReferenceRender(message.reference)}
+                  {(message.streamCompleted || message.stream) && ReferenceRender(message.reference)}
                 </Box>
                 {themeConfig.chatLayoutConfig?.responseHeader && (
                   <Box
@@ -190,20 +193,33 @@ const ChatbotCore = ({
                   }}
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'left', textAlign: 'left' }}>
-                    {message.text && BotMessageRender(message.text)}
+                    {message.text && (message.streamCompleted || !message.stream) && BotMessageRender(message)}
+                    {message.stream && (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          maxWidth: '100%',
+                        }}
+                      >
+                        <Typography>{message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}</Typography>
+                      </Box>
+                    )}
                     {
-                      message.graphData && GraphicalRender(message.graphData) // Button to show graph
+                      GraphicalRender(message.graphData) // Button to show graph
                     }
                   </Box>
                   <Divider />
-                  {message.graphData && DataRender(message.graphData)}
+                  {DataRender(message.graphData)}
                 </Box>
                 <Box
                   sx={{
                     display: 'flex',
                   }}
                 >
-                  {message.related && RelatedQuestionsRender(message.related)}
+                  {(message.streamCompleted || message.stream) && RelatedQuestionsRender(message.related)}
                 </Box>
               </Box>
             ) : (
@@ -243,7 +259,7 @@ const ChatbotCore = ({
                   marginLeft: '1rem',
                 }}
               >
-                Retrieving information from {botMessage.text} ...
+                Retrieving information from {botMessage.text.replace('_', ' ')} ...
               </Typography>
             </Box>
           </ListItem>
