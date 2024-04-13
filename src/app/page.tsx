@@ -1,6 +1,7 @@
 'use client';
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotHttp from '@/layouts/ChatbotHttp';
+import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -48,9 +49,9 @@ export default function Home() {
               <Typography>{text}</Typography>
             </Box>
           )}
-          botMessageRenderFunction={(text: string) => (
+          botMessageRenderFunction={(message: Message) => (
             <Box>
-              <Typography>{text}</Typography>
+              <Typography>{message.text}</Typography>
             </Box>
           )}
           //dataRenderFunction={(data: any) => <div>{data}</div>}

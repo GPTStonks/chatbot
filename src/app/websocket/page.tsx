@@ -1,6 +1,7 @@
 'use client';
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotWebsocket from '@/layouts/ChatbotWebsocket';
+import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -50,7 +51,7 @@ export default function Home() {
               <Typography>{text}</Typography>
             </Box>
           )}
-          botMessageRenderFunction={(text: string) => (
+          botMessageRenderFunction={(message: Message) => (
             <Box
               sx={{
                 maxWidth: '100%',
@@ -62,7 +63,7 @@ export default function Home() {
                   wordWrap: 'break-word',
                 }}
               >
-                {text}
+                {message.text}
               </Typography>
             </Box>
           )}
