@@ -55,7 +55,6 @@ export default function Home() {
             </Box>
           )}
           //dataRenderFunction={(data: any) => <div>{data}</div>}
-          //graphicalDataRenderFunction={(data: any) => <div>{data}</div>}
           errorRenderFunction={(error: string) => <div>{error}</div>}
         />
       </div>
