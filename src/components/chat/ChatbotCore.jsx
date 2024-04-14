@@ -48,9 +48,9 @@ const ChatbotCore = ({
   }, [welcomeMessageRenderFunction]);
 
   const BotMessageRender = useCallback(
-    (message) => {
+    (message, input) => {
       return botMessageRenderFunction ? (
-        botMessageRenderFunction(message)
+        botMessageRenderFunction(message, input)
       ) : (
         <Typography>{message.text}</Typography>
       );
@@ -211,7 +211,7 @@ const ChatbotCore = ({
                   <Box sx={{ display: 'flex' }}>
                     {message.text &&
                       (message.streamCompleted || !message.stream) &&
-                      BotMessageRender(message)}
+                      BotMessageRender(message, messages[index - 1]?.text)}
                     {message.stream && (
                       <Box
                         sx={{
