@@ -229,7 +229,7 @@ const ChatbotCore = ({
                     )}
                   </Box>
                   <Divider />
-                  {(message.streamCompleted || !message.stream) && DataRender(message.graphData)}
+                  {(message.streamCompleted || message.stream) && DataRender(message.graphData)}
                 </Box>
                 <Box
                   sx={{
