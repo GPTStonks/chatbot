@@ -13,14 +13,45 @@ const ChatbotCore = ({
   messagesEndRef,
   isAnyMessageLoading,
   showLinearLoader,
+  welcomeMessageRenderFunction,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
-  graphicalDataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
 }) => {
+
+  const WelcomeMessageRender = useCallback(
+    () => {
+      return welcomeMessageRenderFunction ? (
+        welcomeMessageRenderFunction()
+      ) : (
+        <Box sx={{
+          display: 'flex',
+          width: '100%',
+          height: '100%',
+          alignItems: 'center',
+        }}>
+          <Typography
+            variant="h4"
+            sx={{
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis',
+              color: 'white'
+            }}
+          >
+            Welcome! How can I help you today?
+          </Typography>
+        </Box>
+      );
+    },
+    [welcomeMessageRenderFunction],
+  );
+
   const BotMessageRender = useCallback(
     (message) => {
       return botMessageRenderFunction ? (
@@ -61,13 +92,6 @@ const ChatbotCore = ({
     [dataRenderFunction],
   );
 
-  const GraphicalRender = useCallback(
-    (data) => {
-      return graphicalDataRenderFunction ? graphicalDataRenderFunction(data) : null;
-    },
-    [graphicalDataRenderFunction],
-  );
-
   const ReferenceRender = useCallback(
     (reference) => {
       return referenceRenderFunction ? referenceRenderFunction(reference) : null;
@@ -84,19 +108,15 @@ const ChatbotCore = ({
     [relatedQuestionsRenderFunction],
   );
 
-  const ErrorRender = useCallback(
-    (error) => {
-      return errorRenderFunction ? errorRenderFunction(error) : <Typography>{error}</Typography>;
-    },
-    [errorRenderFunction],
-  );
-
   return (
     <Box
       sx={{
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
+      {messages.length === 0 && (
+        WelcomeMessageRender()
+      )}
       <List>
         {messages.map((message, index) => (
           <ListItem
@@ -107,7 +127,7 @@ const ChatbotCore = ({
                 message.user === botUser
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
-                    'row-reverse',
+                  'row-reverse',
             }}
           >
             {!isMobile &&
@@ -207,9 +227,9 @@ const ChatbotCore = ({
                         <Typography>{message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}</Typography>
                       </Box>
                     )}
-                    {
+                    {/* {
                       GraphicalRender(message.graphData) // Button to show graph
-                    }
+                    } */}
                   </Box>
                   <Divider />
                   {DataRender(message.graphData)}
