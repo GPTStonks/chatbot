@@ -36,12 +36,12 @@ export interface ChatbotProps {
   apiConfig: APIConfig;
   themeConfig: ThemeConfig;
   customMessage?: string;
+  welcomeMessageRenderFunction?: JSX.Element;
   setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
   userMessageRenderFunction?: (text: string) => JSX.Element;
   botMessageRenderFunction?: (message: Message) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
-  graphicalDataRenderFunction?: (data: any) => JSX.Element;
   referenceRenderFunction?: (reference: any) => JSX.Element;
   relatedQuestionsRenderFunction?: (relatedQuestions: any) => JSX.Element;
   errorRenderFunction?: (error: any) => JSX.Element;
