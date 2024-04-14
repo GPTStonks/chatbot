@@ -43,6 +43,9 @@ export interface ChatbotProps {
   botMessageRenderFunction?: (message: Message) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
   referenceRenderFunction?: (reference: string[]) => JSX.Element;
-  relatedQuestionsRenderFunction?: (relatedQuestions: string[], sendCustomMessage: any) => JSX.Element;
+  relatedQuestionsRenderFunction?: (
+    relatedQuestions: string[],
+    sendCustomMessage: any,
+  ) => JSX.Element;
   errorRenderFunction?: (error: any) => JSX.Element;
 }
