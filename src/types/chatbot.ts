@@ -40,7 +40,7 @@ export interface ChatbotProps {
   setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
   userMessageRenderFunction?: (text: string) => JSX.Element;
-  botMessageRenderFunction?: (message: Message) => JSX.Element;
+  botMessageRenderFunction?: (message: Message, input?: string) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
   referenceRenderFunction?: (reference: string[]) => JSX.Element;
   relatedQuestionsRenderFunction?: (
