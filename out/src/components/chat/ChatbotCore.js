@@ -42,7 +42,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                 textAlign: 'center',
             } },
             react_1.default.createElement(material_1.Typography, { variant: "h4", sx: {
-                    color: 'white'
+                    color: 'white',
                 } }, "Welcome! How can I help you today?")));
     }, [welcomeMessageRenderFunction]);
     const BotMessageRender = (0, react_1.useCallback)((message) => {
@@ -69,7 +69,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
             : null;
     }, [relatedQuestionsRenderFunction]);
     return (react_1.default.createElement(material_1.Box, { sx: Object.assign({}, (_b = (_a = themeConfig.components) === null || _a === void 0 ? void 0 : _a.ChatBox) === null || _b === void 0 ? void 0 : _b.style) },
-        messages.length === 0 && (WelcomeMessageRender()),
+        messages.length === 0 && WelcomeMessageRender(),
         react_1.default.createElement(material_1.List, null,
             messages.map((message, index) => {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
@@ -102,7 +102,8 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                         } },
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
-                            } }, (message.streamCompleted || message.stream) && ReferenceRender(message.reference)),
+                            } }, (message.streamCompleted || message.stream) &&
+                            ReferenceRender(message.reference)),
                         ((_z = themeConfig.chatLayoutConfig) === null || _z === void 0 ? void 0 : _z.responseHeader) && (react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
                                 alignItems: 'center',
@@ -115,7 +116,9 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                 ' '))),
                         react_1.default.createElement(material_1.Box, { sx: Object.assign({ display: 'flex', flexDirection: 'column' }, (_8 = (_7 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _7 === void 0 ? void 0 : _7.MessageBubbleBot) === null || _8 === void 0 ? void 0 : _8.style) },
                             react_1.default.createElement(material_1.Box, { sx: { display: 'flex' } },
-                                message.text && (message.streamCompleted || !message.stream) && BotMessageRender(message),
+                                message.text &&
+                                    (message.streamCompleted || !message.stream) &&
+                                    BotMessageRender(message),
                                 message.stream && (react_1.default.createElement(material_1.Box, { sx: {
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -125,10 +128,11 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                     } },
                                     react_1.default.createElement(material_1.Typography, null, message.text.replace(/\\n/g, '  \n').replace(/\\/g, ''))))),
                             react_1.default.createElement(material_1.Divider, null),
-                            DataRender(message.graphData)),
+                            (message.streamCompleted || !message.stream) && DataRender(message.graphData)),
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
-                            } }, (message.streamCompleted || message.stream) && RelatedQuestionsRender(message.related, sendCustomMessage)))) : (react_1.default.createElement(material_1.Box, { sx: (_10 = (_9 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _9 === void 0 ? void 0 : _9.MessageBubbleUser) === null || _10 === void 0 ? void 0 : _10.style }, UserMessageRender(message.text)))));
+                            } }, (message.streamCompleted || message.stream) &&
+                            RelatedQuestionsRender(message.related, sendCustomMessage)))) : (react_1.default.createElement(material_1.Box, { sx: (_10 = (_9 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _9 === void 0 ? void 0 : _9.MessageBubbleUser) === null || _10 === void 0 ? void 0 : _10.style }, UserMessageRender(message.text)))));
             }),
             botMessage && isAnyMessageLoading && !showLinearLoader && (react_1.default.createElement(material_1.ListItem, { sx: {
                     display: 'flex',
