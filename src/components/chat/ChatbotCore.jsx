@@ -21,33 +21,31 @@ const ChatbotCore = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
 }) => {
-
-  const WelcomeMessageRender = useCallback(
-    () => {
-      return welcomeMessageRenderFunction ? (
-        welcomeMessageRenderFunction()
-      ) : (
-        <Box sx={{
+  const WelcomeMessageRender = useCallback(() => {
+    return welcomeMessageRenderFunction ? (
+      welcomeMessageRenderFunction()
+    ) : (
+      <Box
+        sx={{
           position: 'fixed',
           width: '100vw',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           textAlign: 'center',
-        }}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: 'white'
-            }}
-          >
-            Welcome! How can I help you today?
-          </Typography>
-        </Box>
-      );
-    },
-    [welcomeMessageRenderFunction],
-  );
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            color: 'white',
+          }}
+        >
+          Welcome! How can I help you today?
+        </Typography>
+      </Box>
+    );
+  }, [welcomeMessageRenderFunction]);
 
   const BotMessageRender = useCallback(
     (message) => {
@@ -111,9 +109,7 @@ const ChatbotCore = ({
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
-      {messages.length === 0 && (
-        WelcomeMessageRender()
-      )}
+      {messages.length === 0 && WelcomeMessageRender()}
       <List>
         {messages.map((message, index) => (
           <ListItem
@@ -124,7 +120,7 @@ const ChatbotCore = ({
                 message.user === botUser
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
-                  'row-reverse',
+                    'row-reverse',
             }}
           >
             {!isMobile &&
@@ -178,7 +174,8 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {(message.streamCompleted || message.stream) && ReferenceRender(message.reference)}
+                  {(message.streamCompleted || message.stream) &&
+                    ReferenceRender(message.reference)}
                 </Box>
                 {themeConfig.chatLayoutConfig?.responseHeader && (
                   <Box
@@ -212,7 +209,9 @@ const ChatbotCore = ({
                   }}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    {message.text && (message.streamCompleted || !message.stream) && BotMessageRender(message)}
+                    {message.text &&
+                      (message.streamCompleted || !message.stream) &&
+                      BotMessageRender(message)}
                     {message.stream && (
                       <Box
                         sx={{
@@ -223,7 +222,9 @@ const ChatbotCore = ({
                           maxWidth: '100%',
                         }}
                       >
-                        <Typography>{message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}</Typography>
+                        <Typography>
+                          {message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}
+                        </Typography>
                       </Box>
                     )}
                   </Box>
@@ -235,7 +236,8 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {(message.streamCompleted || message.stream) && RelatedQuestionsRender(message.related, sendCustomMessage)}
+                  {(message.streamCompleted || message.stream) &&
+                    RelatedQuestionsRender(message.related, sendCustomMessage)}
                 </Box>
               </Box>
             ) : (
