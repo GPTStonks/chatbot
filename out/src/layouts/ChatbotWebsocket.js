@@ -33,7 +33,7 @@ const react_1 = __importStar(require("react"));
 const react_use_websocket_1 = __importStar(require("react-use-websocket"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, graphicalDataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
+const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent, onApiResponseCode, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
     var _a, _b, _c, _d;
     const ErrorRender = (0, react_1.useCallback)((error) => {
         return errorRenderFunction ? (errorRenderFunction(error)) : (react_1.default.createElement(material_1.Dialog, { open: true },
@@ -90,6 +90,13 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
         const userMessage = { text: newMessage, user: humanUser, loading: false };
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
+    };
+    const handleSendCustomMessage = (message) => {
+        if (!message.trim())
+            return;
+        sendMessage(JSON.stringify({ query: message }));
+        const userMessage = { text: message, user: humanUser, loading: false };
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
     };
     (0, react_1.useEffect)(() => {
         if (onApiResponseCode && messages.length > 0) {
@@ -168,7 +175,7 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
             react_1.default.createElement(react_1.default.Fragment, null,
                 connectionStatus === 'Closed' &&
                     ErrorRender('Connection is closed. Please refresh the page.'),
-                react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, graphicalDataRenderFunction: graphicalDataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction, errorRenderFunction: errorRenderFunction })),
+                react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, welcomeMessageRenderFunction: welcomeMessageRenderFunction, sendCustomMessage: handleSendCustomMessage, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction })),
             ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
             react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));
 };

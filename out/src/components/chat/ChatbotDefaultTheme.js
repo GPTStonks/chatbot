@@ -67,10 +67,10 @@ const useChatbotDefaultTheme = {
                 '& label.MuiFocused': {
                     color: 'white',
                 },
-                '& .MuiInput-underline:after': {
+                '& .MuiInputUnderline:after': {
                     borderBottomColor: 'yellow',
                 },
-                '& .MuiOutlinedInput-root': {
+                '& .MuiOutlinedInputRoot': {
                     '& fieldset': {
                         borderColor: 'white',
                         opacity: '0.5',
@@ -162,8 +162,8 @@ const useChatbotDefaultTheme = {
         Avatar: {
             botAvatarUrl: 'bytebard.png',
             userAvatarUrl: 'gptstonks_logo_small.png',
-            showSideUserAvatar: 'visible',
-            showSideBotAvatar: 'visible',
+            showSideUserAvatar: true,
+            showSideBotAvatar: true,
             style: {
                 width: 40,
                 height: 40,

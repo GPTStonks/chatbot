@@ -1,5 +1,5 @@
 export default ChatbotCore;
-declare function ChatbotCore({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, graphicalDataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }: {
+declare function ChatbotCore({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }: {
     messages: any;
     themeConfig: any;
     isMobile: any;
@@ -9,12 +9,12 @@ declare function ChatbotCore({ messages, themeConfig, isMobile, botUser, humanUs
     messagesEndRef: any;
     isAnyMessageLoading: any;
     showLinearLoader: any;
+    sendCustomMessage: any;
+    welcomeMessageRenderFunction: any;
     botMessageRenderFunction: any;
     userMessageRenderFunction: any;
     dataRenderFunction: any;
-    graphicalDataRenderFunction: any;
     referenceRenderFunction: any;
     relatedQuestionsRenderFunction: any;
-    errorRenderFunction: any;
 }): React.JSX.Element;
 import React from 'react';
