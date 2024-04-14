@@ -85,7 +85,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
         [react_use_websocket_1.ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
     const handleSendMessage = () => {
-        if (!isAnyMessageLoading) {
+        if (!isAnyMessageLoading && messages.length % 2 == 0) {
             if (!newMessage.trim())
                 return;
             sendMessage(JSON.stringify({ query: newMessage }));
@@ -98,7 +98,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
         }
     };
     const handleSendCustomMessage = (message) => {
-        if (!isAnyMessageLoading) {
+        if (!isAnyMessageLoading && messages.length % 2 == 0) {
             if (!message.trim())
                 return;
             sendMessage(JSON.stringify({ query: message }));
@@ -163,6 +163,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
                             reference: reference,
                             graphData: data,
                             loading: false,
+                            stream: false,
                         });
                     }
                     return updatedMessages;
@@ -202,8 +203,10 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
     };
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && !event.shiftKey && !isAnyMessageLoading) {
-            handleSendMessage();
-            event.preventDefault();
+            if (messages.length == 0 || (messages.length > 0 && messages.length % 2 == 0)) {
+                handleSendMessage();
+                event.preventDefault();
+            }
         }
     };
     return (react_1.default.createElement("div", { className: `chatbot-default ${className}`, style: Object.assign({}, themeConfig.style) },
