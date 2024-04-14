@@ -35,14 +35,14 @@ export interface ChatbotProps {
   style?: React.CSSProperties;
   apiConfig: APIConfig;
   themeConfig: ThemeConfig;
-  customMessage?: string;
+  sendCustomMessage?: (text: string) => void;
   welcomeMessageRenderFunction?: JSX.Element;
   setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
   userMessageRenderFunction?: (text: string) => JSX.Element;
   botMessageRenderFunction?: (message: Message) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
-  referenceRenderFunction?: (reference: any) => JSX.Element;
-  relatedQuestionsRenderFunction?: (relatedQuestions: any) => JSX.Element;
+  referenceRenderFunction?: (reference: string[]) => JSX.Element;
+  relatedQuestionsRenderFunction?: (relatedQuestions: string[], sendCustomMessage: any) => JSX.Element;
   errorRenderFunction?: (error: any) => JSX.Element;
 }
