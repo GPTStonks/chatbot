@@ -92,7 +92,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   }[readyState];
 
   const handleSendMessage = () => {
-    if (!isAnyMessageLoading) {
+    if (!isAnyMessageLoading && messages.length % 2 == 0) {
       if (!newMessage.trim()) return;
       sendMessage(JSON.stringify({ query: newMessage }));
 
@@ -105,7 +105,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   };
 
   const handleSendCustomMessage = (message: string) => {
-    if (!isAnyMessageLoading) {
+    if (!isAnyMessageLoading && messages.length % 2 == 0) {
       if (!message.trim()) return;
       sendMessage(JSON.stringify({ query: message }));
 
@@ -184,6 +184,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
               reference: reference,
               graphData: data,
               loading: false,
+              stream: false,
             });
           }
 
@@ -229,8 +230,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && !event.shiftKey && !isAnyMessageLoading) {
-      handleSendMessage();
-      event.preventDefault();
+      if (messages.length == 0 || (messages.length > 0 && messages.length % 2 == 0)) {
+        handleSendMessage();
+        event.preventDefault();
+      }
     }
   };
 
