@@ -117,8 +117,7 @@ const useGptstonksChatbotTheme: ThemeConfig = {
     },
     MessageBubbleBot: {
       style: {
-        display: 'flex',
-        alignItems: 'center',
+        alignItems: 'left',
         justifyContent: 'left',
         borderRadius: '10px',
         flexDirection: 'column',
