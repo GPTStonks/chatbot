@@ -13,13 +13,13 @@ const ChatbotCore = ({
   messagesEndRef,
   isAnyMessageLoading,
   showLinearLoader,
+  sendCustomMessage,
   welcomeMessageRenderFunction,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
-  errorRenderFunction,
 }) => {
 
   const WelcomeMessageRender = useCallback(
@@ -28,19 +28,16 @@ const ChatbotCore = ({
         welcomeMessageRenderFunction()
       ) : (
         <Box sx={{
-          display: 'flex',
-          width: '100%',
-          height: '100%',
-          alignItems: 'center',
+          position: 'fixed',
+          width: '100vw',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
         }}>
           <Typography
             variant="h4"
             sx={{
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              textOverflow: 'ellipsis',
               color: 'white'
             }}
           >
@@ -100,9 +97,9 @@ const ChatbotCore = ({
   );
 
   const RelatedQuestionsRender = useCallback(
-    (relatedQuestions) => {
+    (relatedQuestions, sendCustomMessage) => {
       return relatedQuestionsRenderFunction
-        ? relatedQuestionsRenderFunction(relatedQuestions)
+        ? relatedQuestionsRenderFunction(relatedQuestions, sendCustomMessage)
         : null;
     },
     [relatedQuestionsRenderFunction],
@@ -209,10 +206,12 @@ const ChatbotCore = ({
 
                 <Box
                   sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
                     ...themeConfig?.components?.MessageBubbleBot?.style,
                   }}
                 >
-                  <Box sx={{ display: 'flex', justifyContent: 'left', textAlign: 'left' }}>
+                  <Box sx={{ display: 'flex' }}>
                     {message.text && (message.streamCompleted || !message.stream) && BotMessageRender(message)}
                     {message.stream && (
                       <Box
@@ -227,9 +226,6 @@ const ChatbotCore = ({
                         <Typography>{message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}</Typography>
                       </Box>
                     )}
-                    {/* {
-                      GraphicalRender(message.graphData) // Button to show graph
-                    } */}
                   </Box>
                   <Divider />
                   {DataRender(message.graphData)}
@@ -239,7 +235,7 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {(message.streamCompleted || message.stream) && RelatedQuestionsRender(message.related)}
+                  {(message.streamCompleted || message.stream) && RelatedQuestionsRender(message.related, sendCustomMessage)}
                 </Box>
               </Box>
             ) : (
