@@ -20,12 +20,12 @@ export interface Typography {
 export interface ComponentStyle extends React.CSSProperties {
   '& img'?: React.CSSProperties;
   '& label'?: React.CSSProperties;
-  '& label.Mui-focused'?: React.CSSProperties;
-  '& .MuiInput-underline:after'?: React.CSSProperties;
-  '& .MuiOutlinedInput-root'?: {
+  '& label.MuiFocused'?: React.CSSProperties;
+  '& .MuiInputUnderline:after'?: React.CSSProperties;
+  '& .MuiOutlinedInputRoot'?: {
     '& fieldset'?: React.CSSProperties;
     '&:hover fieldset'?: React.CSSProperties;
-    '&.Mui-focused fieldset'?: React.CSSProperties;
+    '&.MuiFocused fieldset'?: React.CSSProperties;
   };
   '&::-webkit-scrollbar'?: React.CSSProperties;
   '&::-webkit-scrollbar-track'?: React.CSSProperties;

@@ -64,13 +64,13 @@ const useChatbotDefaultTheme = {
                 '& label': {
                     color: 'white',
                 },
-                '& label.Mui-focused': {
+                '& label.MuiFocused': {
                     color: 'white',
                 },
-                '& .MuiInput-underline:after': {
+                '& .MuiInputUnderline:after': {
                     borderBottomColor: 'yellow',
                 },
-                '& .MuiOutlinedInput-root': {
+                '& .MuiOutlinedInputRoot': {
                     '& fieldset': {
                         borderColor: 'white',
                         opacity: '0.5',
@@ -79,7 +79,7 @@ const useChatbotDefaultTheme = {
                         borderColor: 'white',
                         opacity: '0.8',
                     },
-                    '&.Mui-focused fieldset': {
+                    '&.MuiFocused fieldset': {
                         borderColor: '#ebdbb2',
                     },
                 },
@@ -162,8 +162,8 @@ const useChatbotDefaultTheme = {
         Avatar: {
             botAvatarUrl: 'bytebard.png',
             userAvatarUrl: 'gptstonks_logo_small.png',
-            showSideUserAvatar: 'visible',
-            showSideBotAvatar: 'visible',
+            showSideUserAvatar: true,
+            showSideBotAvatar: true,
             style: {
                 width: 40,
                 height: 40,

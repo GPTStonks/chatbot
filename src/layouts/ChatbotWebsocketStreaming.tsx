@@ -12,12 +12,13 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
+  sendCustomMessage,
+  welcomeMessageRenderFunction,
   setDataForParent,
   onApiResponseCode,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
-  graphicalDataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
@@ -91,13 +92,29 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   }[readyState];
 
   const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
-    sendMessage(JSON.stringify({ query: newMessage }));
+    if (!isAnyMessageLoading && messages.length % 2 == 0) {
+      if (!newMessage.trim()) return;
+      sendMessage(JSON.stringify({ query: newMessage }));
 
-    console.log('newMessage:', newMessage);
-    const userMessage = { text: newMessage, user: 'humanUser', loading: false };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setNewMessage('');
+      const userMessage = { text: newMessage, user: humanUser, loading: false };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setNewMessage('');
+    } else {
+      console.log('Message is still loading');
+    }
+  };
+
+  const handleSendCustomMessage = (message: string) => {
+    if (!isAnyMessageLoading && messages.length % 2 == 0) {
+      if (!message.trim()) return;
+      sendMessage(JSON.stringify({ query: message }));
+
+      const userMessage = { text: message, user: humanUser, loading: false };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setNewMessage('');
+    } else {
+      console.log('Message is still loading');
+    }
   };
 
   useEffect(() => {
@@ -122,12 +139,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       let data = mappedData.data;
       let related = mappedData.related;
       let reference = mappedData.reference;
-      /* console.log('body:', body);
-      console.log('type:', type);
-      console.log('data:', data);
-      console.log('related:', related);
-      console.log('reference:', reference);
- */
+      //console.log('data:', mappedData);
+
       if (setDataForParent) {
         setDataForParent(mappedData);
       }
@@ -150,24 +163,38 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
           const lastIndex = updatedMessages.length - 1;
-          if (lastIndex >= 0) {
+          if (lastIndex >= 0 && updatedMessages[lastIndex].loading) {
+            //After streaming
             updatedMessages[lastIndex] = {
               ...updatedMessages[lastIndex],
-              text: updatedMessages[lastIndex].text + '.',
+              text: body,
               related: related,
               reference: reference,
               graphData: data,
               loading: false,
+              stream: false,
+              streamCompleted: true,
             };
+          } else {
+            //Not streaming
+            updatedMessages.push({
+              text: body,
+              user: botUser,
+              related: related,
+              reference: reference,
+              graphData: data,
+              loading: false,
+              stream: false,
+            });
           }
+
           return updatedMessages;
         });
         setBotMessage(null);
       } else if (type === 'stream_step') {
-        const accumulatedStreamData = streamData + body;
+        const accumulatedStreamData = body;
 
         setStreamData(accumulatedStreamData);
-        console.log('accumulatedStreamData:', accumulatedStreamData);
 
         if (
           accumulatedStreamData.includes('"response": "') &&
@@ -176,9 +203,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           const copyMessages = [...messages];
           if (copyMessages.length % 2 != 0) {
             copyMessages.push({
-              text: '',
+              text: ' ',
               user: botUser,
               loading: true,
+              stream: true,
             });
           }
           copyMessages[copyMessages.length - 1].text = accumulatedStreamData
@@ -201,9 +229,11 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleSendMessage();
-      event.preventDefault();
+    if (event.key === 'Enter' && !event.shiftKey && !isAnyMessageLoading) {
+      if (messages.length == 0 || (messages.length > 0 && messages.length % 2 == 0)) {
+        handleSendMessage();
+        event.preventDefault();
+      }
     }
   };
 
@@ -228,13 +258,13 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             showLinearLoader={showLinearLoader}
             isAnyMessageLoading={isAnyMessageLoading}
             isMobile={isMobile}
+            sendCustomMessage={handleSendCustomMessage}
+            welcomeMessageRenderFunction={welcomeMessageRenderFunction}
             botMessageRenderFunction={botMessageRenderFunction}
             userMessageRenderFunction={userMessageRenderFunction}
             dataRenderFunction={dataRenderFunction}
-            graphicalDataRenderFunction={graphicalDataRenderFunction}
             referenceRenderFunction={referenceRenderFunction}
             relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
-            errorRenderFunction={errorRenderFunction}
           />
         </React.Fragment>
 

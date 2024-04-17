@@ -14,10 +14,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   themeConfig,
   setDataForParent,
   onApiResponseCode,
+  sendCustomMessage,
+  welcomeMessageRenderFunction,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
-  graphicalDataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
@@ -96,6 +97,14 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     const userMessage = { text: newMessage, user: humanUser, loading: false };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setNewMessage('');
+  };
+
+  const handleSendCustomMessage = (message: string) => {
+    if (!message.trim()) return;
+    sendMessage(JSON.stringify({ query: message }));
+
+    const userMessage = { text: message, user: humanUser, loading: false };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
   };
 
   useEffect(() => {
@@ -201,13 +210,13 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             showLinearLoader={showLinearLoader}
             isAnyMessageLoading={isAnyMessageLoading}
             isMobile={isMobile}
+            welcomeMessageRenderFunction={welcomeMessageRenderFunction}
+            sendCustomMessage={handleSendCustomMessage}
             botMessageRenderFunction={botMessageRenderFunction}
             userMessageRenderFunction={userMessageRenderFunction}
             dataRenderFunction={dataRenderFunction}
-            graphicalDataRenderFunction={graphicalDataRenderFunction}
             referenceRenderFunction={referenceRenderFunction}
             relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
-            errorRenderFunction={errorRenderFunction}
           />
         </React.Fragment>
 

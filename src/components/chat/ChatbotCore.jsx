@@ -13,20 +13,46 @@ const ChatbotCore = ({
   messagesEndRef,
   isAnyMessageLoading,
   showLinearLoader,
+  sendCustomMessage,
+  welcomeMessageRenderFunction,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
-  graphicalDataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
-  errorRenderFunction,
 }) => {
+  const WelcomeMessageRender = useCallback(() => {
+    return welcomeMessageRenderFunction ? (
+      welcomeMessageRenderFunction()
+    ) : (
+      <Box
+        sx={{
+          position: 'fixed',
+          width: '100vw',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            color: 'white',
+          }}
+        >
+          Welcome! How can I help you today?
+        </Typography>
+      </Box>
+    );
+  }, [welcomeMessageRenderFunction]);
+
   const BotMessageRender = useCallback(
-    (text) => {
+    (message, input) => {
       return botMessageRenderFunction ? (
-        botMessageRenderFunction(text)
+        botMessageRenderFunction(message, input)
       ) : (
-        <Typography>{text}</Typography>
+        <Typography>{message.text}</Typography>
       );
     },
     [botMessageRenderFunction],
@@ -61,13 +87,6 @@ const ChatbotCore = ({
     [dataRenderFunction],
   );
 
-  const GraphicalRender = useCallback(
-    (data) => {
-      return graphicalDataRenderFunction ? graphicalDataRenderFunction(data) : null;
-    },
-    [graphicalDataRenderFunction],
-  );
-
   const ReferenceRender = useCallback(
     (reference) => {
       return referenceRenderFunction ? referenceRenderFunction(reference) : null;
@@ -76,27 +95,22 @@ const ChatbotCore = ({
   );
 
   const RelatedQuestionsRender = useCallback(
-    (relatedQuestions) => {
+    (relatedQuestions, sendCustomMessage) => {
       return relatedQuestionsRenderFunction
-        ? relatedQuestionsRenderFunction(relatedQuestions)
+        ? relatedQuestionsRenderFunction(relatedQuestions, sendCustomMessage)
         : null;
     },
     [relatedQuestionsRenderFunction],
   );
 
-  const ErrorRender = useCallback(
-    (error) => {
-      return errorRenderFunction ? errorRenderFunction(error) : <Typography>{error}</Typography>;
-    },
-    [errorRenderFunction],
-  );
   return (
     <Box
       sx={{
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
-      <List sx={{ width: '100%', margin: 'auto' }}>
+      {messages.length === 0 && WelcomeMessageRender()}
+      <List>
         {messages.map((message, index) => (
           <ListItem
             key={index}
@@ -107,47 +121,46 @@ const ChatbotCore = ({
                   ? 'row'
                   : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
                     'row-reverse',
-              marginBottom: '1rem',
             }}
           >
-            {!isMobile && (
-              <Avatar // Side avatar (outside of message bubble)
-                sx={{
-                  ...themeConfig?.components?.Avatar?.style,
-                  transition: 'opacity 0.5s ease-in-out',
-                  visibility:
-                    message.user === humanUser
-                      ? themeConfig?.components?.Avatar?.showSideUserAvatar
-                      : themeConfig.components?.Avatar?.showSideBotAvatar,
-                }}
-                src={
-                  message.user === botUser
-                    ? themeConfig?.components?.Avatar?.botAvatarUrl
-                    : themeConfig?.components?.Avatar?.userAvatarUrl
-                }
-              />
-            )}
-            {isMobile && (
-              <Avatar // Side avatar (outside of message bubble)
-                sx={{
-                  ...themeConfig?.components?.Avatar?.style,
-                  width: '20px',
-                  height: '20px',
-                  position: 'absolute',
-                  top: '0',
-                  outline: '1px solid #b8bb26',
-                  visibility:
-                    message.user === humanUser
-                      ? themeConfig?.components?.Avatar?.showSideUserAvatar
-                      : themeConfig.components?.Avatar?.showSideBotAvatar,
-                }}
-                src={
-                  message.user === botUser
-                    ? themeConfig?.components?.Avatar?.botAvatarUrl
-                    : themeConfig?.components?.Avatar?.userAvatarUrl
-                }
-              />
-            )}
+            {!isMobile &&
+              ((themeConfig?.components?.Avatar?.showSideUserAvatar &&
+                message.user === humanUser) ||
+                (themeConfig?.components?.Avatar?.showSideBotAvatar &&
+                  message.user === botUser)) && (
+                <Avatar // Side avatar (outside of message bubble)
+                  sx={{
+                    ...themeConfig?.components?.Avatar?.style,
+                    transition: 'opacity 0.5s ease-in-out',
+                  }}
+                  src={
+                    message.user === botUser
+                      ? themeConfig?.components?.Avatar?.botAvatarUrl
+                      : themeConfig?.components?.Avatar?.userAvatarUrl
+                  }
+                />
+              )}
+            {isMobile &&
+              ((themeConfig?.components?.Avatar?.showSideUserAvatar &&
+                message.user === humanUser) ||
+                (themeConfig?.components?.Avatar?.showSideBotAvatar &&
+                  message.user === botUser)) && (
+                <Avatar // Side avatar (outside of message bubble) for mobile
+                  sx={{
+                    ...themeConfig?.components?.Avatar?.style,
+                    width: '20px',
+                    height: '20px',
+                    position: 'absolute',
+                    top: '0',
+                    outline: '1px solid #b8bb26',
+                  }}
+                  src={
+                    message.user === botUser
+                      ? themeConfig?.components?.Avatar?.botAvatarUrl
+                      : themeConfig?.components?.Avatar?.userAvatarUrl
+                  }
+                />
+              )}
             {message.user === botUser ? (
               <Box
                 sx={{
@@ -161,7 +174,8 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {message.reference && ReferenceRender(message.reference)}
+                  {(message.streamCompleted || message.stream) &&
+                    ReferenceRender(message.reference)}
                 </Box>
                 {themeConfig.chatLayoutConfig?.responseHeader && (
                   <Box
@@ -189,24 +203,41 @@ const ChatbotCore = ({
 
                 <Box
                   sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
                     ...themeConfig?.components?.MessageBubbleBot?.style,
                   }}
                 >
-                  <Box sx={{ display: 'flex', justifyContent: 'left', textAlign: 'left' }}>
-                    {message.text && BotMessageRender(message.text)}
-                    {
-                      message.graphData && GraphicalRender(message.graphData) // Button to show graph
-                    }
+                  <Box sx={{ display: 'flex' }}>
+                    {message.text &&
+                      (message.streamCompleted || !message.stream) &&
+                      BotMessageRender(message, messages[index - 1]?.text)}
+                    {message.stream && (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          maxWidth: '100%',
+                        }}
+                      >
+                        <Typography>
+                          {message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}
+                        </Typography>
+                      </Box>
+                    )}
                   </Box>
                   <Divider />
-                  {message.graphData && DataRender(message.graphData)}
+                  {(message.streamCompleted || message.stream) && DataRender(message.graphData)}
                 </Box>
                 <Box
                   sx={{
                     display: 'flex',
                   }}
                 >
-                  {message.related && RelatedQuestionsRender(message.related)}
+                  {(message.streamCompleted || message.stream) &&
+                    RelatedQuestionsRender(message.related, sendCustomMessage)}
                 </Box>
               </Box>
             ) : (
@@ -246,7 +277,7 @@ const ChatbotCore = ({
                   marginLeft: '1rem',
                 }}
               >
-                Retrieving information from {botMessage.text} ...
+                Retrieving information from {botMessage.text.replace('_', ' ')} ...
               </Typography>
             </Box>
           </ListItem>

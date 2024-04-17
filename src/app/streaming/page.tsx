@@ -1,6 +1,7 @@
 'use client';
 import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
+import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -50,14 +51,14 @@ export default function Home() {
               <Typography>{text}</Typography>
             </Box>
           )}
-          botMessageRenderFunction={(text: string) => (
+          botMessageRenderFunction={(message: Message) => (
             <Box
               sx={{
                 maxWidth: '100%',
                 overflowWrap: 'break-word',
               }}
             >
-              <Typography>{text}</Typography>
+              <Typography>{message.text}</Typography>
             </Box>
           )}
         />

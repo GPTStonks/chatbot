@@ -1,9 +1,9 @@
 'use client';
 import { ChatbotProps } from '@/types/chatbot';
 import { Message } from '@/types/message';
-import { Divider, Typography, useMediaQuery } from '@mui/material';
+import { Divider, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
 
@@ -12,14 +12,13 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   apiConfig,
   themeConfig,
   setDataForParent,
+  welcomeMessageRenderFunction,
   onApiResponseCode,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
-  graphicalDataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
-  errorRenderFunction,
 }: ChatbotProps) => {
   const humanUser = 'humanUser';
   const botUser = 'botUser';
@@ -145,8 +144,16 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   const handleSendMessage = () => {
     handleFetchMessage();
 
-    console.log('newMessage:', newMessage);
     const userMessage = { text: newMessage, user: humanUser, loading: false };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setNewMessage('');
+  };
+
+  const handleSendCustomMessage = (message: string) => {
+    setNewMessage(message);
+    handleFetchMessage();
+
+    const userMessage = { text: message, user: humanUser, loading: false };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setNewMessage('');
   };
@@ -184,13 +191,13 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           showLinearLoader={showLinearLoader}
           isAnyMessageLoading={isAnyMessageLoading}
           isMobile={isMobile}
+          sendCustomMessage={handleSendCustomMessage}
+          welcomeMessageRenderFunction={welcomeMessageRenderFunction}
           botMessageRenderFunction={botMessageRenderFunction}
           userMessageRenderFunction={userMessageRenderFunction}
           dataRenderFunction={dataRenderFunction}
-          graphicalDataRenderFunction={graphicalDataRenderFunction}
           referenceRenderFunction={referenceRenderFunction}
           relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
-          errorRenderFunction={errorRenderFunction}
         />
         {themeConfig?.components?.Divider?.appears && (
           <Divider sx={themeConfig?.components?.Divider?.style} />
