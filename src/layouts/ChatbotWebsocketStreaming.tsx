@@ -1,10 +1,10 @@
 'use client';
+import useChatSocket from '@/hooks/useChatSocket';
 import { ChatbotProps } from '@/types/chatbot';
 import { Message } from '@/types/message';
 import { Dialog, Divider, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
 
@@ -75,21 +75,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   }, []);
 
   const wsUrl = useMemo(() => {
-    if (apiConfig.auth && token) {
-      return `${apiConfig.apiQueryEndpoint}?token=${token}`;
-    }
-    return apiConfig.apiQueryEndpoint;
+    return apiConfig.auth && token ? `${apiConfig.apiQueryEndpoint}?token=${token}` : null;
   }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState];
+  const { sendMessage, lastMessage, connectionStatus } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
     if (!isAnyMessageLoading && messages.length % 2 == 0) {
@@ -125,7 +114,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
   useEffect(() => {
     if (lastMessage !== null) {
-      let messageData = JSON.parse(lastMessage.data);
+      let messageData = lastMessage;
       let mappedData: { [key: string]: any } = {};
 
       if (apiConfig.queryParams) {
