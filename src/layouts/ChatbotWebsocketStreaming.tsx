@@ -1,5 +1,5 @@
 'use client';
-import useChatSocket from '@/hooks/useChatSocket';
+import useChatSocket from '../hooks/useChatSocket';
 import { ChatbotProps } from '@/types/chatbot';
 import { Message } from '@/types/message';
 import { Dialog, Divider, useMediaQuery } from '@mui/material';

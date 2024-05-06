@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const useChatSocket_1 = __importDefault(require("@/hooks/useChatSocket"));
+const useChatSocket_1 = __importDefault(require("../hooks/useChatSocket"));
 const material_1 = require("@mui/material");
 const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
