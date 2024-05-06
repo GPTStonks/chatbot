@@ -23,8 +23,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// File: /home/tracert/Desktop/gptstonks/chatbot_v2/chatbot/src/app/layout.tsx
-const entry = __importStar(require("../../../src/app/layout.js"));
+// File: /home/tracert/Desktop/gptstonks/chatbot_v2/chatbot/src/app/websocket/page.tsx
+const entry = __importStar(require("../../../../src/app/websocket/page.js"));
 // Check that the entry is a valid entry
 checkFields();
 // Check the prop type of the entry function

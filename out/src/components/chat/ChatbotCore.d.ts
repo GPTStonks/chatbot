@@ -17,4 +17,4 @@ declare function ChatbotCore({ messages, themeConfig, isMobile, botUser, humanUs
     referenceRenderFunction: any;
     relatedQuestionsRenderFunction: any;
 }): React.JSX.Element;
-import React from 'react';
+import React from "react";

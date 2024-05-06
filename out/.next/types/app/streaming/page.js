@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// File: /home/tracert/OpenBB/front-end/src/app/streaming/page.tsx
+// File: /home/tracert/Desktop/gptstonks/chatbot_v2/chatbot/src/app/streaming/page.tsx
 const entry = __importStar(require("../../../../src/app/streaming/page.js"));
 // Check that the entry is a valid entry
 checkFields();
