@@ -25,6 +25,7 @@
     "out/src/components/**/*",
     "out/src/layouts/**/*",
     "out/src/types/**/*",
+    "out/src/hooks/**/*",
     "out/src/index.d.ts",
     "out/src/index.js"
   ],
