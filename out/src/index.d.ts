@@ -5,3 +5,4 @@ export { default as useChatbotDefaultTheme } from './components/chat/ChatbotDefa
 export { default as useGptstonksChatbotTheme } from './components/chat/GptstonksChatbotTheme';
 export { default as ChatbotCore } from './components/chat/ChatbotCore';
 export { default as ChatbotInput } from './components/chat/ChatbotInput';
+export { default as useChatSocket } from './hooks/useChatSocket';
