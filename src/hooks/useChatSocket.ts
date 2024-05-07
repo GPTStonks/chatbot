@@ -12,7 +12,7 @@ const useChatSocket = (url: string) => {
       return;
     }
 
-    let newSocket : WebSocket | null = null;
+    let newSocket: WebSocket | null = null;
     try {
       newSocket = new WebSocket(url);
     } catch (error) {

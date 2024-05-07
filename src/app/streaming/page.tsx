@@ -40,6 +40,21 @@ export default function Home() {
             },
           }}
           themeConfig={themeConfig}
+          errorRenderFunction={(error: any) => (
+            <Box
+              sx={{
+                position: 'fixed',
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                padding: '3px 15px',
+                zIndex: 1000,
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              }}
+            >
+              <Typography>{error}</Typography>
+            </Box>
+          )}
           setDataForParent={(data: any) => {
             setChatData(data);
           }}

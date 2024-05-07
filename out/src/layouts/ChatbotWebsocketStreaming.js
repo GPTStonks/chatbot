@@ -75,7 +75,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
     }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
     const { sendMessage, lastMessage, connectionStatus } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
-        if (!isAnyMessageLoading && messages.length % 2 == 0) {
+        if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
             if (!newMessage.trim())
                 return;
             sendMessage(JSON.stringify({ query: newMessage }));
@@ -84,7 +84,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
             setNewMessage('');
         }
         else {
-            console.log('Message is still loading');
+            console.log('Some message is still loading or connection is not established.');
         }
     };
     const handleSendCustomMessage = (message) => {
@@ -97,7 +97,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
             setNewMessage('');
         }
         else {
-            console.log('Message is still loading');
+            console.log('Some message is still loading or connection is not established.');
         }
     };
     (0, react_1.useEffect)(() => {
@@ -202,7 +202,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
     return (react_1.default.createElement("div", { className: `chatbot-default ${className}`, style: Object.assign({}, themeConfig.style) },
         react_1.default.createElement(styles_1.ThemeProvider, { theme: customTheme },
             react_1.default.createElement(react_1.default.Fragment, null,
-                connectionStatus === 'Closed' &&
+                connectionStatus === 'disconnected' &&
                     ErrorRender('Connection is closed. Please refresh the page.'),
                 react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, sendCustomMessage: handleSendCustomMessage, welcomeMessageRenderFunction: welcomeMessageRenderFunction, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction })),
             ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),

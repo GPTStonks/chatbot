@@ -81,7 +81,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const { sendMessage, lastMessage, connectionStatus } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
-    if (!isAnyMessageLoading && messages.length % 2 == 0) {
+    if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
       if (!newMessage.trim()) return;
       sendMessage(JSON.stringify({ query: newMessage }));
 
@@ -89,7 +89,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setNewMessage('');
     } else {
-      console.log('Message is still loading');
+      console.log('Some message is still loading or connection is not established.');
     }
   };
 
@@ -102,7 +102,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setNewMessage('');
     } else {
-      console.log('Message is still loading');
+      console.log('Some message is still loading or connection is not established.');
     }
   };
 
@@ -235,7 +235,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
     >
       <ThemeProvider theme={customTheme}>
         <React.Fragment>
-          {connectionStatus === 'Closed' &&
+          {connectionStatus === 'disconnected' &&
             ErrorRender('Connection is closed. Please refresh the page.')}
           <ChatbotCore
             messages={messages}
