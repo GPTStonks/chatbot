@@ -35,7 +35,16 @@ function Home() {
                         related: 'related',
                         stream: 'stream_step',
                     },
-                }, themeConfig: themeConfig, setDataForParent: (data) => {
+                }, themeConfig: themeConfig, errorRenderFunction: (error) => (react_1.default.createElement(material_1.Box, { sx: {
+                        position: 'fixed',
+                        top: 0,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        padding: '3px 15px',
+                        zIndex: 1000,
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    } },
+                    react_1.default.createElement(material_1.Typography, null, error))), setDataForParent: (data) => {
                     setChatData(data);
                 }, onApiResponseCode: (bool) => {
                     setInitializedChat(bool);
