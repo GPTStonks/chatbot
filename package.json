@@ -1,6 +1,6 @@
 {
   "name": "@gptstonks/chatbot",
-  "version": "0.0.22",
+  "version": "0.0.26",
   "author": {
     "name": "GPTStonks",
     "email": "gptstonks@gmail.com"
@@ -25,6 +25,7 @@
     "out/src/components/**/*",
     "out/src/layouts/**/*",
     "out/src/types/**/*",
+    "out/src/hooks/**/*",
     "out/src/index.d.ts",
     "out/src/index.js"
   ],

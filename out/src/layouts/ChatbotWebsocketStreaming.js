@@ -27,10 +27,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const useChatSocket_1 = __importDefault(require("../hooks/useChatSocket"));
 const material_1 = require("@mui/material");
 const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
-const react_use_websocket_1 = __importStar(require("react-use-websocket"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
 const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCustomMessage, welcomeMessageRenderFunction, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
@@ -71,19 +71,9 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
         }
     }, []);
     const wsUrl = (0, react_1.useMemo)(() => {
-        if (apiConfig.auth && token) {
-            return `${apiConfig.apiQueryEndpoint}?token=${token}`;
-        }
-        return apiConfig.apiQueryEndpoint;
+        return apiConfig.auth && token ? `${apiConfig.apiQueryEndpoint}?token=${token}` : null;
     }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
-    const { sendMessage, lastMessage, readyState } = (0, react_use_websocket_1.default)(wsUrl);
-    const connectionStatus = {
-        [react_use_websocket_1.ReadyState.CONNECTING]: 'Connecting',
-        [react_use_websocket_1.ReadyState.OPEN]: 'Open',
-        [react_use_websocket_1.ReadyState.CLOSING]: 'Closing',
-        [react_use_websocket_1.ReadyState.CLOSED]: 'Closed',
-        [react_use_websocket_1.ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-    }[readyState];
+    const { sendMessage, lastMessage, connectionStatus } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
         if (!isAnyMessageLoading && messages.length % 2 == 0) {
             if (!newMessage.trim())
@@ -117,7 +107,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
     }, [messages]);
     (0, react_1.useEffect)(() => {
         if (lastMessage !== null) {
-            let messageData = JSON.parse(lastMessage.data);
+            let messageData = lastMessage;
             let mappedData = {};
             if (apiConfig.queryParams) {
                 Object.entries(apiConfig.queryParams).forEach(([key, value]) => {

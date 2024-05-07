@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatbotInput = exports.ChatbotCore = exports.useGptstonksChatbotTheme = exports.useChatbotDefaultTheme = exports.ChatbotHttp = exports.ChatbotWebsocketStreaming = exports.ChatbotWebsocket = void 0;
+exports.useChatSocket = exports.ChatbotInput = exports.ChatbotCore = exports.useGptstonksChatbotTheme = exports.useChatbotDefaultTheme = exports.ChatbotHttp = exports.ChatbotWebsocketStreaming = exports.ChatbotWebsocket = void 0;
 var ChatbotWebsocket_1 = require("./layouts/ChatbotWebsocket");
 Object.defineProperty(exports, "ChatbotWebsocket", { enumerable: true, get: function () { return __importDefault(ChatbotWebsocket_1).default; } });
 var ChatbotWebsocketStreaming_1 = require("./layouts/ChatbotWebsocketStreaming");
@@ -18,3 +18,5 @@ var ChatbotCore_1 = require("./components/chat/ChatbotCore");
 Object.defineProperty(exports, "ChatbotCore", { enumerable: true, get: function () { return __importDefault(ChatbotCore_1).default; } });
 var ChatbotInput_1 = require("./components/chat/ChatbotInput");
 Object.defineProperty(exports, "ChatbotInput", { enumerable: true, get: function () { return __importDefault(ChatbotInput_1).default; } });
+var useChatSocket_1 = require("./hooks/useChatSocket");
+Object.defineProperty(exports, "useChatSocket", { enumerable: true, get: function () { return __importDefault(useChatSocket_1).default; } });

@@ -8,4 +8,4 @@ declare function ChatbotInput({ isMobile, themeConfig, newMessage, setNewMessage
     handleSendMessage: any;
     isAnyMessageLoading: any;
 }): React.JSX.Element;
-import React from 'react';
+import React from "react";
