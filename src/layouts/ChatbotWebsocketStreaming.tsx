@@ -138,7 +138,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
         setGraphData(data);
       }
 
-      let queryLoading = type !== 'data' || type !== 'error';
+      let queryLoading = type !== 'data';
       setIsAnyMessageLoading(queryLoading);
       
       if (type === 'error') {
@@ -151,6 +151,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           });
           return updatedMessages;
         });
+        setIsAnyMessageLoading(false);
       }
       if (queryLoading && type === 'model_step') {
         setBotMessage(() => ({
