@@ -23,7 +23,7 @@ const ChatbotCore = ({
 }) => {
   const WelcomeMessageRender = useCallback(() => {
     return welcomeMessageRenderFunction ? (
-      welcomeMessageRenderFunction()
+      welcomeMessageRenderFunction
     ) : (
       <Box
         sx={{
