@@ -126,8 +126,19 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
             if (type === 'data' && data) {
                 setGraphData(data);
             }
-            let queryLoading = type !== 'data';
+            let queryLoading = type !== 'data' || type !== 'error';
             setIsAnyMessageLoading(queryLoading);
+            if (type === 'error') {
+                setMessages((prevMessages) => {
+                    const updatedMessages = [...prevMessages];
+                    updatedMessages.push({
+                        text: body,
+                        user: botUser,
+                        loading: false,
+                    });
+                    return updatedMessages;
+                });
+            }
             if (queryLoading && type === 'model_step') {
                 setBotMessage(() => ({
                     text: body,

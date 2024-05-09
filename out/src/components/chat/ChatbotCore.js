@@ -33,7 +33,7 @@ const LinearBuffer_1 = __importDefault(require("./LinearBuffer"));
 const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     const WelcomeMessageRender = (0, react_1.useCallback)(() => {
-        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction()) : (react_1.default.createElement(material_1.Box, { sx: {
+        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction) : (react_1.default.createElement(material_1.Box, { sx: {
                 position: 'fixed',
                 width: '100vw',
                 top: '50%',
