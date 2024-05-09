@@ -140,7 +140,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
       let queryLoading = type !== 'data';
       setIsAnyMessageLoading(queryLoading);
-      
+
       if (type === 'error') {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
