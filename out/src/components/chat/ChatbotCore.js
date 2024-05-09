@@ -33,7 +33,7 @@ const LinearBuffer_1 = __importDefault(require("./LinearBuffer"));
 const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     const WelcomeMessageRender = (0, react_1.useCallback)(() => {
-        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction()) : (react_1.default.createElement(material_1.Box, { sx: {
+        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction) : (react_1.default.createElement(material_1.Box, { sx: {
                 position: 'fixed',
                 width: '100vw',
                 top: '50%',
@@ -145,9 +145,12 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                     react_1.default.createElement(material_1.Typography, { sx: {
                             marginLeft: '1rem',
                         } },
-                        "Retrieving information from ",
-                        botMessage.text.replace('_', ' '),
-                        " ...")))),
+                        botMessage.text == 'world_knowledge' && '🧭 Navigating the Internet...',
+                        botMessage.text == 'simple_reflection' && 'Wrapping up...',
+                        botMessage.text != 'world_knowledge' && botMessage.text != 'simple_reflection' && (react_1.default.createElement(material_1.Typography, null,
+                            " Preparing content from ",
+                            botMessage.text,
+                            "...")))))),
             showLinearLoader && (react_1.default.createElement(material_1.ListItem, { sx: { display: 'flex', flexDirection: 'row', maxWidth: isMobile ? '70vw' : '40vw' } },
                 react_1.default.createElement(material_1.Avatar, { sx: Object.assign({ marginRight: '1rem' }, (_k = (_j = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _j === void 0 ? void 0 : _j.Avatar) === null || _k === void 0 ? void 0 : _k.style), src: (_m = (_l = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _l === void 0 ? void 0 : _l.Avatar) === null || _m === void 0 ? void 0 : _m.botAvatarUrl }),
                 react_1.default.createElement(LinearBuffer_1.default, null)))),
