@@ -277,7 +277,13 @@ const ChatbotCore = ({
                   marginLeft: '1rem',
                 }}
               >
-                Retrieving information from {botMessage.text.replace('_', ' ')} ...
+                {botMessage.text == 'world_knowledge' && '🧭 Navigating the Internet...'}
+
+                {botMessage.text == 'simple_reflection' && 'Wrapping up...'}
+
+                {botMessage.text != 'world_knowledge' && botMessage.text != 'simple_reflection' && (
+                  <Typography> Preparing content from {botMessage.text}...</Typography>
+                )}
               </Typography>
             </Box>
           </ListItem>
