@@ -127,7 +127,6 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                         maxWidth: '100%',
                                     } },
                                     react_1.default.createElement(material_1.Typography, null, message.text.replace(/\\n/g, '  \n').replace(/\\/g, ''))))),
-                            react_1.default.createElement(material_1.Divider, null),
                             (message.streamCompleted || message.stream) && DataRender(message.graphData)),
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',

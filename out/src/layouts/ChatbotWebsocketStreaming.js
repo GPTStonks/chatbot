@@ -126,7 +126,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
             if (type === 'data' && data) {
                 setGraphData(data);
             }
-            let queryLoading = type !== 'data' || type !== 'error';
+            let queryLoading = type !== 'data';
             setIsAnyMessageLoading(queryLoading);
             if (type === 'error') {
                 setMessages((prevMessages) => {
@@ -138,6 +138,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, sendCust
                     });
                     return updatedMessages;
                 });
+                setIsAnyMessageLoading(false);
             }
             if (queryLoading && type === 'model_step') {
                 setBotMessage(() => ({
