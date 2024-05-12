@@ -12,6 +12,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
+  preloadedMessages,
   welcomeMessageRenderFunction,
   setDataForParent,
   onApiResponseCode,
@@ -49,7 +50,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const customTheme = createTheme(
     themeConfig ? { palette: themeConfig.palette, typography: themeConfig.typography } : {},
   );
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(preloadedMessages ?? []);
   const [newMessage, setNewMessage] = useState<string>('');
   const [botMessage, setBotMessage] = useState<Message | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
