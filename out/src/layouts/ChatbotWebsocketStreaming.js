@@ -33,7 +33,7 @@ const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, welcomeMessageRenderFunction, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
+const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloadedMessages, welcomeMessageRenderFunction, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
     var _a, _b, _c, _d;
     const ErrorRender = (0, react_1.useCallback)((error) => {
         return errorRenderFunction ? (errorRenderFunction(error)) : (react_1.default.createElement(material_1.Dialog, { open: true },
@@ -49,7 +49,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, welcomeM
     const botUser = 'botUser';
     const isMobile = (0, material_1.useMediaQuery)('(max-width:750px)');
     const customTheme = (0, styles_1.createTheme)(themeConfig ? { palette: themeConfig.palette, typography: themeConfig.typography } : {});
-    const [messages, setMessages] = (0, react_1.useState)([]);
+    const [messages, setMessages] = (0, react_1.useState)(preloadedMessages !== null && preloadedMessages !== void 0 ? preloadedMessages : []);
     const [newMessage, setNewMessage] = (0, react_1.useState)('');
     const [botMessage, setBotMessage] = (0, react_1.useState)(null);
     const messagesEndRef = (0, react_1.useRef)(null);

@@ -35,6 +35,7 @@ export interface ChatbotProps {
   style?: React.CSSProperties;
   apiConfig: APIConfig;
   themeConfig: ThemeConfig;
+  preloadedMessages?: Message[];
   sendCustomMessage?: (text: string) => void;
   welcomeMessageRenderFunction?: (sendCustomMessage: any) => JSX.Element;
   setDataForParent?: (data: any) => void;

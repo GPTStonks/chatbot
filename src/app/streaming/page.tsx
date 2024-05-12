@@ -11,6 +11,13 @@ export default function Home() {
 
   const themeConfig = useChatbotDefaultTheme;
 
+  const preloadedMessages: Message[] = [
+    {
+      text: 'Hello! How can I help you today?',
+      user: 'humanUser',
+    },
+  ];
+
   return (
     <main
       style={{
@@ -25,6 +32,7 @@ export default function Home() {
       <div style={{ width: '20vw', height: '100%' }}></div>
       <div style={{ width: '100%', height: '100%' }}>
         <ChatbotWebsocketStreaming
+          preloadedMessages={preloadedMessages}
           apiConfig={{
             auth: true,
             tokenName: 'userToken',
