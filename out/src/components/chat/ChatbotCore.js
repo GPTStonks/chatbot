@@ -32,8 +32,8 @@ const react_loader_spinner_1 = require("react-loader-spinner");
 const LinearBuffer_1 = __importDefault(require("./LinearBuffer"));
 const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-    const WelcomeMessageRender = (0, react_1.useCallback)(() => {
-        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction) : (react_1.default.createElement(material_1.Box, { sx: {
+    const WelcomeMessageRender = (0, react_1.useCallback)((sendCustomMessage) => {
+        return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction(sendCustomMessage)) : (react_1.default.createElement(material_1.Box, { sx: {
                 position: 'fixed',
                 width: '100vw',
                 top: '50%',
@@ -69,7 +69,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
             : null;
     }, [relatedQuestionsRenderFunction]);
     return (react_1.default.createElement(material_1.Box, { sx: Object.assign({}, (_b = (_a = themeConfig.components) === null || _a === void 0 ? void 0 : _a.ChatBox) === null || _b === void 0 ? void 0 : _b.style) },
-        messages.length === 0 && WelcomeMessageRender(),
+        messages.length === 0 && WelcomeMessageRender(sendCustomMessage),
         react_1.default.createElement(material_1.List, null,
             messages.map((message, index) => {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11;

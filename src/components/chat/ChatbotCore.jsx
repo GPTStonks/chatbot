@@ -21,31 +21,34 @@ const ChatbotCore = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
 }) => {
-  const WelcomeMessageRender = useCallback(() => {
-    return welcomeMessageRenderFunction ? (
-      welcomeMessageRenderFunction
-    ) : (
-      <Box
-        sx={{
-          position: 'fixed',
-          width: '100vw',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-        }}
-      >
-        <Typography
-          variant="h4"
+  const WelcomeMessageRender = useCallback(
+    (sendCustomMessage) => {
+      return welcomeMessageRenderFunction ? (
+        welcomeMessageRenderFunction(sendCustomMessage)
+      ) : (
+        <Box
           sx={{
-            color: 'white',
+            position: 'fixed',
+            width: '100vw',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
           }}
         >
-          Welcome! How can I help you today?
-        </Typography>
-      </Box>
-    );
-  }, [welcomeMessageRenderFunction]);
+          <Typography
+            variant="h4"
+            sx={{
+              color: 'white',
+            }}
+          >
+            Welcome! How can I help you today?
+          </Typography>
+        </Box>
+      );
+    },
+    [welcomeMessageRenderFunction],
+  );
 
   const BotMessageRender = useCallback(
     (message, input) => {
@@ -109,7 +112,7 @@ const ChatbotCore = ({
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
-      {messages.length === 0 && WelcomeMessageRender()}
+      {messages.length === 0 && WelcomeMessageRender(sendCustomMessage)}
       <List>
         {messages.map((message, index) => (
           <ListItem
