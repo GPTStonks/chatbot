@@ -12,6 +12,12 @@ function Home() {
     const [initializedChat, setInitializedChat] = react_1.default.useState(false);
     const [chatData, setChatData] = react_1.default.useState(null);
     const themeConfig = ChatbotDefaultTheme_1.default;
+    const preloadedMessages = [
+        {
+            text: 'Hello! How can I help you today?',
+            user: 'humanUser',
+        },
+    ];
     return (react_1.default.createElement("main", { style: {
             display: 'flex',
             justifyContent: 'center',
@@ -22,7 +28,7 @@ function Home() {
         } },
         react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
         react_1.default.createElement("div", { style: { width: '100%', height: '100%' } },
-            react_1.default.createElement(ChatbotWebsocketStreaming_1.default, { apiConfig: {
+            react_1.default.createElement(ChatbotWebsocketStreaming_1.default, { preloadedMessages: preloadedMessages, apiConfig: {
                     auth: true,
                     tokenName: 'userToken',
                     fetchFunction: '',
