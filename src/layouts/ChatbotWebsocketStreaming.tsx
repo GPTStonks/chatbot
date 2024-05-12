@@ -12,7 +12,6 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
-  sendCustomMessage,
   welcomeMessageRenderFunction,
   setDataForParent,
   onApiResponseCode,
