@@ -3,10 +3,7 @@ import { Components } from './component';
 import { Message } from './message';
 
 export interface APIConfig {
-  auth?: boolean;
-  tokenName?: string;
-  fetchFunction?: string;
-  apiQueryEndpoint: string;
+  queryEndpoint: string;
   queryParams?: Record<string, any>;
 }
 
