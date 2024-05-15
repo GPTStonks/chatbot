@@ -58,12 +58,11 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     const [token, setToken] = (0, react_1.useState)(null);
     const [graphData, setGraphData] = (0, react_1.useState)(null);
     const [streamData, setStreamData] = (0, react_1.useState)('');
-    if (!apiConfig.queryEndpoint.startsWith('ws')) {
-        throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
-    }
     const wsUrl = (0, react_1.useMemo)(() => {
-        return apiConfig.queryEndpoint;
-    }, [apiConfig.queryEndpoint]);
+        var _a, _b;
+        return ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) || ((_b = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _b === void 0 ? void 0 : _b.startsWith('wss://')) ?
+            apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+    }, [apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint]);
     const { sendMessage, lastMessage, connectionStatus, eventReason } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
         if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
@@ -97,6 +96,9 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
         }
     }, [messages]);
     (0, react_1.useEffect)(() => {
+        if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
+            throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
+        }
         if (lastMessage !== null) {
             let messageData = lastMessage;
             let mappedData = {};

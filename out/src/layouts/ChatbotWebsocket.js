@@ -34,7 +34,7 @@ const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"))
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
 const useChatSocket_1 = __importDefault(require("../hooks/useChatSocket"));
 const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent, onApiResponseCode, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     const ErrorRender = (0, react_1.useCallback)((error) => {
         return errorRenderFunction ? (errorRenderFunction(error)) : (react_1.default.createElement(material_1.Dialog, { open: true },
             react_1.default.createElement("div", { style: {
@@ -57,11 +57,11 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
     const [showLinearLoader, setShowLinearLoader] = (0, react_1.useState)(false);
     const [token, setToken] = (0, react_1.useState)(null);
     const [graphData, setGraphData] = (0, react_1.useState)(null);
-    if (!apiConfig.queryEndpoint.startsWith('ws')) {
+    if (!((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws'))) {
         throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
     }
     const wsUrl = (0, react_1.useMemo)(() => {
-        return apiConfig.queryEndpoint;
+        return apiConfig.queryEndpoint || '';
     }, [apiConfig.queryEndpoint]);
     const { sendMessage, lastMessage, connectionStatus, eventReason } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
@@ -157,7 +157,7 @@ const ChatbotWebsocket = ({ className, apiConfig, themeConfig, setDataForParent,
                 connectionStatus === 'Closed' &&
                     ErrorRender(eventReason ? eventReason : 'Connection closed unexpectedly'),
                 react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, welcomeMessageRenderFunction: welcomeMessageRenderFunction, sendCustomMessage: handleSendCustomMessage, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction })),
-            ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
+            ((_c = (_b = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _b === void 0 ? void 0 : _b.Divider) === null || _c === void 0 ? void 0 : _c.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_e = (_d = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _d === void 0 ? void 0 : _d.Divider) === null || _e === void 0 ? void 0 : _e.style })),
             react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));
 };
 exports.default = ChatbotWebsocket;
