@@ -60,13 +60,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [graphData, setGraphData] = useState<any>(null);
   const [streamData, setStreamData] = useState<string>('');
 
-  if (!apiConfig?.queryEndpoint?.startsWith('ws')) {
-    throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
-  }
-
   const wsUrl = useMemo(() => {
-    return apiConfig.queryEndpoint || '';
-  }, [apiConfig.queryEndpoint]);
+    return apiConfig?.queryEndpoint?.startsWith('ws://') || apiConfig?.queryEndpoint?.startsWith('wss://') ?
+      apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+  }, [apiConfig?.queryEndpoint]);
 
   const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
 
@@ -103,6 +100,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   }, [messages]);
 
   useEffect(() => {
+    if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
+      throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
+    }
     if (lastMessage !== null) {
       let messageData = lastMessage;
       let mappedData: { [key: string]: any } = {};
