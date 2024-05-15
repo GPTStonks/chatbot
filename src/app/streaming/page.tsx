@@ -3,7 +3,7 @@ import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Home() {
   const [initializedChat, setInitializedChat] = React.useState(false);
@@ -22,7 +22,12 @@ export default function Home() {
     },
   ];
 
-  const token = localStorage.getItem('userToken');
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('userToken');
+    setToken(storedToken);
+  }, []);
 
   return (
     <main
