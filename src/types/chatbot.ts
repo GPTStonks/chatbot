@@ -5,6 +5,8 @@ import { Message } from './message';
 export interface APIConfig {
   queryEndpoint: string;
   queryParams?: Record<string, any>;
+  needsJWT?: boolean; // If the API needs a JWT token for HTTP requests
+  token?: string; // JWT token name (only if needsJWT is true)
 }
 
 export interface ChatLayoutConfig {
