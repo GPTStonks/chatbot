@@ -16,7 +16,14 @@ export default function Home() {
       text: 'Hello! How can I help you today?',
       user: 'humanUser',
     },
+    {
+      text: 'Hello!',
+      user: 'botUser',
+    },
   ];
+
+  const token = localStorage.getItem('userToken');
+
 
   return (
     <main
@@ -34,10 +41,7 @@ export default function Home() {
         <ChatbotWebsocketStreaming
           preloadedMessages={preloadedMessages}
           apiConfig={{
-            auth: true,
-            tokenName: 'userToken',
-            fetchFunction: '',
-            apiQueryEndpoint: 'ws://localhost:8000/chatws',
+            queryEndpoint: 'ws://localhost:8000/chatws?token=' + token,
             queryParams: {
               type: 'type',
               data: 'result_data',
