@@ -1,10 +1,11 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const useChatSocket = (url: string) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [connectionStatus, setConnectionStatus] = useState('disconnected');
   const [lastMessage, setLastMessage] = useState<any>(null);
+  const [eventReason, setEventReason] = useState<string | null>(null);
 
   useEffect(() => {
     if (!url) {
@@ -22,12 +23,14 @@ const useChatSocket = (url: string) => {
 
     newSocket.addEventListener('open', () => {
       setConnectionStatus('connected');
+      setEventReason(null);
       console.log('Socket connection opened');
     });
 
-    newSocket.addEventListener('close', () => {
+    newSocket.addEventListener('close', (event) => {
       setConnectionStatus('disconnected');
-      console.log('Socket connection closed');
+      setEventReason(event.reason);
+      console.log(`Socket connection closed: ${event.reason}`);
     });
 
     newSocket.addEventListener('message', (event) => {
@@ -37,6 +40,7 @@ const useChatSocket = (url: string) => {
 
     newSocket.addEventListener('error', (event) => {
       setConnectionStatus('error');
+      setEventReason('An error occurred');
       console.log('WebSocket error:', event);
     });
 
@@ -75,7 +79,7 @@ const useChatSocket = (url: string) => {
     [socket],
   );
 
-  return { sendMessage, lastMessage, connectionStatus };
+  return { sendMessage, lastMessage, connectionStatus, eventReason };
 };
 
 export default useChatSocket;
