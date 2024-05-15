@@ -104,7 +104,7 @@ export default function Home() {
             auth: false,
             tokenName: 'userToken',
             fetchFunction: '',
-            apiQueryEndpoint: 'ws://localhost:5000/chatws',
+            queryEndpoint: 'ws://localhost:5000/chatws',
             queryParams: {
               type: 'type',
               data: 'result_data',
@@ -154,7 +154,7 @@ function App() {
   return (
     <ChatbotWebsocket
       apiConfig={{
-        apiQueryEndpoint: "ws://localhost:8000/chatws",
+        queryEndpoint: "ws://localhost:8000/chatws",
       }}
       themeConfig={themeConfig}
     />
@@ -168,7 +168,7 @@ function App() {
 Customize the chatbot's API endpoints and authentication settings:
 
 - `isWebsocket`: Determines whether to use WebSocket for real-time communication.
-- `apiQueryEndpoint`: The endpoint URL for the API or WebSocket connection.
+- `queryEndpoint`: The endpoint URL for the API or WebSocket connection.
 - `auth` (optional): Enables authentication.
 - `tokenName` (optional): The key name for the authentication token in localStorage.
 - `fetchFunction` (optional): A custom fetch function for API calls.

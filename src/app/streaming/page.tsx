@@ -24,7 +24,6 @@ export default function Home() {
 
   const token = localStorage.getItem('userToken');
 
-
   return (
     <main
       style={{

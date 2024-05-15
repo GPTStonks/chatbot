@@ -26,10 +26,7 @@ export default function Home() {
       <div style={{ width: '100%', height: '100%' }}>
         <ChatbotWebsocket
           apiConfig={{
-            auth: true,
-            tokenName: 'userToken',
-            fetchFunction: '',
-            apiQueryEndpoint: 'ws://localhost:8000/chatws',
+            queryEndpoint: 'ws://localhost:8000/chatws',
             queryParams: {
               type: 'type',
               data: 'result_data',
