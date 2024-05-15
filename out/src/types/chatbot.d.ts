@@ -3,11 +3,10 @@ import { Palette, Typography } from './styles';
 import { Components } from './component';
 import { Message } from './message';
 export interface APIConfig {
-    auth?: boolean;
-    tokenName?: string;
-    fetchFunction?: string;
-    apiQueryEndpoint: string;
+    queryEndpoint: string;
     queryParams?: Record<string, any>;
+    needsJWT?: boolean;
+    token?: string;
 }
 export interface ChatLayoutConfig {
     chatOrientation?: 'horizontal' | 'vertical';

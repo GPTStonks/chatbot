@@ -22,10 +22,7 @@ function Home() {
         react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
         react_1.default.createElement("div", { style: { width: '60vw', height: '100%' } },
             react_1.default.createElement(ChatbotHttp_1.default, { apiConfig: {
-                    auth: false,
-                    tokenName: 'userToken',
-                    fetchFunction: '',
-                    apiQueryEndpoint: 'http://localhost:5000/ask',
+                    queryEndpoint: 'http://localhost:5000/ask',
                     queryParams: {
                         type: 'type',
                         data: 'result_data',

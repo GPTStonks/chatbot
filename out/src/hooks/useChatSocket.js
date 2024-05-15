@@ -6,6 +6,7 @@ const useChatSocket = (url) => {
     const [socket, setSocket] = (0, react_1.useState)(null);
     const [connectionStatus, setConnectionStatus] = (0, react_1.useState)('disconnected');
     const [lastMessage, setLastMessage] = (0, react_1.useState)(null);
+    const [eventReason, setEventReason] = (0, react_1.useState)(null);
     (0, react_1.useEffect)(() => {
         if (!url) {
             console.error('WebSocket connection failed: URL is required');
@@ -21,11 +22,13 @@ const useChatSocket = (url) => {
         }
         newSocket.addEventListener('open', () => {
             setConnectionStatus('connected');
+            setEventReason(null);
             console.log('Socket connection opened');
         });
-        newSocket.addEventListener('close', () => {
+        newSocket.addEventListener('close', (event) => {
             setConnectionStatus('disconnected');
-            console.log('Socket connection closed');
+            setEventReason(event.reason);
+            console.log(`Socket connection closed: ${event.reason}`);
         });
         newSocket.addEventListener('message', (event) => {
             const messageData = JSON.parse(event.data);
@@ -33,6 +36,7 @@ const useChatSocket = (url) => {
         });
         newSocket.addEventListener('error', (event) => {
             setConnectionStatus('error');
+            setEventReason('An error occurred');
             console.log('WebSocket error:', event);
         });
         setSocket(newSocket);
@@ -64,6 +68,6 @@ const useChatSocket = (url) => {
             console.error('WebSocket is not open. Cannot send message.');
         }
     }, [socket]);
-    return { sendMessage, lastMessage, connectionStatus };
+    return { sendMessage, lastMessage, connectionStatus, eventReason };
 };
 exports.default = useChatSocket;
