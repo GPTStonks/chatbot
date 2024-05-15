@@ -25,10 +25,7 @@ export default function Home() {
       <div style={{ width: '60vw', height: '100%' }}>
         <ChatbotHttp
           apiConfig={{
-            auth: false,
-            tokenName: 'userToken',
-            fetchFunction: '',
-            apiQueryEndpoint: 'http://localhost:5000/ask',
+            queryEndpoint: 'http://localhost:5000/ask',
             queryParams: {
               type: 'type',
               data: 'result_data',

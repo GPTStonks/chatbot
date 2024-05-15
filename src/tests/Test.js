@@ -6,7 +6,7 @@ export const Test = () => {
     <Chatbot
       theme={useChatbotDefaultTheme}
       apiConfig={{
-        apiQueryEndpoint: 'http://localhost:8000/ask/',
+        queryEndpoint: 'http://localhost:8000/ask/',
         queryParams: {
           query: '',
         },

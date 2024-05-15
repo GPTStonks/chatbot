@@ -13,7 +13,6 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   themeConfig,
   setDataForParent,
   welcomeMessageRenderFunction,
-  onApiResponseCode,
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
@@ -33,28 +32,22 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
   const [showLinearLoader, setShowLinearLoader] = useState(false);
   const [token, setToken] = useState<string | null>(null);
-  const [graphData, setGraphData] = useState<any>(null);
 
-  if (!apiConfig.apiQueryEndpoint.startsWith('http')) {
-    throw new Error('apiQueryEndpoint should start with http:// or https:// for fetch');
+  if (!apiConfig.queryEndpoint.startsWith('http')) {
+    throw new Error('queryEndpoint should start with http:// or https:// for fetch');
   }
 
-  useEffect(() => {
-    if (apiConfig.auth) {
-      if (!apiConfig.tokenName) {
-        throw new Error('tokenName should be provided for auth');
-      }
-      const fetchedToken = localStorage.getItem(apiConfig.tokenName);
-      setToken(fetchedToken);
-    }
-  }, []);
-
-  const customFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> =
-    typeof apiConfig.fetchFunction === 'function' ? apiConfig.fetchFunction : fetch;
+  if (apiConfig.needsJWT && !apiConfig.token) {
+    throw new Error('token is required for JWT authentication');
+  } else if (!apiConfig.needsJWT && apiConfig.token) {
+    console.warn('token is not required for non-JWT authentication');
+  } else if (apiConfig.needsJWT && apiConfig.token) {
+    setToken(localStorage.getItem(apiConfig.token));
+  }
 
   const handleFetchMessage = async () => {
-    if (apiConfig.auth && token) {
-      const response = await customFetch(apiConfig.apiQueryEndpoint, {
+    if (apiConfig.needsJWT && apiConfig.token && token) {
+      const response = await fetch(apiConfig.queryEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +90,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
       };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } else {
-      const response = await customFetch(apiConfig.apiQueryEndpoint, {
+      const response = await fetch(apiConfig.queryEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

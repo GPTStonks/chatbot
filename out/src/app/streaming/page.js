@@ -1,5 +1,28 @@
 "use strict";
 'use client';
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ChatbotDefaultTheme_1 = __importDefault(require("@/components/chat/ChatbotDefaultTheme"));
 const ChatbotWebsocketStreaming_1 = __importDefault(require("@/layouts/ChatbotWebsocketStreaming"));
 const material_1 = require("@mui/material");
-const react_1 = __importDefault(require("react"));
+const react_1 = __importStar(require("react"));
 function Home() {
     const [initializedChat, setInitializedChat] = react_1.default.useState(false);
     const [chatData, setChatData] = react_1.default.useState(null);
@@ -17,7 +40,16 @@ function Home() {
             text: 'Hello! How can I help you today?',
             user: 'humanUser',
         },
+        {
+            text: 'Hello!',
+            user: 'botUser',
+        },
     ];
+    const [token, setToken] = (0, react_1.useState)(null);
+    (0, react_1.useEffect)(() => {
+        const storedToken = localStorage.getItem('userToken');
+        setToken(storedToken);
+    }, []);
     return (react_1.default.createElement("main", { style: {
             display: 'flex',
             justifyContent: 'center',
@@ -29,10 +61,7 @@ function Home() {
         react_1.default.createElement("div", { style: { width: '20vw', height: '100%' } }),
         react_1.default.createElement("div", { style: { width: '100%', height: '100%' } },
             react_1.default.createElement(ChatbotWebsocketStreaming_1.default, { preloadedMessages: preloadedMessages, apiConfig: {
-                    auth: true,
-                    tokenName: 'userToken',
-                    fetchFunction: '',
-                    apiQueryEndpoint: 'ws://localhost:8000/chatws',
+                    queryEndpoint: 'ws://localhost:8000/chatws?token=' + token,
                     queryParams: {
                         type: 'type',
                         data: 'result_data',

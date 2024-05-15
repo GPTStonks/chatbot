@@ -58,22 +58,12 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     const [token, setToken] = (0, react_1.useState)(null);
     const [graphData, setGraphData] = (0, react_1.useState)(null);
     const [streamData, setStreamData] = (0, react_1.useState)('');
-    if (!apiConfig.apiQueryEndpoint.startsWith('ws')) {
-        throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
-    }
-    (0, react_1.useEffect)(() => {
-        if (apiConfig.auth) {
-            if (!apiConfig.tokenName) {
-                throw new Error('tokenName should be provided for auth');
-            }
-            const fetchedToken = localStorage.getItem(apiConfig.tokenName);
-            setToken(fetchedToken);
-        }
-    }, []);
     const wsUrl = (0, react_1.useMemo)(() => {
-        return apiConfig.auth && token ? `${apiConfig.apiQueryEndpoint}?token=${token}` : null;
-    }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
-    const { sendMessage, lastMessage, connectionStatus } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
+        var _a, _b;
+        return ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) || ((_b = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _b === void 0 ? void 0 : _b.startsWith('wss://')) ?
+            apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+    }, [apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint]);
+    const { sendMessage, lastMessage, connectionStatus, eventReason } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
         if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
             if (!newMessage.trim())
@@ -106,6 +96,9 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
         }
     }, [messages]);
     (0, react_1.useEffect)(() => {
+        if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
+            throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
+        }
         if (lastMessage !== null) {
             let messageData = lastMessage;
             let mappedData = {};
@@ -215,7 +208,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
         react_1.default.createElement(styles_1.ThemeProvider, { theme: customTheme },
             react_1.default.createElement(react_1.default.Fragment, null,
                 connectionStatus === 'disconnected' &&
-                    ErrorRender('Connection is closed. Please refresh the page.'),
+                    ErrorRender(eventReason ? eventReason : 'Connection is closed. Please refresh the page.'),
                 react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, sendCustomMessage: handleSendCustomMessage, welcomeMessageRenderFunction: welcomeMessageRenderFunction, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction })),
             ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
             react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));

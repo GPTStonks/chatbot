@@ -3,7 +3,7 @@ import useChatbotDefaultTheme from '@/components/chat/ChatbotDefaultTheme';
 import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Home() {
   const [initializedChat, setInitializedChat] = React.useState(false);
@@ -16,7 +16,18 @@ export default function Home() {
       text: 'Hello! How can I help you today?',
       user: 'humanUser',
     },
+    {
+      text: 'Hello!',
+      user: 'botUser',
+    },
   ];
+
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('userToken');
+    setToken(storedToken);
+  }, []);
 
   return (
     <main
@@ -34,10 +45,7 @@ export default function Home() {
         <ChatbotWebsocketStreaming
           preloadedMessages={preloadedMessages}
           apiConfig={{
-            auth: true,
-            tokenName: 'userToken',
-            fetchFunction: '',
-            apiQueryEndpoint: 'ws://localhost:8000/chatws',
+            queryEndpoint: 'ws://localhost:8000/chatws?token=' + token,
             queryParams: {
               type: 'type',
               data: 'result_data',

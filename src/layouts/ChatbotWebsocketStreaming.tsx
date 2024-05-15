@@ -60,25 +60,12 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [graphData, setGraphData] = useState<any>(null);
   const [streamData, setStreamData] = useState<string>('');
 
-  if (!apiConfig.apiQueryEndpoint.startsWith('ws')) {
-    throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
-  }
-
-  useEffect(() => {
-    if (apiConfig.auth) {
-      if (!apiConfig.tokenName) {
-        throw new Error('tokenName should be provided for auth');
-      }
-      const fetchedToken = localStorage.getItem(apiConfig.tokenName);
-      setToken(fetchedToken);
-    }
-  }, []);
-
   const wsUrl = useMemo(() => {
-    return apiConfig.auth && token ? `${apiConfig.apiQueryEndpoint}?token=${token}` : null;
-  }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
+    return apiConfig?.queryEndpoint?.startsWith('ws://') || apiConfig?.queryEndpoint?.startsWith('wss://') ?
+      apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+  }, [apiConfig?.queryEndpoint]);
 
-  const { sendMessage, lastMessage, connectionStatus } = useChatSocket(wsUrl ?? '');
+  const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
     if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
@@ -113,6 +100,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   }, [messages]);
 
   useEffect(() => {
+    if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
+      throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
+    }
     if (lastMessage !== null) {
       let messageData = lastMessage;
       let mappedData: { [key: string]: any } = {};
@@ -248,7 +238,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       <ThemeProvider theme={customTheme}>
         <React.Fragment>
           {connectionStatus === 'disconnected' &&
-            ErrorRender('Connection is closed. Please refresh the page.')}
+            ErrorRender(
+              eventReason ? eventReason : 'Connection is closed. Please refresh the page.',
+            )}
           <ChatbotCore
             messages={messages}
             themeConfig={themeConfig}

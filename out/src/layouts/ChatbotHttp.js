@@ -41,7 +41,7 @@ const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welcomeMessageRenderFunction, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
+const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
     var _a, _b, _c, _d;
     const humanUser = 'humanUser';
     const botUser = 'botUser';
@@ -54,23 +54,21 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welc
     const [isAnyMessageLoading, setIsAnyMessageLoading] = (0, react_1.useState)(false);
     const [showLinearLoader, setShowLinearLoader] = (0, react_1.useState)(false);
     const [token, setToken] = (0, react_1.useState)(null);
-    const [graphData, setGraphData] = (0, react_1.useState)(null);
-    if (!apiConfig.apiQueryEndpoint.startsWith('http')) {
-        throw new Error('apiQueryEndpoint should start with http:// or https:// for fetch');
+    if (!apiConfig.queryEndpoint.startsWith('http')) {
+        throw new Error('queryEndpoint should start with http:// or https:// for fetch');
     }
-    (0, react_1.useEffect)(() => {
-        if (apiConfig.auth) {
-            if (!apiConfig.tokenName) {
-                throw new Error('tokenName should be provided for auth');
-            }
-            const fetchedToken = localStorage.getItem(apiConfig.tokenName);
-            setToken(fetchedToken);
-        }
-    }, []);
-    const customFetch = typeof apiConfig.fetchFunction === 'function' ? apiConfig.fetchFunction : fetch;
+    if (apiConfig.needsJWT && !apiConfig.token) {
+        throw new Error('token is required for JWT authentication');
+    }
+    else if (!apiConfig.needsJWT && apiConfig.token) {
+        console.warn('token is not required for non-JWT authentication');
+    }
+    else if (apiConfig.needsJWT && apiConfig.token) {
+        setToken(localStorage.getItem(apiConfig.token));
+    }
     const handleFetchMessage = () => __awaiter(void 0, void 0, void 0, function* () {
-        if (apiConfig.auth && token) {
-            const response = yield customFetch(apiConfig.apiQueryEndpoint, {
+        if (apiConfig.needsJWT && apiConfig.token && token) {
+            const response = yield fetch(apiConfig.queryEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +107,7 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welc
             setMessages((prevMessages) => [...prevMessages, botMessage]);
         }
         else {
-            const response = yield customFetch(apiConfig.apiQueryEndpoint, {
+            const response = yield fetch(apiConfig.queryEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
