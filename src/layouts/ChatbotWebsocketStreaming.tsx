@@ -60,23 +60,13 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [graphData, setGraphData] = useState<any>(null);
   const [streamData, setStreamData] = useState<string>('');
 
-  if (!apiConfig.apiQueryEndpoint.startsWith('ws')) {
-    throw new Error('apiQueryEndpoint should start with ws:// or wss:// for websocket');
+  if (!apiConfig.queryEndpoint.startsWith('ws')) {
+    throw new Error('queryEndpoint should start with ws:// or wss:// for websocket');
   }
 
-  useEffect(() => {
-    if (apiConfig.auth) {
-      if (!apiConfig.tokenName) {
-        throw new Error('tokenName should be provided for auth');
-      }
-      const fetchedToken = localStorage.getItem(apiConfig.tokenName);
-      setToken(fetchedToken);
-    }
-  }, []);
-
   const wsUrl = useMemo(() => {
-    return apiConfig.auth && token ? `${apiConfig.apiQueryEndpoint}?token=${token}` : null;
-  }, [apiConfig.apiQueryEndpoint, apiConfig.auth, token]);
+    return apiConfig.queryEndpoint;
+  }, [apiConfig.queryEndpoint]);
 
   const { sendMessage, lastMessage, connectionStatus } = useChatSocket(wsUrl ?? '');
 
