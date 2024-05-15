@@ -68,7 +68,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
     return apiConfig.queryEndpoint;
   }, [apiConfig.queryEndpoint]);
 
-  const { sendMessage, lastMessage, connectionStatus } = useChatSocket(wsUrl ?? '');
+  const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
     if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
@@ -238,7 +238,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       <ThemeProvider theme={customTheme}>
         <React.Fragment>
           {connectionStatus === 'disconnected' &&
-            ErrorRender('Connection is closed. Please refresh the page.')}
+            ErrorRender(
+              eventReason ? eventReason : 'Connection is closed. Please refresh the page.',
+            )}
           <ChatbotCore
             messages={messages}
             themeConfig={themeConfig}

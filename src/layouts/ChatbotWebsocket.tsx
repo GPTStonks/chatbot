@@ -4,9 +4,10 @@ import { Message } from '@/types/message';
 import { Dialog, Divider, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { ReadyState } from 'react-use-websocket';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
+import useChatSocket from '../hooks/useChatSocket';
 
 const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   className,
@@ -67,15 +68,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
     return apiConfig.queryEndpoint;
   }, [apiConfig.queryEndpoint]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState];
+  const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
@@ -186,7 +179,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
       <ThemeProvider theme={customTheme}>
         <React.Fragment>
           {connectionStatus === 'Closed' &&
-            ErrorRender('Connection is closed. Please refresh the page.')}
+            ErrorRender(eventReason ? eventReason : 'Connection closed unexpectedly')}
           <ChatbotCore
             messages={messages}
             themeConfig={themeConfig}
