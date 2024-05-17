@@ -60,8 +60,10 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     const [streamData, setStreamData] = (0, react_1.useState)('');
     const wsUrl = (0, react_1.useMemo)(() => {
         var _a, _b;
-        return ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) || ((_b = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _b === void 0 ? void 0 : _b.startsWith('wss://')) ?
-            apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+        return ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) ||
+            ((_b = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _b === void 0 ? void 0 : _b.startsWith('wss://'))
+            ? apiConfig.queryEndpoint
+            : 'wss://localhost:8000/websocket';
     }, [apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint]);
     const { sendMessage, lastMessage, connectionStatus, eventReason } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {

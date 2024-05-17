@@ -61,8 +61,10 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [streamData, setStreamData] = useState<string>('');
 
   const wsUrl = useMemo(() => {
-    return apiConfig?.queryEndpoint?.startsWith('ws://') || apiConfig?.queryEndpoint?.startsWith('wss://') ?
-      apiConfig.queryEndpoint : 'wss://localhost:8000/websocket';
+    return apiConfig?.queryEndpoint?.startsWith('ws://') ||
+      apiConfig?.queryEndpoint?.startsWith('wss://')
+      ? apiConfig.queryEndpoint
+      : 'wss://localhost:8000/websocket';
   }, [apiConfig?.queryEndpoint]);
 
   const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
