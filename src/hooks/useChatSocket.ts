@@ -70,7 +70,7 @@ const useChatSocket = (url: string) => {
     (newMessage: string) => {
       if (!newMessage.trim()) return;
       if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ query: newMessage }));
+        socket.send(newMessage);
         setLastMessage({ text: newMessage, user: 'humanUser' });
       } else {
         console.error('WebSocket is not open. Cannot send message.');
