@@ -23,6 +23,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   relatedQuestionsRenderFunction,
   errorRenderFunction,
   multimodeChat,
+  multimodeRenderFunction,
 }: ChatbotProps) => {
   const ErrorRender = useCallback(
     (error: any) => {
@@ -292,6 +293,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           themeConfig={themeConfig}
           isAnyMessageLoading={isAnyMessageLoading}
           multimodeChat={multimodeChat}
+          multimodeRenderFunction={(modes: string[]) => multimodeRenderFunction?.(modes) ?? null}
         />
       </ThemeProvider>
     </div>
