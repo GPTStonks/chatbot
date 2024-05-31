@@ -271,12 +271,20 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             isAnyMessageLoading={isAnyMessageLoading}
             isMobile={isMobile}
             sendCustomMessage={handleSendCustomMessage}
-            welcomeMessageRenderFunction={welcomeMessageRenderFunction}
-            botMessageRenderFunction={botMessageRenderFunction}
-            userMessageRenderFunction={userMessageRenderFunction}
-            dataRenderFunction={dataRenderFunction}
-            referenceRenderFunction={referenceRenderFunction}
-            relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
+            welcomeMessageRenderFunction={(sendCustomMessage: (message: string) => void) =>
+              welcomeMessageRenderFunction?.(sendCustomMessage) ?? null
+            }
+            botMessageRenderFunction={(message: any, input: string) =>
+              botMessageRenderFunction?.(message, input) ?? null
+            }
+            userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
+            dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
+            referenceRenderFunction={(reference: string[]) =>
+              referenceRenderFunction?.(reference) ?? null
+            }
+            relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
+              relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
+            }
           />
         </React.Fragment>
 

@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 declare const ChatbotInput: ({ isMobile, themeConfig, newMessage, setNewMessage, handleKeyDown, handleSendMessage, isAnyMessageLoading, multimodeChat, multimodeRenderFunction, }: {
     isMobile: boolean;
     themeConfig: any;
@@ -9,5 +9,5 @@ declare const ChatbotInput: ({ isMobile, themeConfig, newMessage, setNewMessage,
     isAnyMessageLoading: boolean;
     multimodeChat: any;
     multimodeRenderFunction: (modes: string[]) => JSX.Element | null;
-}) => import("react").JSX.Element;
+}) => React.JSX.Element;
 export default ChatbotInput;

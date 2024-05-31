@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import React from 'react';
 
 const ChatbotInput = ({
   isMobile,

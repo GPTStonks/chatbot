@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import { Box, List, ListItem, Avatar, Typography, Divider } from '@mui/material';
 import { DNA } from 'react-loader-spinner';
 import LinearBuffer from './LinearBuffer';
+import { Message } from '@/types/message';
+import { ThemeConfig } from '@/types/chatbot';
 
 const ChatbotCore = ({
   messages,
@@ -20,9 +22,35 @@ const ChatbotCore = ({
   dataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
+}: {
+  messages: Message[];
+  themeConfig: ThemeConfig;
+  isMobile: boolean;
+  botUser: string;
+  humanUser: string;
+  botMessage: any;
+  messagesEndRef: any;
+  isAnyMessageLoading: boolean;
+  showLinearLoader: boolean;
+  setDataForParent?: (data: any) => void;
+  onApiResponseCode?: (bool: boolean) => void;
+  multimodeRenderFunction?: (modes: string[]) => JSX.Element;
+  errorRenderFunction?: (error: any) => JSX.Element;
+  sendCustomMessage: (message: string) => void;
+  welcomeMessageRenderFunction: (
+    sendCustomMessage: (message: string) => void,
+  ) => JSX.Element | null;
+  botMessageRenderFunction: (message: any, input: string) => JSX.Element | null;
+  userMessageRenderFunction: (text: string) => JSX.Element | null;
+  dataRenderFunction: (data: any) => JSX.Element | null;
+  referenceRenderFunction: (reference: any) => JSX.Element | null;
+  relatedQuestionsRenderFunction: (
+    relatedQuestions: any,
+    sendCustomMessage: (message: string) => void,
+  ) => JSX.Element | null;
 }) => {
   const WelcomeMessageRender = useCallback(
-    (sendCustomMessage) => {
+    (sendCustomMessage: (message: string) => void) => {
       return welcomeMessageRenderFunction ? (
         welcomeMessageRenderFunction(sendCustomMessage)
       ) : (
@@ -51,7 +79,7 @@ const ChatbotCore = ({
   );
 
   const BotMessageRender = useCallback(
-    (message, input) => {
+    (message: any, input: string) => {
       return botMessageRenderFunction ? (
         botMessageRenderFunction(message, input)
       ) : (
@@ -62,7 +90,7 @@ const ChatbotCore = ({
   );
 
   const UserMessageRender = useCallback(
-    (text) => {
+    (text: string) => {
       return userMessageRenderFunction ? (
         userMessageRenderFunction(text)
       ) : (
@@ -84,21 +112,21 @@ const ChatbotCore = ({
   );
 
   const DataRender = useCallback(
-    (data) => {
+    (data: any) => {
       return dataRenderFunction ? dataRenderFunction(data) : null;
     },
     [dataRenderFunction],
   );
 
   const ReferenceRender = useCallback(
-    (reference) => {
+    (reference: any) => {
       return referenceRenderFunction ? referenceRenderFunction(reference) : null;
     },
     [referenceRenderFunction],
   );
 
   const RelatedQuestionsRender = useCallback(
-    (relatedQuestions, sendCustomMessage) => {
+    (relatedQuestions: any, sendCustomMessage: (message: string) => void) => {
       return relatedQuestionsRenderFunction
         ? relatedQuestionsRenderFunction(relatedQuestions, sendCustomMessage)
         : null;
@@ -122,7 +150,7 @@ const ChatbotCore = ({
               flexDirection:
                 message.user === botUser
                   ? 'row'
-                  : themeConfig?.components.MessageBubbleUser?.style?.flexDirection ||
+                  : themeConfig?.components?.MessageBubbleUser?.style?.flexDirection ||
                     'row-reverse',
             }}
           >

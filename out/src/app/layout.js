@@ -13,8 +13,7 @@ exports.metadata = {
     description: 'A fully customizable chatbot for your website.',
 };
 function RootLayout({ children, }) {
-    return (<html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>);
+    return (react_1.default.createElement("html", { lang: "en" },
+        react_1.default.createElement("body", { className: inter.className }, children)));
 }
 exports.default = RootLayout;
