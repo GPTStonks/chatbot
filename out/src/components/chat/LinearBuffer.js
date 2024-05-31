@@ -55,11 +55,10 @@ function LinearBuffer() {
             clearInterval(timer);
         };
     }, []);
-    return (<Box_1.default sx={{ width: '100%' }}>
-      <LinearProgress_1.default variant="buffer" value={progress} valueBuffer={buffer} sx={{
-            height: '5px',
-            borderRadius: 5,
-        }}/>
-    </Box_1.default>);
+    return (React.createElement(Box_1.default, { sx: { width: '100%' } },
+        React.createElement(LinearProgress_1.default, { variant: "buffer", value: progress, valueBuffer: buffer, sx: {
+                height: '5px',
+                borderRadius: 5,
+            } })));
 }
 exports.default = LinearBuffer;
