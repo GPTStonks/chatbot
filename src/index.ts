@@ -6,3 +6,10 @@ export { default as useGptstonksChatbotTheme } from './components/chat/Gptstonks
 export { default as ChatbotCore } from './components/chat/ChatbotCore';
 export { default as ChatbotInput } from './components/chat/ChatbotInput';
 export { default as useChatSocket } from './hooks/useChatSocket';
+
+// Type definitions
+export * from './types/chatbot';
+export * from './types/message';
+export * from './types/component';
+export * from './types/styles';
+
