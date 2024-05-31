@@ -9,6 +9,14 @@ export interface APIConfig {
   token?: string; // JWT token name (only if needsJWT is true)
 }
 
+export interface MultimodeChat {
+  [key: string]: {
+    url_param: string;
+    value: string;
+    isActivated?: boolean;
+  };
+}
+
 export interface ChatLayoutConfig {
   chatOrientation?: 'horizontal' | 'vertical';
   avatarPosition?: 'left' | 'right' | 'top' | 'bottom';
@@ -35,6 +43,7 @@ export interface ChatbotProps {
   apiConfig: APIConfig;
   themeConfig: ThemeConfig;
   preloadedMessages?: Message[];
+  multimodeChat?: MultimodeChat;
   sendCustomMessage?: (text: string) => void;
   welcomeMessageRenderFunction?: (sendCustomMessage: any) => JSX.Element;
   setDataForParent?: (data: any) => void;
