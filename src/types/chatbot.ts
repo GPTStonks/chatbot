@@ -48,6 +48,7 @@ export interface ChatbotProps {
   welcomeMessageRenderFunction?: (sendCustomMessage: any) => JSX.Element;
   setDataForParent?: (data: any) => void;
   onApiResponseCode?: (bool: boolean) => void;
+  multimodeRenderFunction?: (modes: string[]) => JSX.Element;
   userMessageRenderFunction?: (text: string) => JSX.Element;
   botMessageRenderFunction?: (message: Message, input?: string) => JSX.Element;
   dataRenderFunction?: (data: any) => JSX.Element;
