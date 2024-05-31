@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
+import { text } from 'stream/consumers';
 
 const ChatbotHttp: React.FC<ChatbotProps> = ({
   className,
@@ -187,12 +188,20 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           isAnyMessageLoading={isAnyMessageLoading}
           isMobile={isMobile}
           sendCustomMessage={handleSendCustomMessage}
-          welcomeMessageRenderFunction={welcomeMessageRenderFunction}
-          botMessageRenderFunction={botMessageRenderFunction}
-          userMessageRenderFunction={userMessageRenderFunction}
-          dataRenderFunction={dataRenderFunction}
-          referenceRenderFunction={referenceRenderFunction}
-          relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
+          welcomeMessageRenderFunction={(sendCustomMessage: (message: string) => void) =>
+            welcomeMessageRenderFunction?.(sendCustomMessage) ?? null
+          }
+          botMessageRenderFunction={(message: any, input: string) =>
+            botMessageRenderFunction?.(message, input) ?? null
+          }
+          userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
+          dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
+          referenceRenderFunction={(reference: string[]) =>
+            referenceRenderFunction?.(reference) ?? null
+          }
+          relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
+            relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
+          }
         />
         {themeConfig?.components?.Divider?.appears && (
           <Divider sx={themeConfig?.components?.Divider?.style} />
