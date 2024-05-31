@@ -19,7 +19,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   multimodeChat,
-  multimodeRenderFunction
+  multimodeRenderFunction,
 }: ChatbotProps) => {
   const humanUser = 'humanUser';
   const botUser = 'botUser';
