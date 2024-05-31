@@ -33,17 +33,18 @@ const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloadedMessages, welcomeMessageRenderFunction, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, }) => {
+const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloadedMessages, welcomeMessageRenderFunction, setDataForParent, onApiResponseCode, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, errorRenderFunction, multimodeChat, multimodeRenderFunction, }) => {
     var _a, _b, _c, _d;
     const ErrorRender = (0, react_1.useCallback)((error) => {
-        return errorRenderFunction ? (errorRenderFunction(error)) : (react_1.default.createElement(material_1.Dialog, { open: true },
-            react_1.default.createElement("div", { style: {
-                    padding: '20px',
-                    fontSize: '20px',
-                    textAlign: 'center',
-                } },
-                "\u26A0\uFE0F ",
-                error)));
+        return errorRenderFunction ? (errorRenderFunction(error)) : (<material_1.Dialog open>
+          <div style={{
+                padding: '20px',
+                fontSize: '20px',
+                textAlign: 'center',
+            }}>
+            ⚠️ {error}
+          </div>
+        </material_1.Dialog>);
     }, [errorRenderFunction]);
     const humanUser = 'humanUser';
     const botUser = 'botUser';
@@ -58,16 +59,26 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     const [token, setToken] = (0, react_1.useState)(null);
     const [graphData, setGraphData] = (0, react_1.useState)(null);
     const [streamData, setStreamData] = (0, react_1.useState)('');
-    const wsUrl = (0, react_1.useMemo)(() => {
+    const constructWsUrl = (0, react_1.useCallback)(() => {
         var _a, _b;
-        return ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) ||
+        const baseUrl = ((_a = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _a === void 0 ? void 0 : _a.startsWith('ws://')) ||
             ((_b = apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint) === null || _b === void 0 ? void 0 : _b.startsWith('wss://'))
             ? apiConfig.queryEndpoint
             : 'wss://localhost:8000/websocket';
-    }, [apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint]);
+        const url = new URL(baseUrl);
+        if (multimodeChat) {
+            Object.values(multimodeChat).forEach((mode) => {
+                if (mode.isActivated) {
+                    url.searchParams.append(mode.url_param, mode.value);
+                }
+            });
+        }
+        return url.toString();
+    }, [apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.queryEndpoint, multimodeChat]);
+    const wsUrl = (0, react_1.useMemo)(() => constructWsUrl(), [constructWsUrl]);
     const { sendMessage, lastMessage, connectionStatus, eventReason } = (0, useChatSocket_1.default)(wsUrl !== null && wsUrl !== void 0 ? wsUrl : '');
     const handleSendMessage = () => {
-        if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
+        if (!isAnyMessageLoading && messages.length % 2 === 0 && connectionStatus === 'connected') {
             if (!newMessage.trim())
                 return;
             sendMessage(JSON.stringify({ query: newMessage }));
@@ -80,7 +91,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
         }
     };
     const handleSendCustomMessage = (message) => {
-        if (!isAnyMessageLoading && messages.length % 2 == 0) {
+        if (!isAnyMessageLoading && messages.length % 2 === 0) {
             if (!message.trim())
                 return;
             sendMessage(JSON.stringify({ query: message }));
@@ -173,7 +184,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
                 if (accumulatedStreamData.includes('"response": "') &&
                     !accumulatedStreamData.includes('",')) {
                     const copyMessages = [...messages];
-                    if (copyMessages.length % 2 != 0) {
+                    if (copyMessages.length % 2 !== 0) {
                         copyMessages.push({
                             text: ' ',
                             user: botUser,
@@ -200,19 +211,24 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     };
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && !event.shiftKey && !isAnyMessageLoading) {
-            if (messages.length == 0 || (messages.length > 0 && messages.length % 2 == 0)) {
+            if (messages.length === 0 || (messages.length > 0 && messages.length % 2 === 0)) {
                 handleSendMessage();
                 event.preventDefault();
             }
         }
     };
-    return (react_1.default.createElement("div", { className: `chatbot-default ${className}`, style: Object.assign({}, themeConfig.style) },
-        react_1.default.createElement(styles_1.ThemeProvider, { theme: customTheme },
-            react_1.default.createElement(react_1.default.Fragment, null,
-                connectionStatus === 'disconnected' &&
-                    ErrorRender(eventReason ? eventReason : 'Connection is closed. Please refresh the page.'),
-                react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, sendCustomMessage: handleSendCustomMessage, welcomeMessageRenderFunction: welcomeMessageRenderFunction, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction })),
-            ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
-            react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));
+    return (<div className={`chatbot-default ${className}`} style={Object.assign({}, themeConfig.style)}>
+      <styles_1.ThemeProvider theme={customTheme}>
+        <react_1.default.Fragment>
+          {connectionStatus === 'disconnected' &&
+            ErrorRender(eventReason ? eventReason : 'Connection is closed. Please refresh the page.')}
+          <ChatbotCore_1.default messages={messages} themeConfig={themeConfig} botUser={botUser} humanUser={humanUser} botMessage={botMessage} messagesEndRef={messagesEndRef} showLinearLoader={showLinearLoader} isAnyMessageLoading={isAnyMessageLoading} isMobile={isMobile} sendCustomMessage={handleSendCustomMessage} welcomeMessageRenderFunction={welcomeMessageRenderFunction} botMessageRenderFunction={botMessageRenderFunction} userMessageRenderFunction={userMessageRenderFunction} dataRenderFunction={dataRenderFunction} referenceRenderFunction={referenceRenderFunction} relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}/>
+        </react_1.default.Fragment>
+
+        {((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (<material_1.Divider sx={(_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style}/>)}
+
+        <ChatbotInput_1.default isMobile={isMobile} newMessage={newMessage} setNewMessage={setNewMessage} handleSendMessage={handleSendMessage} handleKeyDown={handleKeyDown} themeConfig={themeConfig} isAnyMessageLoading={isAnyMessageLoading} multimodeChat={multimodeChat} multimodeRenderFunction={(modes) => { var _a; return (_a = multimodeRenderFunction === null || multimodeRenderFunction === void 0 ? void 0 : multimodeRenderFunction(modes)) !== null && _a !== void 0 ? _a : null; }}/>
+      </styles_1.ThemeProvider>
+    </div>);
 };
 exports.default = ChatbotWebsocketStreaming;

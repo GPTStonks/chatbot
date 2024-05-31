@@ -18,6 +18,8 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   dataRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
+  multimodeChat,
+  multimodeRenderFunction,
 }: ChatbotProps) => {
   const humanUser = 'humanUser';
   const botUser = 'botUser';
@@ -204,6 +206,8 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           handleKeyDown={handleKeyDown}
           themeConfig={themeConfig}
           isAnyMessageLoading={isAnyMessageLoading}
+          multimodeChat={multimodeChat}
+          multimodeRenderFunction={(modes: string[]) => multimodeRenderFunction?.(modes) ?? null}
         />
       </ThemeProvider>
     </div>

@@ -8,6 +8,13 @@ export interface APIConfig {
     needsJWT?: boolean;
     token?: string;
 }
+export interface MultimodeChat {
+    [key: string]: {
+        url_param: string;
+        value: string;
+        isActivated?: boolean;
+    };
+}
 export interface ChatLayoutConfig {
     chatOrientation?: 'horizontal' | 'vertical';
     avatarPosition?: 'left' | 'right' | 'top' | 'bottom';
@@ -32,10 +39,12 @@ export interface ChatbotProps {
     apiConfig: APIConfig;
     themeConfig: ThemeConfig;
     preloadedMessages?: Message[];
+    multimodeChat?: MultimodeChat;
     sendCustomMessage?: (text: string) => void;
     welcomeMessageRenderFunction?: (sendCustomMessage: any) => JSX.Element;
     setDataForParent?: (data: any) => void;
     onApiResponseCode?: (bool: boolean) => void;
+    multimodeRenderFunction?: (modes: string[]) => JSX.Element;
     userMessageRenderFunction?: (text: string) => JSX.Element;
     botMessageRenderFunction?: (message: Message, input?: string) => JSX.Element;
     dataRenderFunction?: (data: any) => JSX.Element;

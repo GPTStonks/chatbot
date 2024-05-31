@@ -22,6 +22,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
+  multimodeChat,
+  multimodeRenderFunction,
 }: ChatbotProps) => {
   const ErrorRender = useCallback(
     (error: any) => {
@@ -60,17 +62,32 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [graphData, setGraphData] = useState<any>(null);
   const [streamData, setStreamData] = useState<string>('');
 
-  const wsUrl = useMemo(() => {
-    return apiConfig?.queryEndpoint?.startsWith('ws://') ||
+  const constructWsUrl = useCallback(() => {
+    const baseUrl =
+      apiConfig?.queryEndpoint?.startsWith('ws://') ||
       apiConfig?.queryEndpoint?.startsWith('wss://')
-      ? apiConfig.queryEndpoint
-      : 'wss://localhost:8000/websocket';
-  }, [apiConfig?.queryEndpoint]);
+        ? apiConfig.queryEndpoint
+        : 'wss://localhost:8000/websocket';
+
+    const url = new URL(baseUrl);
+
+    if (multimodeChat) {
+      Object.values(multimodeChat).forEach((mode) => {
+        if (mode.isActivated) {
+          url.searchParams.append(mode.url_param, mode.value);
+        }
+      });
+    }
+
+    return url.toString();
+  }, [apiConfig?.queryEndpoint, multimodeChat]);
+
+  const wsUrl = useMemo(() => constructWsUrl(), [constructWsUrl]);
 
   const { sendMessage, lastMessage, connectionStatus, eventReason } = useChatSocket(wsUrl ?? '');
 
   const handleSendMessage = () => {
-    if (!isAnyMessageLoading && messages.length % 2 == 0 && connectionStatus === 'connected') {
+    if (!isAnyMessageLoading && messages.length % 2 === 0 && connectionStatus === 'connected') {
       if (!newMessage.trim()) return;
       sendMessage(JSON.stringify({ query: newMessage }));
 
@@ -83,7 +100,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   };
 
   const handleSendCustomMessage = (message: string) => {
-    if (!isAnyMessageLoading && messages.length % 2 == 0) {
+    if (!isAnyMessageLoading && messages.length % 2 === 0) {
       if (!message.trim()) return;
       sendMessage(JSON.stringify({ query: message }));
 
@@ -194,7 +211,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           !accumulatedStreamData.includes('",')
         ) {
           const copyMessages = [...messages];
-          if (copyMessages.length % 2 != 0) {
+          if (copyMessages.length % 2 !== 0) {
             copyMessages.push({
               text: ' ',
               user: botUser,
@@ -223,7 +240,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && !event.shiftKey && !isAnyMessageLoading) {
-      if (messages.length == 0 || (messages.length > 0 && messages.length % 2 == 0)) {
+      if (messages.length === 0 || (messages.length > 0 && messages.length % 2 === 0)) {
         handleSendMessage();
         event.preventDefault();
       }
@@ -275,6 +292,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           handleKeyDown={handleKeyDown}
           themeConfig={themeConfig}
           isAnyMessageLoading={isAnyMessageLoading}
+          multimodeChat={multimodeChat}
+          multimodeRenderFunction={(modes: string[]) => multimodeRenderFunction?.(modes) ?? null}
         />
       </ThemeProvider>
     </div>

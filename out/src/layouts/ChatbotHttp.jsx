@@ -41,7 +41,7 @@ const styles_1 = require("@mui/material/styles");
 const react_1 = __importStar(require("react"));
 const ChatbotCore_1 = __importDefault(require("../components/chat/ChatbotCore"));
 const ChatbotInput_1 = __importDefault(require("../components/chat/ChatbotInput"));
-const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
+const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, multimodeChat, multimodeRenderFunction, }) => {
     var _a, _b, _c, _d;
     const humanUser = 'humanUser';
     const botUser = 'botUser';
@@ -171,10 +171,13 @@ const ChatbotHttp = ({ className, apiConfig, themeConfig, setDataForParent, welc
             event.preventDefault();
         }
     };
-    return (react_1.default.createElement("div", { className: `chatbot-default ${className}`, style: Object.assign({}, themeConfig.style) },
-        react_1.default.createElement(styles_1.ThemeProvider, { theme: customTheme },
-            react_1.default.createElement(ChatbotCore_1.default, { messages: messages, themeConfig: themeConfig, botUser: botUser, humanUser: humanUser, botMessage: botMessage, messagesEndRef: messagesEndRef, showLinearLoader: showLinearLoader, isAnyMessageLoading: isAnyMessageLoading, isMobile: isMobile, sendCustomMessage: handleSendCustomMessage, welcomeMessageRenderFunction: welcomeMessageRenderFunction, botMessageRenderFunction: botMessageRenderFunction, userMessageRenderFunction: userMessageRenderFunction, dataRenderFunction: dataRenderFunction, referenceRenderFunction: referenceRenderFunction, relatedQuestionsRenderFunction: relatedQuestionsRenderFunction }),
-            ((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (react_1.default.createElement(material_1.Divider, { sx: (_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style })),
-            react_1.default.createElement(ChatbotInput_1.default, { isMobile: isMobile, newMessage: newMessage, setNewMessage: setNewMessage, handleSendMessage: handleSendMessage, handleKeyDown: handleKeyDown, themeConfig: themeConfig, isAnyMessageLoading: isAnyMessageLoading }))));
+    return (<div className={`chatbot-default ${className}`} style={Object.assign({}, themeConfig.style)}>
+      <styles_1.ThemeProvider theme={customTheme}>
+        <ChatbotCore_1.default messages={messages} themeConfig={themeConfig} botUser={botUser} humanUser={humanUser} botMessage={botMessage} messagesEndRef={messagesEndRef} showLinearLoader={showLinearLoader} isAnyMessageLoading={isAnyMessageLoading} isMobile={isMobile} sendCustomMessage={handleSendCustomMessage} welcomeMessageRenderFunction={welcomeMessageRenderFunction} botMessageRenderFunction={botMessageRenderFunction} userMessageRenderFunction={userMessageRenderFunction} dataRenderFunction={dataRenderFunction} referenceRenderFunction={referenceRenderFunction} relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}/>
+        {((_b = (_a = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _a === void 0 ? void 0 : _a.Divider) === null || _b === void 0 ? void 0 : _b.appears) && (<material_1.Divider sx={(_d = (_c = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _c === void 0 ? void 0 : _c.Divider) === null || _d === void 0 ? void 0 : _d.style}/>)}
+
+        <ChatbotInput_1.default isMobile={isMobile} newMessage={newMessage} setNewMessage={setNewMessage} handleSendMessage={handleSendMessage} handleKeyDown={handleKeyDown} themeConfig={themeConfig} isAnyMessageLoading={isAnyMessageLoading} multimodeChat={multimodeChat} multimodeRenderFunction={(modes) => { var _a; return (_a = multimodeRenderFunction === null || multimodeRenderFunction === void 0 ? void 0 : multimodeRenderFunction(modes)) !== null && _a !== void 0 ? _a : null; }}/>
+      </styles_1.ThemeProvider>
+    </div>);
 };
 exports.default = ChatbotHttp;
