@@ -4,10 +4,15 @@ import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { Message } from '@/types/message';
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { MultimodeChat } from '@/types/chatbot';
 
 export default function Home() {
   const [initializedChat, setInitializedChat] = React.useState(false);
   const [chatData, setChatData] = React.useState<any>(null);
+  const [multimodeChat, setMultimodeChat] = useState<MultimodeChat>({
+    mode1: { url_param: 'agent_mode', value: 'speed', isActivated: true },
+    mode2: { url_param: 'agent_mode', value: 'speed', isActivated: false },
+  });
 
   const themeConfig = useChatbotDefaultTheme;
 
@@ -43,6 +48,7 @@ export default function Home() {
       <div style={{ width: '20vw', height: '100%' }}></div>
       <div style={{ width: '100%', height: '100%' }}>
         <ChatbotWebsocketStreaming
+          multimodeChat={multimodeChat}
           preloadedMessages={preloadedMessages}
           apiConfig={{
             queryEndpoint: 'ws://localhost:8000/chatws?token=' + token,
