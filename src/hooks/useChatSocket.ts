@@ -14,6 +14,7 @@ const useChatSocket = (url: string) => {
     }
 
     let newSocket: WebSocket | null = null;
+
     try {
       newSocket = new WebSocket(url);
     } catch (error) {
@@ -21,34 +22,45 @@ const useChatSocket = (url: string) => {
       return;
     }
 
-    newSocket.addEventListener('open', () => {
+    const handleOpen = () => {
       setConnectionStatus('connected');
       setEventReason(null);
       console.log('Socket connection opened');
-    });
+    };
 
-    newSocket.addEventListener('close', (event) => {
+    const handleClose = (event: CloseEvent) => {
       setConnectionStatus('disconnected');
       setEventReason(event.reason);
       console.log(`Socket connection closed: ${event.reason}`);
-    });
+    };
 
-    newSocket.addEventListener('message', (event) => {
+    const handleMessage = (event: MessageEvent) => {
       const messageData = JSON.parse(event.data);
       setLastMessage(messageData);
-    });
+    };
 
-    newSocket.addEventListener('error', (event) => {
+    const handleError = (event: Event) => {
       setConnectionStatus('error');
       setEventReason('An error occurred');
       console.log('WebSocket error:', event);
-    });
+    };
+
+    newSocket.addEventListener('open', handleOpen);
+    newSocket.addEventListener('close', handleClose);
+    newSocket.addEventListener('message', handleMessage);
+    newSocket.addEventListener('error', handleError);
 
     setSocket(newSocket);
 
     return () => {
-      if (newSocket && newSocket.readyState === WebSocket.OPEN) {
-        newSocket.close();
+      if (newSocket) {
+        newSocket.removeEventListener('open', handleOpen);
+        newSocket.removeEventListener('close', handleClose);
+        newSocket.removeEventListener('message', handleMessage);
+        newSocket.removeEventListener('error', handleError);
+        if (newSocket.readyState === WebSocket.OPEN) {
+          newSocket.close();
+        }
       }
     };
   }, [url]);
