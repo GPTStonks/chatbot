@@ -240,22 +240,17 @@ const ChatbotCore = ({
                   }}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    {message.text &&
-                      (message.streamCompleted || !message.stream) &&
-                      BotMessageRender(message, messages[index - 1]?.text)}
-                    {message.stream && (
+                    {message.text && (
                       <Box
                         sx={{
                           display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
+                          flexDirection: message.stream ? 'column' : 'row',
+                          justifyContent: message.stream ? 'center' : 'flex-start',
+                          alignItems: message.stream ? 'center' : 'flex-start',
                           maxWidth: '100%',
                         }}
                       >
-                        <Typography>
-                          {message.text.replace(/\\n/g, '  \n').replace(/\\/g, '')}
-                        </Typography>
+                        {BotMessageRender(message, messages[index - 1]?.text)}
                       </Box>
                     )}
                   </Box>
