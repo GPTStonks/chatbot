@@ -12,4 +12,3 @@ export * from './types/chatbot';
 export * from './types/message';
 export * from './types/component';
 export * from './types/styles';
-

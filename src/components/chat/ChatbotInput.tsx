@@ -61,10 +61,15 @@ const ChatbotInput = ({
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           size="small"
-          label={themeConfig?.components?.TextField?.label || 'Ask our chatbot!'}
+          label={
+            isAnyMessageLoading
+              ? ''
+              : themeConfig?.components?.TextField?.label || 'Ask our chatbot!'
+          }
           InputProps={{
             style: {
               ...themeConfig?.components?.TextField?.style,
+              opacity: isAnyMessageLoading ? 0.2 : 1,
             },
             endAdornment: (
               <InputAdornment position="end">
