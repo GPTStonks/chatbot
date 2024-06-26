@@ -200,20 +200,13 @@ const ChatbotCore = ({
                     themeConfig?.chatLayoutConfig?.botMessageStackDirection || 'column',
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                  }}
-                >
-                  {(message.streamCompleted || message.stream) &&
-                    ReferenceRender(message.reference)}
-                </Box>
                 {themeConfig.chatLayoutConfig?.responseHeader && (
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
                       marginBottom: '1em',
+                      marginTop: '15px',
                     }}
                   >
                     <Avatar
@@ -254,6 +247,13 @@ const ChatbotCore = ({
                       </Box>
                     )}
                   </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                    }}
+                  >
+                    {message.reference && ReferenceRender(message.reference)}
+                  </Box>
                   {(message.streamCompleted || message.stream) && DataRender(message.graphData)}
                 </Box>
                 <Box
@@ -261,8 +261,7 @@ const ChatbotCore = ({
                     display: 'flex',
                   }}
                 >
-                  {(message.streamCompleted || message.stream) &&
-                    RelatedQuestionsRender(message.related, sendCustomMessage)}
+                  {message.related && RelatedQuestionsRender(message.related, sendCustomMessage)}
                 </Box>
               </Box>
             ) : (
