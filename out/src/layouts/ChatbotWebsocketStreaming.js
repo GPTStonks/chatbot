@@ -52,6 +52,8 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
     const [messages, setMessages] = (0, react_1.useState)(preloadedMessages !== null && preloadedMessages !== void 0 ? preloadedMessages : []);
     const [newMessage, setNewMessage] = (0, react_1.useState)('');
     const [botMessage, setBotMessage] = (0, react_1.useState)(null);
+    const [lastUserMessage, setLastUserMessage] = (0, react_1.useState)(null);
+    const [lastBotMessage, setLastBotMessage] = (0, react_1.useState)(null);
     const messagesEndRef = (0, react_1.useRef)(null);
     const [isAnyMessageLoading, setIsAnyMessageLoading] = (0, react_1.useState)(false);
     const [showLinearLoader, setShowLinearLoader] = (0, react_1.useState)(false);
@@ -83,6 +85,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
             sendMessage(JSON.stringify({ query: newMessage }));
             const userMessage = { text: newMessage, user: humanUser, loading: false };
             setMessages((prevMessages) => [...prevMessages, userMessage]);
+            setLastUserMessage(newMessage);
             setNewMessage('');
         }
         else {
@@ -96,6 +99,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
             sendMessage(JSON.stringify({ query: message }));
             const userMessage = { text: message, user: humanUser, loading: false };
             setMessages((prevMessages) => [...prevMessages, userMessage]);
+            setLastUserMessage(message);
             setNewMessage('');
         }
         else {
@@ -126,7 +130,8 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
             let reference = mappedData.reference;
             //console.log('data:', mappedData);
             if (setDataForParent) {
-                setDataForParent(mappedData);
+                setDataForParent(Object.assign(Object.assign({}, mappedData), { isAnyMessageLoading,
+                    lastUserMessage, lastBotMessage: body }));
             }
             if (type === 'data' && data) {
                 setGraphData(data);
@@ -176,6 +181,7 @@ const ChatbotWebsocketStreaming = ({ className, apiConfig, themeConfig, preloade
                     return updatedMessages;
                 });
                 setBotMessage(null);
+                setLastBotMessage(body);
             }
             else if (type === 'stream_step') {
                 const accumulatedStreamData = body;

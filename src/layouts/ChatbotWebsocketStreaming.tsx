@@ -55,6 +55,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const [messages, setMessages] = useState<Message[]>(preloadedMessages ?? []);
   const [newMessage, setNewMessage] = useState<string>('');
   const [botMessage, setBotMessage] = useState<Message | null>(null);
+  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
+  const [lastBotMessage, setLastBotMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
   const [showLinearLoader, setShowLinearLoader] = useState(false);
@@ -93,6 +95,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
       const userMessage = { text: newMessage, user: humanUser, loading: false };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setLastUserMessage(newMessage);
       setNewMessage('');
     } else {
       console.log('Some message is still loading or connection is not established.');
@@ -106,6 +109,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
       const userMessage = { text: message, user: humanUser, loading: false };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setLastUserMessage(message);
       setNewMessage('');
     } else {
       console.log('Some message is still loading or connection is not established.');
@@ -140,7 +144,12 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       //console.log('data:', mappedData);
 
       if (setDataForParent) {
-        setDataForParent(mappedData);
+        setDataForParent({
+          ...mappedData,
+          isAnyMessageLoading,
+          lastUserMessage,
+          lastBotMessage: body,
+        });
       }
 
       if (type === 'data' && data) {
@@ -201,6 +210,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           return updatedMessages;
         });
         setBotMessage(null);
+        setLastBotMessage(body);
       } else if (type === 'stream_step') {
         const accumulatedStreamData = body;
 

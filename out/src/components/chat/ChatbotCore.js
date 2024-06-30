@@ -121,13 +121,11 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                 } }, BotMessageRender(message, (_10 = messages[index - 1]) === null || _10 === void 0 ? void 0 : _10.text)))),
                             react_1.default.createElement(material_1.Box, { sx: {
                                     display: 'flex',
-                                } }, (message.reference) &&
-                                ReferenceRender(message.reference)),
+                                } }, message.reference && ReferenceRender(message.reference)),
                             (message.streamCompleted || message.stream) && DataRender(message.graphData)),
                         react_1.default.createElement(material_1.Box, { sx: {
                                 display: 'flex',
-                            } }, (message.related) &&
-                            RelatedQuestionsRender(message.related, sendCustomMessage)))) : (react_1.default.createElement(material_1.Box, { sx: (_12 = (_11 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _11 === void 0 ? void 0 : _11.MessageBubbleUser) === null || _12 === void 0 ? void 0 : _12.style }, UserMessageRender(message.text)))));
+                            } }, message.related && RelatedQuestionsRender(message.related, sendCustomMessage)))) : (react_1.default.createElement(material_1.Box, { sx: (_12 = (_11 = themeConfig === null || themeConfig === void 0 ? void 0 : themeConfig.components) === null || _11 === void 0 ? void 0 : _11.MessageBubbleUser) === null || _12 === void 0 ? void 0 : _12.style }, UserMessageRender(message.text)))));
             }),
             botMessage && isAnyMessageLoading && !showLinearLoader && (react_1.default.createElement(material_1.ListItem, { sx: {
                     display: 'flex',
