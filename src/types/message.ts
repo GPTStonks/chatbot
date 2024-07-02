@@ -5,6 +5,7 @@ export interface Message {
   graphData?: any;
   related?: any;
   reference?: any;
+  providers?: any;
   stream?: boolean;
   streamCompleted?: boolean;
 }
