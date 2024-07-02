@@ -1,9 +1,9 @@
+import { ThemeConfig } from '@/types/chatbot';
+import { Message } from '@/types/message';
+import { Avatar, Box, List, ListItem, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
-import { Box, List, ListItem, Avatar, Typography, Divider } from '@mui/material';
 import { DNA } from 'react-loader-spinner';
 import LinearBuffer from './LinearBuffer';
-import { Message } from '@/types/message';
-import { ThemeConfig } from '@/types/chatbot';
 
 const ChatbotCore = ({
   messages,
@@ -20,6 +20,7 @@ const ChatbotCore = ({
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
+  providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
 }: {
@@ -43,6 +44,7 @@ const ChatbotCore = ({
   botMessageRenderFunction: (message: any, input: string) => JSX.Element | null;
   userMessageRenderFunction: (text: string) => JSX.Element | null;
   dataRenderFunction: (data: any) => JSX.Element | null;
+  providerRenderFunction: (providers: string[]) => JSX.Element | null;
   referenceRenderFunction: (reference: any) => JSX.Element | null;
   relatedQuestionsRenderFunction: (
     relatedQuestions: any,
@@ -116,6 +118,13 @@ const ChatbotCore = ({
       return dataRenderFunction ? dataRenderFunction(data) : null;
     },
     [dataRenderFunction],
+  );
+
+  const ProviderRender = useCallback(
+    (providers: any) => {
+      return providerRenderFunction ? providerRenderFunction(providers) : null;
+    },
+    [providerRenderFunction],
   );
 
   const ReferenceRender = useCallback(
@@ -246,6 +255,13 @@ const ChatbotCore = ({
                         {BotMessageRender(message, messages[index - 1]?.text)}
                       </Box>
                     )}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                    }}
+                  >
+                    {message.providers && ProviderRender(message.providers)}
                   </Box>
                   <Box
                     sx={{
