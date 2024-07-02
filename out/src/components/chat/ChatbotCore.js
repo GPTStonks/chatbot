@@ -124,7 +124,7 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                 } }, BotMessageRender(message, (_10 = messages[index - 1]) === null || _10 === void 0 ? void 0 : _10.text)))),
                             react_1.default.createElement(material_1.Box, { sx: {
                                     display: 'flex',
-                                } }, (message.providers) && ProviderRender(message.providers)),
+                                } }, message.providers && ProviderRender(message.providers)),
                             react_1.default.createElement(material_1.Box, { sx: {
                                     display: 'flex',
                                 } }, message.reference && ReferenceRender(message.reference)),
