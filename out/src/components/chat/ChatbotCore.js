@@ -26,11 +26,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = __importStar(require("react"));
 const material_1 = require("@mui/material");
+const react_1 = __importStar(require("react"));
 const react_loader_spinner_1 = require("react-loader-spinner");
 const LinearBuffer_1 = __importDefault(require("./LinearBuffer"));
-const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
+const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, providerRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     const WelcomeMessageRender = (0, react_1.useCallback)((sendCustomMessage) => {
         return welcomeMessageRenderFunction ? (welcomeMessageRenderFunction(sendCustomMessage)) : (react_1.default.createElement(material_1.Box, { sx: {
@@ -60,6 +60,9 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
     const DataRender = (0, react_1.useCallback)((data) => {
         return dataRenderFunction ? dataRenderFunction(data) : null;
     }, [dataRenderFunction]);
+    const ProviderRender = (0, react_1.useCallback)((providers) => {
+        return providerRenderFunction ? providerRenderFunction(providers) : null;
+    }, [providerRenderFunction]);
     const ReferenceRender = (0, react_1.useCallback)((reference) => {
         return referenceRenderFunction ? referenceRenderFunction(reference) : null;
     }, [referenceRenderFunction]);
@@ -119,6 +122,9 @@ const ChatbotCore = ({ messages, themeConfig, isMobile, botUser, humanUser, botM
                                     alignItems: message.stream ? 'center' : 'flex-start',
                                     maxWidth: '100%',
                                 } }, BotMessageRender(message, (_10 = messages[index - 1]) === null || _10 === void 0 ? void 0 : _10.text)))),
+                            react_1.default.createElement(material_1.Box, { sx: {
+                                    display: 'flex',
+                                } }, (message.providers) && ProviderRender(message.providers)),
                             react_1.default.createElement(material_1.Box, { sx: {
                                     display: 'flex',
                                 } }, message.reference && ReferenceRender(message.reference)),
