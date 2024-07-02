@@ -19,6 +19,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
+  providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
@@ -60,7 +61,6 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [isAnyMessageLoading, setIsAnyMessageLoading] = useState(false);
   const [showLinearLoader, setShowLinearLoader] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
   const [graphData, setGraphData] = useState<any>(null);
   const [streamData, setStreamData] = useState<string>('');
 
@@ -141,7 +141,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       let data = mappedData.data;
       let related = mappedData.related;
       let reference = mappedData.reference;
-      //console.log('data:', mappedData);
+      let providers = mappedData.providers;
 
       if (setDataForParent) {
         setDataForParent({
@@ -190,6 +190,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
               related: related,
               reference: reference,
               graphData: data,
+              providers: providers,
               loading: false,
               stream: false,
               streamCompleted: true,
@@ -202,6 +203,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
               related: related,
               reference: reference,
               graphData: data,
+              providers: providers,
               loading: false,
               stream: false,
             });
@@ -253,7 +255,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
 
   return (
     <div
-      className={`chatbot-default ${className}`}
+      className={`gptstonks-chatbot ${className}`}
       style={{
         ...themeConfig.style,
       }}
@@ -283,6 +285,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             }
             userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
             dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
+            providerRenderFunction={(providers: string[]) =>
+              providerRenderFunction?.(providers) ?? null
+            }
             referenceRenderFunction={(reference: string[]) =>
               referenceRenderFunction?.(reference) ?? null
             }

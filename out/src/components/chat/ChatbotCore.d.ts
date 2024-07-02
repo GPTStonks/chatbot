@@ -1,7 +1,7 @@
-import React from 'react';
-import { Message } from '@/types/message';
 import { ThemeConfig } from '@/types/chatbot';
-declare const ChatbotCore: ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }: {
+import { Message } from '@/types/message';
+import React from 'react';
+declare const ChatbotCore: ({ messages, themeConfig, isMobile, botUser, humanUser, botMessage, messagesEndRef, isAnyMessageLoading, showLinearLoader, sendCustomMessage, welcomeMessageRenderFunction, botMessageRenderFunction, userMessageRenderFunction, dataRenderFunction, providerRenderFunction, referenceRenderFunction, relatedQuestionsRenderFunction, }: {
     messages: Message[];
     themeConfig: ThemeConfig;
     isMobile: boolean;
@@ -20,6 +20,7 @@ declare const ChatbotCore: ({ messages, themeConfig, isMobile, botUser, humanUse
     botMessageRenderFunction: (message: any, input: string) => JSX.Element | null;
     userMessageRenderFunction: (text: string) => JSX.Element | null;
     dataRenderFunction: (data: any) => JSX.Element | null;
+    providerRenderFunction: (providers: string[]) => JSX.Element | null;
     referenceRenderFunction: (reference: any) => JSX.Element | null;
     relatedQuestionsRenderFunction: (relatedQuestions: any, sendCustomMessage: (message: string) => void) => JSX.Element | null;
 }) => React.JSX.Element;

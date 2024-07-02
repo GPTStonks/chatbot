@@ -17,6 +17,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
+  providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   multimodeChat,
@@ -196,6 +197,9 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           }
           userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
           dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
+          providerRenderFunction={(providers: string[]) =>
+            providerRenderFunction?.(providers) ?? null
+          }
           referenceRenderFunction={(reference: string[]) =>
             referenceRenderFunction?.(reference) ?? null
           }
