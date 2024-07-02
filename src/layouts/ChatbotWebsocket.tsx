@@ -20,6 +20,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   botMessageRenderFunction,
   userMessageRenderFunction,
   dataRenderFunction,
+  providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   errorRenderFunction,
@@ -201,6 +202,9 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             }
             userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
             dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
+            providerRenderFunction={(providers: string[]) =>
+              providerRenderFunction?.(providers) ?? null
+            }
             referenceRenderFunction={(reference: string[]) =>
               referenceRenderFunction?.(reference) ?? null
             }
