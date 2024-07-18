@@ -22,6 +22,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
+  subqueryRenderFunction,
   errorRenderFunction,
   multimodeChat,
   multimodeRenderFunction,
@@ -142,6 +143,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
       let related = mappedData.related;
       let reference = mappedData.reference;
       let providers = mappedData.providers;
+      let subqueryQuestion = mappedData.subqueryQuestion;
+      let subqueryResponse = mappedData.subqueryResponse;
 
       if (setDataForParent) {
         setDataForParent({
@@ -191,6 +194,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
               reference: reference,
               graphData: data,
               providers: providers,
+              subqueryQuestion: subqueryQuestion,
+              subqueryResponse: subqueryResponse,
               loading: false,
               stream: false,
               streamCompleted: true,
@@ -204,6 +209,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
               reference: reference,
               graphData: data,
               providers: providers,
+              subqueryQuestion: subqueryQuestion,
+              subqueryResponse: subqueryResponse,
               loading: false,
               stream: false,
             });
@@ -268,6 +275,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             )}
           <ChatbotCore
             messages={messages}
+            apiConfig={{ ...apiConfig }}
             themeConfig={themeConfig}
             botUser={botUser}
             humanUser={humanUser}
@@ -293,6 +301,9 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             }
             relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
               relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
+            }
+            subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) =>
+              subqueryRenderFunction?.(subqueryQuestion, subqueryResponse) ?? null
             }
           />
         </React.Fragment>
