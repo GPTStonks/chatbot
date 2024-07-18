@@ -180,6 +180,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
       <ThemeProvider theme={customTheme}>
         <ChatbotCore
           messages={messages}
+          apiConfig={{ ...apiConfig }}
           themeConfig={themeConfig}
           botUser={botUser}
           humanUser={humanUser}
@@ -206,6 +207,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
             relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
           }
+          subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) => null}
         />
         {themeConfig?.components?.Divider?.appears && (
           <Divider sx={themeConfig?.components?.Divider?.style} />
