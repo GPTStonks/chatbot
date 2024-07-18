@@ -3,9 +3,11 @@ export interface Message {
   user: string;
   loading?: boolean;
   graphData?: any;
-  related?: any;
-  reference?: any;
-  providers?: any;
+  related?: string[];
+  reference?: string[];
+  providers?: string[];
+  subqueryQuestion?: string[];
+  subqueryResponse?: string[];
   stream?: boolean;
   streamCompleted?: boolean;
 }
