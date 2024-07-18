@@ -5,6 +5,7 @@ import { Message } from './message';
 export interface APIConfig {
   queryEndpoint: string;
   queryParams?: Record<string, any>;
+  modelStepTypes?: Record<string, string>;
   needsJWT?: boolean; // If the API needs a JWT token for HTTP requests
   token?: string; // JWT token name (only if needsJWT is true)
 }
@@ -54,6 +55,7 @@ export interface ChatbotProps {
   dataRenderFunction?: (data: any) => JSX.Element;
   providerRenderFunction?: (providers: string[]) => JSX.Element;
   referenceRenderFunction?: (reference: string[]) => JSX.Element;
+  subqueryRenderFunction?: (subqueryQuestion: string[], subqueryResponse: string[]) => JSX.Element;
   relatedQuestionsRenderFunction?: (
     relatedQuestions: string[],
     sendCustomMessage: any,

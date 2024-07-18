@@ -185,6 +185,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             ErrorRender(eventReason ? eventReason : 'Connection closed unexpectedly')}
           <ChatbotCore
             messages={messages}
+            apiConfig={{ ...apiConfig }}
             themeConfig={themeConfig}
             botUser={botUser}
             humanUser={humanUser}
@@ -210,6 +211,9 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             }
             relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
               relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
+            }
+            subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) =>
+              null
             }
           />
         </React.Fragment>
