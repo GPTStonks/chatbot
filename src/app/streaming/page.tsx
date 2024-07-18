@@ -10,8 +10,8 @@ export default function Home() {
   const [initializedChat, setInitializedChat] = React.useState(false);
   const [chatData, setChatData] = React.useState<any>(null);
   const [multimodeChat, setMultimodeChat] = useState<MultimodeChat>({
-    mode1: { url_param: 'agent_mode', value: 'speed', isActivated: true },
-    mode2: { url_param: 'agent_mode', value: 'quality', isActivated: false },
+    mode1: { url_param: 'agent_mode', value: 'speed', isActivated: false },
+    mode2: { url_param: 'agent_mode', value: 'quality', isActivated: true },
   });
 
   const themeConfig = useChatbotDefaultTheme;
@@ -85,6 +85,13 @@ export default function Home() {
               reference: 'reference',
               related: 'related',
               stream: 'stream_step',
+              subqueryQuestion: 'subqueries_answered',
+              subqueryResponse: 'subqueries_responses',
+            },
+            modelStepTypes: {
+              world_knowledge: '📈 Navigating Economic Currents...',
+              simple_reflection: 'Wrapping up...',
+              other: 'Preparing content from...',
             },
           }}
           themeConfig={themeConfig}
@@ -122,6 +129,12 @@ export default function Home() {
               }}
             >
               <Typography>{message.text}</Typography>
+            </Box>
+          )}
+          subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) => (
+            <Box>
+              <Typography>{subqueryQuestion.join(', ')}</Typography>
+              <Typography>{subqueryResponse.join(', ')}</Typography>
             </Box>
           )}
         />
