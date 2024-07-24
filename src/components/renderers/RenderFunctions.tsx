@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
 import { Message } from '@/types/message';
+import { DNA, MutatingDots } from 'react-loader-spinner';
+import { Avatar } from '@mui/material';
+import { ThemeConfig } from '@/types/chatbot';
+import SubqueryComponent from '@/app/streaming/test/Loading';
 
 const RenderFunctions = ({
   welcomeMessageRenderFunction,
@@ -11,6 +15,7 @@ const RenderFunctions = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
+  loadingRenderFunction,
 }: {
   welcomeMessageRenderFunction?: Function;
   botMessageRenderFunction?: Function;
@@ -20,7 +25,7 @@ const RenderFunctions = ({
   referenceRenderFunction?: Function;
   relatedQuestionsRenderFunction?: Function;
   subqueryRenderFunction?: Function;
-  sendCustomMessage: Function;
+  loadingRenderFunction?: Function;
 }) => {
   const WelcomeMessageRender = useCallback(
     (sendCustomMessage: (message: string) => void) => {
@@ -37,12 +42,7 @@ const RenderFunctions = ({
             textAlign: 'center',
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{
-              color: 'white',
-            }}
-          >
+          <Typography variant="h4" sx={{ color: 'white' }}>
             Welcome! How can I help you today?
           </Typography>
         </Box>
@@ -123,6 +123,36 @@ const RenderFunctions = ({
     [subqueryRenderFunction],
   );
 
+  const LoadingMessageRender = useCallback(
+    (text: string, themeConfig: any, subquery_arrays: any, type: number = 1) => {
+      return loadingRenderFunction ? (
+        loadingRenderFunction(text, themeConfig, subquery_arrays, type)
+      ) : (
+        <Box display="flex" flexDirection="row" alignItems="center">
+          <Avatar
+            sx={{
+              marginRight: '1rem',
+              ...themeConfig?.components?.Avatar?.style,
+            }}
+            src={themeConfig?.components?.Avatar?.botAvatarUrl}
+          />
+          <Box sx={{ ...themeConfig?.components?.LoaderBot?.style }}>
+            <DNA
+              visible={true}
+              height="60"
+              width="60"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+            <Typography sx={{ marginLeft: '1rem' }}>{text}</Typography>
+          </Box>
+        </Box>
+      );
+    },
+    [loadingRenderFunction],
+  );
+
   return {
     WelcomeMessageRender,
     BotMessageRender,
@@ -132,6 +162,7 @@ const RenderFunctions = ({
     ReferenceRender,
     RelatedQuestionsRender,
     SubqueryRender,
+    LoadingMessageRender,
   };
 };
 
