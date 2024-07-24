@@ -25,6 +25,7 @@ gptstonks-test-package/
 
 # production
 /build
+/out/src/app/
 
 # misc
 .DS_Store
