@@ -5,14 +5,8 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, '__esModule', { value: true });
-exports.defaultLoadingRenderFunction =
-  exports.defaultSubqueryRenderFunction =
-  exports.defaultUserMessageRenderFunction =
-  exports.defaultBotMessageRenderFunction =
-  exports.defaultWelcomeMessageRenderFunction =
-    void 0;
-const react_1 = __importDefault(require('react'));
 const material_1 = require('@mui/material');
+const react_1 = __importDefault(require('react'));
 const react_loader_spinner_1 = require('react-loader-spinner');
 const defaultWelcomeMessageRenderFunction = (sendCustomMessage) =>
   react_1.default.createElement(
@@ -33,7 +27,6 @@ const defaultWelcomeMessageRenderFunction = (sendCustomMessage) =>
       'Welcome! How can I help you today?',
     ),
   );
-exports.defaultWelcomeMessageRenderFunction = defaultWelcomeMessageRenderFunction;
 const defaultBotMessageRenderFunction = (message, input) =>
   react_1.default.createElement(
     material_1.Box,
@@ -45,14 +38,12 @@ const defaultBotMessageRenderFunction = (message, input) =>
     },
     react_1.default.createElement(material_1.Typography, null, message.text),
   );
-exports.defaultBotMessageRenderFunction = defaultBotMessageRenderFunction;
 const defaultUserMessageRenderFunction = (text) =>
   react_1.default.createElement(
     material_1.Box,
     null,
     react_1.default.createElement(material_1.Typography, null, text),
   );
-exports.defaultUserMessageRenderFunction = defaultUserMessageRenderFunction;
 const defaultSubqueryRenderFunction = (subqueryQuestion, subqueryResponse) =>
   react_1.default.createElement(
     material_1.Box,
@@ -68,7 +59,6 @@ const defaultSubqueryRenderFunction = (subqueryQuestion, subqueryResponse) =>
       subqueryResponse.join(', '),
     ),
   );
-exports.defaultSubqueryRenderFunction = defaultSubqueryRenderFunction;
 const defaultLoadingRenderFunction = (text, themeConfig, subquery_arrays, type = 1) => {
   var _a, _b, _c, _d, _e, _f;
   return react_1.default.createElement(
@@ -123,4 +113,11 @@ const defaultLoadingRenderFunction = (text, themeConfig, subquery_arrays, type =
     ),
   );
 };
-exports.defaultLoadingRenderFunction = defaultLoadingRenderFunction;
+const DefaultRenderFunctions = {
+  defaultWelcomeMessageRenderFunction,
+  defaultBotMessageRenderFunction,
+  defaultUserMessageRenderFunction,
+  defaultSubqueryRenderFunction,
+  defaultLoadingRenderFunction,
+};
+exports.default = DefaultRenderFunctions;

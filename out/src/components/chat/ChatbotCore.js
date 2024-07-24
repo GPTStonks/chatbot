@@ -6,9 +6,16 @@ var __importDefault =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 const material_1 = require('@mui/material');
-const DefaultRenderers_1 = require('../renderers/DefaultRenderers');
+const DefaultRenderers_1 = __importDefault(require('../renderers/DefaultRenderers'));
 const LinearBuffer_1 = __importDefault(require('./LinearBuffer'));
 const react_1 = __importDefault(require('react'));
+const {
+  defaultWelcomeMessageRenderFunction,
+  defaultBotMessageRenderFunction,
+  defaultUserMessageRenderFunction,
+  defaultSubqueryRenderFunction,
+  defaultLoadingRenderFunction,
+} = DefaultRenderers_1.default;
 const ChatbotCore = ({
   messages,
   themeConfig,
@@ -22,15 +29,15 @@ const ChatbotCore = ({
   isAnyMessageLoading,
   showLinearLoader,
   sendCustomMessage,
-  welcomeMessageRenderFunction = DefaultRenderers_1.defaultWelcomeMessageRenderFunction,
-  botMessageRenderFunction = DefaultRenderers_1.defaultBotMessageRenderFunction,
-  userMessageRenderFunction = DefaultRenderers_1.defaultUserMessageRenderFunction,
+  welcomeMessageRenderFunction = defaultWelcomeMessageRenderFunction,
+  botMessageRenderFunction = defaultBotMessageRenderFunction,
+  userMessageRenderFunction = defaultUserMessageRenderFunction,
   dataRenderFunction = (data) => null,
   providerRenderFunction = (providers) => null,
   referenceRenderFunction = (reference) => null,
   relatedQuestionsRenderFunction = (relatedQuestions, sendCustomMessage) => null,
-  subqueryRenderFunction = DefaultRenderers_1.defaultSubqueryRenderFunction,
-  loadingRenderFunction = DefaultRenderers_1.defaultLoadingRenderFunction,
+  subqueryRenderFunction = defaultSubqueryRenderFunction,
+  loadingRenderFunction = defaultLoadingRenderFunction,
 }) => {
   var _a, _b, _c, _d, _e, _f;
   const getMessage = (text) => {

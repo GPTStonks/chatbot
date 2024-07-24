@@ -32,7 +32,8 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, '__esModule', { value: true });
-exports.RenderFunctions =
+exports.DefaulRenderFunctions =
+  exports.RenderFunctions =
   exports.useChatSocket =
   exports.ChatbotInput =
   exports.ChatbotCore =
@@ -103,6 +104,13 @@ Object.defineProperty(exports, 'RenderFunctions', {
   enumerable: true,
   get: function () {
     return __importDefault(RenderFunctions_1).default;
+  },
+});
+var DefaultRenderers_1 = require('./components/renderers/DefaultRenderers');
+Object.defineProperty(exports, 'DefaulRenderFunctions', {
+  enumerable: true,
+  get: function () {
+    return __importDefault(DefaultRenderers_1).default;
   },
 });
 // Type definitions
