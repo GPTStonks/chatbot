@@ -8,6 +8,7 @@ declare const RenderFunctions: ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
+  loadingRenderFunction,
 }: {
   welcomeMessageRenderFunction?: Function | undefined;
   botMessageRenderFunction?: Function | undefined;
@@ -17,7 +18,7 @@ declare const RenderFunctions: ({
   referenceRenderFunction?: Function | undefined;
   relatedQuestionsRenderFunction?: Function | undefined;
   subqueryRenderFunction?: Function | undefined;
-  sendCustomMessage: Function;
+  loadingRenderFunction?: Function | undefined;
 }) => {
   WelcomeMessageRender: (sendCustomMessage: (message: string) => void) => any;
   BotMessageRender: (message: Message, input: string) => any;
@@ -30,5 +31,11 @@ declare const RenderFunctions: ({
     sendCustomMessage: (message: string) => void,
   ) => any;
   SubqueryRender: (subqueryQuestion: any, subqueryResponse: any) => any;
+  LoadingMessageRender: (
+    text: string,
+    themeConfig: any,
+    subquery_arrays: any,
+    type?: number,
+  ) => any;
 };
 export default RenderFunctions;

@@ -51,6 +51,7 @@ const ChatbotDefaultTheme_1 = __importDefault(require('@/components/chat/Chatbot
 const ChatbotWebsocketStreaming_1 = __importDefault(require('@/layouts/ChatbotWebsocketStreaming'));
 const material_1 = require('@mui/material');
 const react_1 = __importStar(require('react'));
+const CustomRenderers_1 = require('./CustomRenderers');
 function Home() {
   const [initializedChat, setInitializedChat] = react_1.default.useState(false);
   const [chatData, setChatData] = react_1.default.useState(null);
@@ -141,52 +142,20 @@ function Home() {
           },
         },
         themeConfig: themeConfig,
-        errorRenderFunction: (error) =>
-          react_1.default.createElement(
-            material_1.Box,
-            {
-              sx: {
-                position: 'fixed',
-                top: 0,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                padding: '3px 15px',
-                zIndex: 1000,
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              },
-            },
-            react_1.default.createElement(material_1.Typography, null, error),
-          ),
         setDataForParent: (data) => {
           setChatData(data);
         },
         onApiResponseCode: (bool) => {
           setInitializedChat(bool);
         },
-        userMessageRenderFunction: (text) =>
-          react_1.default.createElement(
-            material_1.Box,
-            null,
-            react_1.default.createElement(material_1.Typography, null, text),
-          ),
-        botMessageRenderFunction: (message) =>
-          react_1.default.createElement(
-            material_1.Box,
-            {
-              sx: {
-                maxWidth: '100%',
-                overflowWrap: 'break-word',
-              },
-            },
-            react_1.default.createElement(material_1.Typography, null, message.text),
-          ),
-        subqueryRenderFunction: (subqueryQuestion, subqueryResponse) =>
-          react_1.default.createElement(
-            material_1.Box,
-            null,
-            react_1.default.createElement(material_1.Typography, null, subqueryQuestion.join(', ')),
-            react_1.default.createElement(material_1.Typography, null, subqueryResponse.join(', ')),
-          ),
+        errorRenderFunction: CustomRenderers_1.ErrorRenderFunction,
+        userMessageRenderFunction: CustomRenderers_1.UserMessageRender,
+        botMessageRenderFunction: CustomRenderers_1.BotMessageRender,
+        providerRenderFunction: CustomRenderers_1.ProviderRender,
+        subqueryRenderFunction: CustomRenderers_1.SubqueryRender,
+        welcomeMessageRenderFunction: CustomRenderers_1.WelcomeMessageRender,
+        loaderType: 3,
+        loadingRenderFunction: CustomRenderers_1.LoadingMessageRender,
       }),
     ),
     react_1.default.createElement('div', { style: { width: '20vw', height: '100%' } }),

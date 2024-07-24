@@ -56,6 +56,7 @@ const useChatSocket_1 = __importDefault(require('../hooks/useChatSocket'));
 const ChatbotWebsocket = ({
   className,
   apiConfig,
+  loaderType,
   themeConfig,
   setDataForParent,
   onApiResponseCode,
@@ -67,9 +68,11 @@ const ChatbotWebsocket = ({
   providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
+  subqueryRenderFunction,
   errorRenderFunction,
   multimodeChat,
   multimodeRenderFunction,
+  loadingRenderFunction,
 }) => {
   var _a, _b, _c, _d, _e;
   const ErrorRender = (0, react_1.useCallback)(
@@ -224,6 +227,7 @@ const ChatbotWebsocket = ({
           messages: messages,
           apiConfig: Object.assign({}, apiConfig),
           themeConfig: themeConfig,
+          loaderType: loaderType ? loaderType : 1,
           botUser: botUser,
           humanUser: humanUser,
           botMessage: botMessage,
@@ -232,71 +236,15 @@ const ChatbotWebsocket = ({
           isAnyMessageLoading: isAnyMessageLoading,
           isMobile: isMobile,
           sendCustomMessage: handleSendCustomMessage,
-          welcomeMessageRenderFunction: (sendCustomMessage) => {
-            var _a;
-            return (_a =
-              welcomeMessageRenderFunction === null || welcomeMessageRenderFunction === void 0
-                ? void 0
-                : welcomeMessageRenderFunction(sendCustomMessage)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          botMessageRenderFunction: (message, input) => {
-            var _a;
-            return (_a =
-              botMessageRenderFunction === null || botMessageRenderFunction === void 0
-                ? void 0
-                : botMessageRenderFunction(message, input)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          userMessageRenderFunction: (text) => {
-            var _a;
-            return (_a =
-              userMessageRenderFunction === null || userMessageRenderFunction === void 0
-                ? void 0
-                : userMessageRenderFunction(text)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          dataRenderFunction: (data) => {
-            var _a;
-            return (_a =
-              dataRenderFunction === null || dataRenderFunction === void 0
-                ? void 0
-                : dataRenderFunction(data)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          providerRenderFunction: (providers) => {
-            var _a;
-            return (_a =
-              providerRenderFunction === null || providerRenderFunction === void 0
-                ? void 0
-                : providerRenderFunction(providers)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          referenceRenderFunction: (reference) => {
-            var _a;
-            return (_a =
-              referenceRenderFunction === null || referenceRenderFunction === void 0
-                ? void 0
-                : referenceRenderFunction(reference)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          relatedQuestionsRenderFunction: (relatedQuestions, sendCustomMessage) => {
-            var _a;
-            return (_a =
-              relatedQuestionsRenderFunction === null || relatedQuestionsRenderFunction === void 0
-                ? void 0
-                : relatedQuestionsRenderFunction(relatedQuestions, sendCustomMessage)) !== null &&
-              _a !== void 0
-              ? _a
-              : null;
-          },
-          subqueryRenderFunction: (subqueryQuestion, subqueryResponse) => null,
+          welcomeMessageRenderFunction: welcomeMessageRenderFunction,
+          botMessageRenderFunction: botMessageRenderFunction,
+          userMessageRenderFunction: userMessageRenderFunction,
+          dataRenderFunction: dataRenderFunction,
+          providerRenderFunction: providerRenderFunction,
+          referenceRenderFunction: referenceRenderFunction,
+          relatedQuestionsRenderFunction: relatedQuestionsRenderFunction,
+          subqueryRenderFunction: subqueryRenderFunction,
+          loadingRenderFunction: loadingRenderFunction,
         }),
       ),
       ((_c =

@@ -6,13 +6,13 @@ var __importDefault =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 const material_1 = require('@mui/material');
-const react_1 = __importDefault(require('react'));
-const react_loader_spinner_1 = require('react-loader-spinner');
+const DefaultRenderers_1 = require('../renderers/DefaultRenderers');
 const LinearBuffer_1 = __importDefault(require('./LinearBuffer'));
-const RenderFunctions_1 = __importDefault(require('../renderers/RenderFunctions'));
+const react_1 = __importDefault(require('react'));
 const ChatbotCore = ({
   messages,
   themeConfig,
+  loaderType = 1,
   apiConfig,
   isMobile,
   botUser,
@@ -22,36 +22,17 @@ const ChatbotCore = ({
   isAnyMessageLoading,
   showLinearLoader,
   sendCustomMessage,
-  welcomeMessageRenderFunction,
-  botMessageRenderFunction,
-  userMessageRenderFunction,
-  dataRenderFunction,
-  providerRenderFunction,
-  referenceRenderFunction,
-  relatedQuestionsRenderFunction,
-  subqueryRenderFunction,
+  welcomeMessageRenderFunction = DefaultRenderers_1.defaultWelcomeMessageRenderFunction,
+  botMessageRenderFunction = DefaultRenderers_1.defaultBotMessageRenderFunction,
+  userMessageRenderFunction = DefaultRenderers_1.defaultUserMessageRenderFunction,
+  dataRenderFunction = (data) => null,
+  providerRenderFunction = (providers) => null,
+  referenceRenderFunction = (reference) => null,
+  relatedQuestionsRenderFunction = (relatedQuestions, sendCustomMessage) => null,
+  subqueryRenderFunction = DefaultRenderers_1.defaultSubqueryRenderFunction,
+  loadingRenderFunction = DefaultRenderers_1.defaultLoadingRenderFunction,
 }) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-  const {
-    WelcomeMessageRender,
-    BotMessageRender,
-    UserMessageRender,
-    DataRender,
-    ProviderRender,
-    ReferenceRender,
-    RelatedQuestionsRender,
-    SubqueryRender,
-  } = (0, RenderFunctions_1.default)({
-    welcomeMessageRenderFunction,
-    botMessageRenderFunction,
-    userMessageRenderFunction,
-    dataRenderFunction,
-    providerRenderFunction,
-    referenceRenderFunction,
-    relatedQuestionsRenderFunction,
-    subqueryRenderFunction,
-    sendCustomMessage,
-  });
+  var _a, _b, _c, _d, _e, _f;
   const getMessage = (text) => {
     if (apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.modelStepTypes) {
       const modelStepTypes = apiConfig.modelStepTypes;
@@ -72,7 +53,7 @@ const ChatbotCore = ({
           : _b.style,
       ),
     },
-    messages.length === 0 && WelcomeMessageRender(sendCustomMessage),
+    messages.length === 0 && welcomeMessageRenderFunction(sendCustomMessage),
     react_1.default.createElement(
       material_1.List,
       null,
@@ -158,46 +139,43 @@ const ChatbotCore = ({
                 ? void 0
                 : _g.showSideBotAvatar) &&
                 message.user === botUser)) &&
-            react_1.default.createElement(
-              material_1.Avatar, // Side avatar (outside of message bubble)
-              {
-                sx: Object.assign(
-                  Object.assign(
-                    {},
-                    (_j =
-                      (_h =
+            react_1.default.createElement(material_1.Avatar, {
+              sx: Object.assign(
+                Object.assign(
+                  {},
+                  (_j =
+                    (_h =
+                      themeConfig === null || themeConfig === void 0
+                        ? void 0
+                        : themeConfig.components) === null || _h === void 0
+                      ? void 0
+                      : _h.Avatar) === null || _j === void 0
+                    ? void 0
+                    : _j.style,
+                ),
+                { transition: 'opacity 0.5s ease-in-out' },
+              ),
+              src:
+                message.user === botUser
+                  ? (_l =
+                      (_k =
                         themeConfig === null || themeConfig === void 0
                           ? void 0
-                          : themeConfig.components) === null || _h === void 0
+                          : themeConfig.components) === null || _k === void 0
                         ? void 0
-                        : _h.Avatar) === null || _j === void 0
-                      ? void 0
-                      : _j.style,
-                  ),
-                  { transition: 'opacity 0.5s ease-in-out' },
-                ),
-                src:
-                  message.user === botUser
-                    ? (_l =
-                        (_k =
+                        : _k.Avatar) === null || _l === void 0
+                    ? void 0
+                    : _l.botAvatarUrl
+                  : (_o =
+                        (_m =
                           themeConfig === null || themeConfig === void 0
                             ? void 0
-                            : themeConfig.components) === null || _k === void 0
+                            : themeConfig.components) === null || _m === void 0
                           ? void 0
-                          : _k.Avatar) === null || _l === void 0
-                      ? void 0
-                      : _l.botAvatarUrl
-                    : (_o =
-                          (_m =
-                            themeConfig === null || themeConfig === void 0
-                              ? void 0
-                              : themeConfig.components) === null || _m === void 0
-                            ? void 0
-                            : _m.Avatar) === null || _o === void 0
-                      ? void 0
-                      : _o.userAvatarUrl,
-              },
-            ),
+                          : _m.Avatar) === null || _o === void 0
+                    ? void 0
+                    : _o.userAvatarUrl,
+            }),
           isMobile &&
             ((((_q =
               (_p =
@@ -219,52 +197,49 @@ const ChatbotCore = ({
                 ? void 0
                 : _s.showSideBotAvatar) &&
                 message.user === botUser)) &&
-            react_1.default.createElement(
-              material_1.Avatar, // Side avatar (outside of message bubble) for mobile
-              {
-                sx: Object.assign(
-                  Object.assign(
-                    {},
-                    (_u =
-                      (_t =
+            react_1.default.createElement(material_1.Avatar, {
+              sx: Object.assign(
+                Object.assign(
+                  {},
+                  (_u =
+                    (_t =
+                      themeConfig === null || themeConfig === void 0
+                        ? void 0
+                        : themeConfig.components) === null || _t === void 0
+                      ? void 0
+                      : _t.Avatar) === null || _u === void 0
+                    ? void 0
+                    : _u.style,
+                ),
+                {
+                  width: '20px',
+                  height: '20px',
+                  position: 'absolute',
+                  top: '0',
+                  outline: '1px solid #b8bb26',
+                },
+              ),
+              src:
+                message.user === botUser
+                  ? (_w =
+                      (_v =
                         themeConfig === null || themeConfig === void 0
                           ? void 0
-                          : themeConfig.components) === null || _t === void 0
+                          : themeConfig.components) === null || _v === void 0
                         ? void 0
-                        : _t.Avatar) === null || _u === void 0
-                      ? void 0
-                      : _u.style,
-                  ),
-                  {
-                    width: '20px',
-                    height: '20px',
-                    position: 'absolute',
-                    top: '0',
-                    outline: '1px solid #b8bb26',
-                  },
-                ),
-                src:
-                  message.user === botUser
-                    ? (_w =
-                        (_v =
+                        : _v.Avatar) === null || _w === void 0
+                    ? void 0
+                    : _w.botAvatarUrl
+                  : (_y =
+                        (_x =
                           themeConfig === null || themeConfig === void 0
                             ? void 0
-                            : themeConfig.components) === null || _v === void 0
+                            : themeConfig.components) === null || _x === void 0
                           ? void 0
-                          : _v.Avatar) === null || _w === void 0
-                      ? void 0
-                      : _w.botAvatarUrl
-                    : (_y =
-                          (_x =
-                            themeConfig === null || themeConfig === void 0
-                              ? void 0
-                              : themeConfig.components) === null || _x === void 0
-                            ? void 0
-                            : _x.Avatar) === null || _y === void 0
-                      ? void 0
-                      : _y.userAvatarUrl,
-              },
-            ),
+                          : _x.Avatar) === null || _y === void 0
+                    ? void 0
+                    : _y.userAvatarUrl,
+            }),
           message.user === botUser
             ? react_1.default.createElement(
                 material_1.Box,
@@ -335,9 +310,7 @@ const ChatbotCore = ({
                             ? void 0
                             : _7.color,
                       },
-                      ' ',
                       'Response',
-                      ' ',
                     ),
                   ),
                 react_1.default.createElement(
@@ -371,7 +344,7 @@ const ChatbotCore = ({
                             maxWidth: '100%',
                           },
                         },
-                        BotMessageRender(
+                        botMessageRenderFunction(
                           message,
                           (_10 = messages[index - 1]) === null || _10 === void 0
                             ? void 0
@@ -381,43 +354,29 @@ const ChatbotCore = ({
                   ),
                   react_1.default.createElement(
                     material_1.Box,
-                    {
-                      sx: {
-                        display: 'flex',
-                      },
-                    },
+                    { sx: { display: 'flex' } },
                     message.subqueryQuestion &&
                       message.subqueryResponse &&
-                      SubqueryRender(message.subqueryQuestion, message.subqueryResponse),
+                      subqueryRenderFunction(message.subqueryQuestion, message.subqueryResponse),
                   ),
                   react_1.default.createElement(
                     material_1.Box,
-                    {
-                      sx: {
-                        display: 'flex',
-                      },
-                    },
-                    message.providers && ProviderRender(message.providers),
+                    { sx: { display: 'flex' } },
+                    message.providers && providerRenderFunction(message.providers),
                   ),
                   react_1.default.createElement(
                     material_1.Box,
-                    {
-                      sx: {
-                        display: 'flex',
-                      },
-                    },
-                    message.reference && ReferenceRender(message.reference),
+                    { sx: { display: 'flex' } },
+                    message.reference && referenceRenderFunction(message.reference),
                   ),
-                  (message.streamCompleted || message.stream) && DataRender(message.graphData),
+                  (message.streamCompleted || message.stream) &&
+                    dataRenderFunction(message.graphData),
                 ),
                 react_1.default.createElement(
                   material_1.Box,
-                  {
-                    sx: {
-                      display: 'flex',
-                    },
-                  },
-                  message.related && RelatedQuestionsRender(message.related, sendCustomMessage),
+                  { sx: { display: 'flex' } },
+                  message.related &&
+                    relatedQuestionsRenderFunction(message.related, sendCustomMessage),
                 ),
               )
             : react_1.default.createElement(
@@ -434,7 +393,7 @@ const ChatbotCore = ({
                       ? void 0
                       : _12.style,
                 },
-                UserMessageRender(message.text),
+                userMessageRenderFunction(message.text),
               ),
         );
       }),
@@ -443,13 +402,18 @@ const ChatbotCore = ({
         !showLinearLoader &&
         react_1.default.createElement(
           material_1.ListItem,
-          {
-            sx: {
-              display: 'flex',
-              flexDirection: 'row',
-              transition: 'opacity 0.5s ease-in-out',
-            },
-          },
+          { sx: { display: 'flex', flexDirection: 'row' } },
+          loadingRenderFunction(
+            getMessage(botMessage.text),
+            themeConfig,
+            botMessage.subqueryQuestion,
+            loaderType,
+          ),
+        ),
+      showLinearLoader &&
+        react_1.default.createElement(
+          material_1.ListItem,
+          { sx: { display: 'flex', flexDirection: 'row', maxWidth: isMobile ? '70vw' : '40vw' } },
           react_1.default.createElement(material_1.Avatar, {
             sx: Object.assign(
               { marginRight: '1rem' },
@@ -474,78 +438,11 @@ const ChatbotCore = ({
                 ? void 0
                 : _f.botAvatarUrl,
           }),
-          react_1.default.createElement(
-            material_1.Box,
-            {
-              sx: Object.assign(
-                {},
-                (_h =
-                  (_g =
-                    themeConfig === null || themeConfig === void 0
-                      ? void 0
-                      : themeConfig.components) === null || _g === void 0
-                    ? void 0
-                    : _g.LoaderBot) === null || _h === void 0
-                  ? void 0
-                  : _h.style,
-              ),
-            },
-            react_1.default.createElement(react_loader_spinner_1.DNA, {
-              visible: true,
-              height: '60',
-              width: '60',
-              ariaLabel: 'dna-loading',
-              wrapperStyle: {},
-              wrapperClass: 'dna-wrapper',
-            }),
-            react_1.default.createElement(
-              material_1.Typography,
-              {
-                sx: {
-                  marginLeft: '1rem',
-                },
-              },
-              getMessage(botMessage.text),
-            ),
-          ),
-        ),
-      showLinearLoader &&
-        react_1.default.createElement(
-          material_1.ListItem,
-          { sx: { display: 'flex', flexDirection: 'row', maxWidth: isMobile ? '70vw' : '40vw' } },
-          react_1.default.createElement(material_1.Avatar, {
-            sx: Object.assign(
-              { marginRight: '1rem' },
-              (_k =
-                (_j =
-                  themeConfig === null || themeConfig === void 0
-                    ? void 0
-                    : themeConfig.components) === null || _j === void 0
-                  ? void 0
-                  : _j.Avatar) === null || _k === void 0
-                ? void 0
-                : _k.style,
-            ),
-            src:
-              (_m =
-                (_l =
-                  themeConfig === null || themeConfig === void 0
-                    ? void 0
-                    : themeConfig.components) === null || _l === void 0
-                  ? void 0
-                  : _l.Avatar) === null || _m === void 0
-                ? void 0
-                : _m.botAvatarUrl,
-          }),
           react_1.default.createElement(LinearBuffer_1.default, null),
         ),
     ),
     react_1.default.createElement('div', { ref: messagesEndRef }),
-    react_1.default.createElement('div', {
-      style: {
-        height: '100px',
-      },
-    }),
+    react_1.default.createElement('div', { style: { height: '100px' } }),
   );
 };
 exports.default = ChatbotCore;

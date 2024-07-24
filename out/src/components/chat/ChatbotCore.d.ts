@@ -4,6 +4,7 @@ import React from 'react';
 declare const ChatbotCore: ({
   messages,
   themeConfig,
+  loaderType,
   apiConfig,
   isMobile,
   botUser,
@@ -21,9 +22,11 @@ declare const ChatbotCore: ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
+  loadingRenderFunction,
 }: {
   messages: Message[];
   themeConfig: ThemeConfig;
+  loaderType?: number | undefined;
   isMobile: boolean;
   apiConfig: APIConfig;
   botUser: string;
@@ -37,21 +40,27 @@ declare const ChatbotCore: ({
   multimodeRenderFunction?: ((modes: string[]) => JSX.Element) | undefined;
   errorRenderFunction?: ((error: any) => JSX.Element) | undefined;
   sendCustomMessage: (message: string) => void;
-  welcomeMessageRenderFunction: (
-    sendCustomMessage: (message: string) => void,
-  ) => JSX.Element | null;
-  botMessageRenderFunction: (message: any, input: string) => JSX.Element | null;
-  userMessageRenderFunction: (text: string) => JSX.Element | null;
-  dataRenderFunction: (data: any) => JSX.Element | null;
-  providerRenderFunction: (providers: string[]) => JSX.Element | null;
-  referenceRenderFunction: (reference: any) => JSX.Element | null;
-  relatedQuestionsRenderFunction: (
-    relatedQuestions: any,
-    sendCustomMessage: (message: string) => void,
-  ) => JSX.Element | null;
-  subqueryRenderFunction: (
-    subqueryQuestion: string[],
-    subqueryResponse: string[],
-  ) => JSX.Element | null;
+  welcomeMessageRenderFunction?:
+    | ((sendCustomMessage: (message: string) => void) => JSX.Element | null)
+    | undefined;
+  botMessageRenderFunction?: ((message: any, input: string) => JSX.Element | null) | undefined;
+  userMessageRenderFunction?: ((text: string) => JSX.Element | null) | undefined;
+  dataRenderFunction?: ((data: any) => JSX.Element | null) | undefined;
+  providerRenderFunction?: ((providers: string[]) => JSX.Element | null) | undefined;
+  referenceRenderFunction?: ((reference: any) => JSX.Element | null) | undefined;
+  relatedQuestionsRenderFunction?:
+    | ((relatedQuestions: any, sendCustomMessage: (message: string) => void) => JSX.Element | null)
+    | undefined;
+  subqueryRenderFunction?:
+    | ((subqueryQuestion: string[], subqueryResponse: string[]) => JSX.Element | null)
+    | undefined;
+  loadingRenderFunction?:
+    | ((
+        text: string,
+        themeConfig: ThemeConfig,
+        subquery_arrays: any,
+        type: number,
+      ) => JSX.Element | null)
+    | undefined;
 }) => React.JSX.Element;
 export default ChatbotCore;

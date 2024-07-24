@@ -56,8 +56,11 @@ const ChatbotInput_1 = __importDefault(require('../components/chat/ChatbotInput'
 const ChatbotWebsocketStreaming = ({
   className,
   apiConfig,
+  loaderType,
   themeConfig,
   preloadedMessages,
+  multimodeChat,
+  multimodeRenderFunction,
   welcomeMessageRenderFunction,
   setDataForParent,
   onApiResponseCode,
@@ -69,8 +72,7 @@ const ChatbotWebsocketStreaming = ({
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
   errorRenderFunction,
-  multimodeChat,
-  multimodeRenderFunction,
+  loadingRenderFunction,
 }) => {
   var _a, _b, _c, _d;
   const ErrorRender = (0, react_1.useCallback)(
@@ -224,6 +226,8 @@ const ChatbotWebsocketStreaming = ({
           text: body,
           user: 'botUser',
           loading: true,
+          subqueryQuestion: subqueryQuestion ? subqueryQuestion : [],
+          subqueryResponse: subqueryResponse ? subqueryResponse : [],
         }));
       } else if (type === 'data') {
         setStreamData('');
@@ -318,6 +322,7 @@ const ChatbotWebsocketStreaming = ({
           messages: messages,
           apiConfig: Object.assign({}, apiConfig),
           themeConfig: themeConfig,
+          loaderType: loaderType ? loaderType : 1,
           botUser: botUser,
           humanUser: humanUser,
           botMessage: botMessage,
@@ -326,80 +331,15 @@ const ChatbotWebsocketStreaming = ({
           isAnyMessageLoading: isAnyMessageLoading,
           isMobile: isMobile,
           sendCustomMessage: handleSendCustomMessage,
-          welcomeMessageRenderFunction: (sendCustomMessage) => {
-            var _a;
-            return (_a =
-              welcomeMessageRenderFunction === null || welcomeMessageRenderFunction === void 0
-                ? void 0
-                : welcomeMessageRenderFunction(sendCustomMessage)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          botMessageRenderFunction: (message, input) => {
-            var _a;
-            return (_a =
-              botMessageRenderFunction === null || botMessageRenderFunction === void 0
-                ? void 0
-                : botMessageRenderFunction(message, input)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          userMessageRenderFunction: (text) => {
-            var _a;
-            return (_a =
-              userMessageRenderFunction === null || userMessageRenderFunction === void 0
-                ? void 0
-                : userMessageRenderFunction(text)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          dataRenderFunction: (data) => {
-            var _a;
-            return (_a =
-              dataRenderFunction === null || dataRenderFunction === void 0
-                ? void 0
-                : dataRenderFunction(data)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          providerRenderFunction: (providers) => {
-            var _a;
-            return (_a =
-              providerRenderFunction === null || providerRenderFunction === void 0
-                ? void 0
-                : providerRenderFunction(providers)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          referenceRenderFunction: (reference) => {
-            var _a;
-            return (_a =
-              referenceRenderFunction === null || referenceRenderFunction === void 0
-                ? void 0
-                : referenceRenderFunction(reference)) !== null && _a !== void 0
-              ? _a
-              : null;
-          },
-          relatedQuestionsRenderFunction: (relatedQuestions, sendCustomMessage) => {
-            var _a;
-            return (_a =
-              relatedQuestionsRenderFunction === null || relatedQuestionsRenderFunction === void 0
-                ? void 0
-                : relatedQuestionsRenderFunction(relatedQuestions, sendCustomMessage)) !== null &&
-              _a !== void 0
-              ? _a
-              : null;
-          },
-          subqueryRenderFunction: (subqueryQuestion, subqueryResponse) => {
-            var _a;
-            return (_a =
-              subqueryRenderFunction === null || subqueryRenderFunction === void 0
-                ? void 0
-                : subqueryRenderFunction(subqueryQuestion, subqueryResponse)) !== null &&
-              _a !== void 0
-              ? _a
-              : null;
-          },
+          welcomeMessageRenderFunction: welcomeMessageRenderFunction,
+          botMessageRenderFunction: botMessageRenderFunction,
+          userMessageRenderFunction: userMessageRenderFunction,
+          dataRenderFunction: dataRenderFunction,
+          providerRenderFunction: providerRenderFunction,
+          referenceRenderFunction: referenceRenderFunction,
+          relatedQuestionsRenderFunction: relatedQuestionsRenderFunction,
+          subqueryRenderFunction: subqueryRenderFunction,
+          loadingRenderFunction: loadingRenderFunction,
         }),
       ),
       ((_b =
