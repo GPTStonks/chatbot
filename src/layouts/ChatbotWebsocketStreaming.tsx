@@ -51,28 +51,6 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
     [errorRenderFunction],
   );
 
-  const {
-    WelcomeMessageRender,
-    BotMessageRender,
-    UserMessageRender,
-    DataRender,
-    ProviderRender,
-    ReferenceRender,
-    RelatedQuestionsRender,
-    SubqueryRender,
-    LoadingMessageRender,
-  } = RenderFunctions({
-    welcomeMessageRenderFunction,
-    botMessageRenderFunction,
-    userMessageRenderFunction,
-    dataRenderFunction,
-    providerRenderFunction,
-    referenceRenderFunction,
-    relatedQuestionsRenderFunction,
-    subqueryRenderFunction,
-    loadingRenderFunction,
-  });
-
   const humanUser = 'humanUser';
   const botUser = 'botUser';
   const isMobile = useMediaQuery('(max-width:750px)');
