@@ -42,6 +42,7 @@ export interface ChatbotProps {
   className?: string;
   style?: React.CSSProperties;
   apiConfig: APIConfig;
+  loaderType?: number;
   themeConfig: ThemeConfig;
   preloadedMessages?: Message[];
   multimodeChat?: MultimodeChat;
@@ -61,4 +62,10 @@ export interface ChatbotProps {
     sendCustomMessage: any,
   ) => JSX.Element;
   errorRenderFunction?: (error: any) => JSX.Element;
+  loadingRenderFunction?: (
+    text: string,
+    themeConfig: ThemeConfig,
+    subquery_arrays: any,
+    type?: number,
+  ) => JSX.Element;
 }
