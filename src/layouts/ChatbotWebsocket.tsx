@@ -12,6 +12,7 @@ import useChatSocket from '../hooks/useChatSocket';
 const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
+  loaderType,
   themeConfig,
   setDataForParent,
   onApiResponseCode,
@@ -23,9 +24,11 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
   providerRenderFunction,
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
+  subqueryRenderFunction,
   errorRenderFunction,
   multimodeChat,
   multimodeRenderFunction,
+  loadingRenderFunction,
 }: ChatbotProps) => {
   const ErrorRender = useCallback(
     (error: any) => {
@@ -187,6 +190,7 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             messages={messages}
             apiConfig={{ ...apiConfig }}
             themeConfig={themeConfig}
+            loaderType={loaderType ? loaderType : 1}
             botUser={botUser}
             humanUser={humanUser}
             botMessage={botMessage}
@@ -195,26 +199,15 @@ const ChatbotWebsocket: React.FC<ChatbotProps> = ({
             isAnyMessageLoading={isAnyMessageLoading}
             isMobile={isMobile}
             sendCustomMessage={handleSendCustomMessage}
-            welcomeMessageRenderFunction={(sendCustomMessage: (message: string) => void) =>
-              welcomeMessageRenderFunction?.(sendCustomMessage) ?? null
-            }
-            botMessageRenderFunction={(message: any, input: string) =>
-              botMessageRenderFunction?.(message, input) ?? null
-            }
-            userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
-            dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
-            providerRenderFunction={(providers: string[]) =>
-              providerRenderFunction?.(providers) ?? null
-            }
-            referenceRenderFunction={(reference: string[]) =>
-              referenceRenderFunction?.(reference) ?? null
-            }
-            relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
-              relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
-            }
-            subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) =>
-              null
-            }
+            welcomeMessageRenderFunction={welcomeMessageRenderFunction}
+            botMessageRenderFunction={botMessageRenderFunction}
+            userMessageRenderFunction={userMessageRenderFunction}
+            dataRenderFunction={dataRenderFunction}
+            providerRenderFunction={providerRenderFunction}
+            referenceRenderFunction={referenceRenderFunction}
+            relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
+            subqueryRenderFunction={subqueryRenderFunction}
+            loadingRenderFunction={loadingRenderFunction}
           />
         </React.Fragment>
 

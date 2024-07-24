@@ -1,14 +1,22 @@
 import { APIConfig, ThemeConfig } from '@/types/chatbot';
 import { Message } from '@/types/message';
 import { Avatar, Box, List, ListItem, Typography } from '@mui/material';
-import React, { useCallback } from 'react';
-import { DNA } from 'react-loader-spinner';
+import DefaultRenderFunctions from '../renderers/DefaultRenderers';
 import LinearBuffer from './LinearBuffer';
-import RenderFunctions from '../renderers/RenderFunctions';
+import React from 'react';
+
+const {
+  defaultWelcomeMessageRenderFunction,
+  defaultBotMessageRenderFunction,
+  defaultUserMessageRenderFunction,
+  defaultSubqueryRenderFunction,
+  defaultLoadingRenderFunction,
+} = DefaultRenderFunctions;
 
 const ChatbotCore = ({
   messages,
   themeConfig,
+  loaderType = 1,
   apiConfig,
   isMobile,
   botUser,
@@ -18,22 +26,27 @@ const ChatbotCore = ({
   isAnyMessageLoading,
   showLinearLoader,
   sendCustomMessage,
-  welcomeMessageRenderFunction,
-  botMessageRenderFunction,
-  userMessageRenderFunction,
-  dataRenderFunction,
-  providerRenderFunction,
-  referenceRenderFunction,
-  relatedQuestionsRenderFunction,
-  subqueryRenderFunction,
+  welcomeMessageRenderFunction = defaultWelcomeMessageRenderFunction,
+  botMessageRenderFunction = defaultBotMessageRenderFunction,
+  userMessageRenderFunction = defaultUserMessageRenderFunction,
+  dataRenderFunction = (data: any) => null,
+  providerRenderFunction = (providers: string[]) => null,
+  referenceRenderFunction = (reference: any) => null,
+  relatedQuestionsRenderFunction = (
+    relatedQuestions: any,
+    sendCustomMessage: (message: string) => void,
+  ) => null,
+  subqueryRenderFunction = defaultSubqueryRenderFunction,
+  loadingRenderFunction = defaultLoadingRenderFunction,
 }: {
   messages: Message[];
   themeConfig: ThemeConfig;
+  loaderType?: number;
   isMobile: boolean;
   apiConfig: APIConfig;
   botUser: string;
   humanUser: string;
-  botMessage: any;
+  botMessage: Message | null;
   messagesEndRef: any;
   isAnyMessageLoading: boolean;
   showLinearLoader: boolean;
@@ -42,43 +55,33 @@ const ChatbotCore = ({
   multimodeRenderFunction?: (modes: string[]) => JSX.Element;
   errorRenderFunction?: (error: any) => JSX.Element;
   sendCustomMessage: (message: string) => void;
-  welcomeMessageRenderFunction: (
+  welcomeMessageRenderFunction?: (
     sendCustomMessage: (message: string) => void,
   ) => JSX.Element | null;
-  botMessageRenderFunction: (message: any, input: string) => JSX.Element | null;
-  userMessageRenderFunction: (text: string) => JSX.Element | null;
-  dataRenderFunction: (data: any) => JSX.Element | null;
-  providerRenderFunction: (providers: string[]) => JSX.Element | null;
-  referenceRenderFunction: (reference: any) => JSX.Element | null;
-  relatedQuestionsRenderFunction: (
+  botMessageRenderFunction?: (message: any, input: string) => JSX.Element | null;
+  userMessageRenderFunction?: (text: string) => JSX.Element | null;
+  dataRenderFunction?: (data: any) => JSX.Element | null;
+  providerRenderFunction?: (providers: string[]) => JSX.Element | null;
+  referenceRenderFunction?: (reference: any) => JSX.Element | null;
+  relatedQuestionsRenderFunction?: (
     relatedQuestions: any,
     sendCustomMessage: (message: string) => void,
   ) => JSX.Element | null;
-  subqueryRenderFunction: (
+  subqueryRenderFunction?: (
     subqueryQuestion: string[],
     subqueryResponse: string[],
   ) => JSX.Element | null;
+  loadingRenderFunction?: (
+    text: string,
+    themeConfig: ThemeConfig,
+    subquery_arrays: any,
+    type: number,
+  ) => JSX.Element | null;
 }) => {
-  const {
-    WelcomeMessageRender,
-    BotMessageRender,
-    UserMessageRender,
-    DataRender,
-    ProviderRender,
-    ReferenceRender,
-    RelatedQuestionsRender,
-    SubqueryRender,
-  } = RenderFunctions({
-    welcomeMessageRenderFunction,
-    botMessageRenderFunction,
-    userMessageRenderFunction,
-    dataRenderFunction,
-    providerRenderFunction,
-    referenceRenderFunction,
-    relatedQuestionsRenderFunction,
-    subqueryRenderFunction,
-    sendCustomMessage,
-  });
+  const subquery_arrays = {
+    subqueryQuestions: botMessage?.subqueryQuestion,
+    subqueryResponses: botMessage?.subqueryResponse,
+  };
 
   const getMessage = (text: string) => {
     if (apiConfig?.modelStepTypes) {
@@ -98,7 +101,7 @@ const ChatbotCore = ({
         ...themeConfig.components?.ChatBox?.style,
       }}
     >
-      {messages.length === 0 && WelcomeMessageRender(sendCustomMessage)}
+      {messages.length === 0 && welcomeMessageRenderFunction(sendCustomMessage)}
       <List>
         {messages.map((message, index) => (
           <ListItem
@@ -117,7 +120,7 @@ const ChatbotCore = ({
                 message.user === humanUser) ||
                 (themeConfig?.components?.Avatar?.showSideBotAvatar &&
                   message.user === botUser)) && (
-                <Avatar // Side avatar (outside of message bubble)
+                <Avatar
                   sx={{
                     ...themeConfig?.components?.Avatar?.style,
                     transition: 'opacity 0.5s ease-in-out',
@@ -134,7 +137,7 @@ const ChatbotCore = ({
                 message.user === humanUser) ||
                 (themeConfig?.components?.Avatar?.showSideBotAvatar &&
                   message.user === botUser)) && (
-                <Avatar // Side avatar (outside of message bubble) for mobile
+                <Avatar
                   sx={{
                     ...themeConfig?.components?.Avatar?.style,
                     width: '20px',
@@ -177,8 +180,7 @@ const ChatbotCore = ({
                       variant="h6"
                       color={themeConfig?.components?.MessageBubbleBot?.style?.color}
                     >
-                      {' '}
-                      Response{' '}
+                      Response
                     </Typography>
                   </Box>
                 )}
@@ -201,90 +203,50 @@ const ChatbotCore = ({
                           maxWidth: '100%',
                         }}
                       >
-                        {BotMessageRender(message, messages[index - 1]?.text)}
+                        {botMessageRenderFunction(message, messages[index - 1]?.text)}
                       </Box>
                     )}
                   </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                    }}
-                  >
+                  <Box sx={{ display: 'flex' }}>
                     {message.subqueryQuestion &&
                       message.subqueryResponse &&
-                      SubqueryRender(message.subqueryQuestion, message.subqueryResponse)}
+                      subqueryRenderFunction(message.subqueryQuestion, message.subqueryResponse)}
                   </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                    }}
-                  >
-                    {message.providers && ProviderRender(message.providers)}
+                  <Box sx={{ display: 'flex' }}>
+                    {message.providers && providerRenderFunction(message.providers)}
                   </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                    }}
-                  >
-                    {message.reference && ReferenceRender(message.reference)}
+                  <Box sx={{ display: 'flex' }}>
+                    {message.reference && referenceRenderFunction(message.reference)}
                   </Box>
-                  {(message.streamCompleted || message.stream) && DataRender(message.graphData)}
+                  {(message.streamCompleted || message.stream) &&
+                    dataRenderFunction(message.graphData)}
                 </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                  }}
-                >
-                  {message.related && RelatedQuestionsRender(message.related, sendCustomMessage)}
+                <Box sx={{ display: 'flex' }}>
+                  {message.related &&
+                    relatedQuestionsRenderFunction(message.related, sendCustomMessage)}
                 </Box>
               </Box>
             ) : (
               <Box sx={themeConfig?.components?.MessageBubbleUser?.style}>
-                {UserMessageRender(message.text)}
+                {userMessageRenderFunction(message.text)}
               </Box>
             )}
           </ListItem>
         ))}
         {botMessage && isAnyMessageLoading && !showLinearLoader && (
-          <ListItem
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              transition: 'opacity 0.5s ease-in-out',
-            }}
-          >
-            <Avatar
-              sx={{
-                marginRight: '1rem',
-                ...themeConfig?.components?.Avatar?.style,
-              }}
-              src={themeConfig?.components?.Avatar?.botAvatarUrl}
-            />
-            <Box sx={{ ...themeConfig?.components?.LoaderBot?.style }}>
-              {/*TODO: Add a custom model_step loader*/}
-              <DNA
-                visible={true}
-                height="60"
-                width="60"
-                ariaLabel="dna-loading"
-                wrapperStyle={{}}
-                wrapperClass="dna-wrapper"
-              />
-              <Typography
-                sx={{
-                  marginLeft: '1rem',
-                }}
-              >
-                {getMessage(botMessage.text)}
-              </Typography>
-            </Box>
+          <ListItem sx={{ display: 'flex', flexDirection: 'row' }}>
+            {loadingRenderFunction(
+              getMessage(botMessage.text),
+              themeConfig,
+              subquery_arrays,
+              loaderType,
+            )}
           </ListItem>
         )}
         {showLinearLoader && (
           <ListItem
             sx={{ display: 'flex', flexDirection: 'row', maxWidth: isMobile ? '70vw' : '40vw' }}
           >
-            {/*TODO: Add a custom pre-render loader (when data is retrieved)*/}
             <Avatar
               sx={{
                 marginRight: '1rem',
@@ -298,11 +260,7 @@ const ChatbotCore = ({
       </List>
 
       <div ref={messagesEndRef} />
-      <div
-        style={{
-          height: '100px',
-        }}
-      />
+      <div style={{ height: '100px' }} />
     </Box>
   );
 };

@@ -6,12 +6,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
-import { text } from 'stream/consumers';
 
 const ChatbotHttp: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
   themeConfig,
+  loaderType,
   setDataForParent,
   welcomeMessageRenderFunction,
   botMessageRenderFunction,
@@ -22,6 +22,8 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
   relatedQuestionsRenderFunction,
   multimodeChat,
   multimodeRenderFunction,
+  loadingRenderFunction,
+  subqueryRenderFunction,
 }: ChatbotProps) => {
   const humanUser = 'humanUser';
   const botUser = 'botUser';
@@ -182,6 +184,7 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           messages={messages}
           apiConfig={{ ...apiConfig }}
           themeConfig={themeConfig}
+          loaderType={loaderType ? loaderType : 1}
           botUser={botUser}
           humanUser={humanUser}
           botMessage={botMessage}
@@ -190,24 +193,15 @@ const ChatbotHttp: React.FC<ChatbotProps> = ({
           isAnyMessageLoading={isAnyMessageLoading}
           isMobile={isMobile}
           sendCustomMessage={handleSendCustomMessage}
-          welcomeMessageRenderFunction={(sendCustomMessage: (message: string) => void) =>
-            welcomeMessageRenderFunction?.(sendCustomMessage) ?? null
-          }
-          botMessageRenderFunction={(message: any, input: string) =>
-            botMessageRenderFunction?.(message, input) ?? null
-          }
-          userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
-          dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
-          providerRenderFunction={(providers: string[]) =>
-            providerRenderFunction?.(providers) ?? null
-          }
-          referenceRenderFunction={(reference: string[]) =>
-            referenceRenderFunction?.(reference) ?? null
-          }
-          relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
-            relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
-          }
-          subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) => null}
+          welcomeMessageRenderFunction={welcomeMessageRenderFunction}
+          botMessageRenderFunction={botMessageRenderFunction}
+          userMessageRenderFunction={userMessageRenderFunction}
+          dataRenderFunction={dataRenderFunction}
+          providerRenderFunction={providerRenderFunction}
+          referenceRenderFunction={referenceRenderFunction}
+          relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
+          subqueryRenderFunction={subqueryRenderFunction}
+          loadingRenderFunction={loadingRenderFunction}
         />
         {themeConfig?.components?.Divider?.appears && (
           <Divider sx={themeConfig?.components?.Divider?.style} />

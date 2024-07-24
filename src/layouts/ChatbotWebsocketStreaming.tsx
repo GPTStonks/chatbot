@@ -7,12 +7,16 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ChatbotCore from '../components/chat/ChatbotCore';
 import ChatbotInput from '../components/chat/ChatbotInput';
+import RenderFunctions from '../components/renderers/RenderFunctions';
 
 const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   className,
   apiConfig,
+  loaderType,
   themeConfig,
   preloadedMessages,
+  multimodeChat,
+  multimodeRenderFunction,
   welcomeMessageRenderFunction,
   setDataForParent,
   onApiResponseCode,
@@ -24,8 +28,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
   errorRenderFunction,
-  multimodeChat,
-  multimodeRenderFunction,
+  loadingRenderFunction,
 }: ChatbotProps) => {
   const ErrorRender = useCallback(
     (error: any) => {
@@ -179,6 +182,8 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
           text: body,
           user: 'botUser',
           loading: true,
+          subqueryQuestion: subqueryQuestion ? subqueryQuestion : [],
+          subqueryResponse: subqueryResponse ? subqueryResponse : [],
         }));
       } else if (type === 'data') {
         setStreamData('');
@@ -277,6 +282,7 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             messages={messages}
             apiConfig={{ ...apiConfig }}
             themeConfig={themeConfig}
+            loaderType={loaderType ? loaderType : 1}
             botUser={botUser}
             humanUser={humanUser}
             botMessage={botMessage}
@@ -285,26 +291,15 @@ const ChatbotWebsocketStreaming: React.FC<ChatbotProps> = ({
             isAnyMessageLoading={isAnyMessageLoading}
             isMobile={isMobile}
             sendCustomMessage={handleSendCustomMessage}
-            welcomeMessageRenderFunction={(sendCustomMessage: (message: string) => void) =>
-              welcomeMessageRenderFunction?.(sendCustomMessage) ?? null
-            }
-            botMessageRenderFunction={(message: any, input: string) =>
-              botMessageRenderFunction?.(message, input) ?? null
-            }
-            userMessageRenderFunction={(text: string) => userMessageRenderFunction?.(text) ?? null}
-            dataRenderFunction={(data: any) => dataRenderFunction?.(data) ?? null}
-            providerRenderFunction={(providers: string[]) =>
-              providerRenderFunction?.(providers) ?? null
-            }
-            referenceRenderFunction={(reference: string[]) =>
-              referenceRenderFunction?.(reference) ?? null
-            }
-            relatedQuestionsRenderFunction={(relatedQuestions: string[], sendCustomMessage: any) =>
-              relatedQuestionsRenderFunction?.(relatedQuestions, sendCustomMessage) ?? null
-            }
-            subqueryRenderFunction={(subqueryQuestion: string[], subqueryResponse: string[]) =>
-              subqueryRenderFunction?.(subqueryQuestion, subqueryResponse) ?? null
-            }
+            welcomeMessageRenderFunction={welcomeMessageRenderFunction}
+            botMessageRenderFunction={botMessageRenderFunction}
+            userMessageRenderFunction={userMessageRenderFunction}
+            dataRenderFunction={dataRenderFunction}
+            providerRenderFunction={providerRenderFunction}
+            referenceRenderFunction={referenceRenderFunction}
+            relatedQuestionsRenderFunction={relatedQuestionsRenderFunction}
+            subqueryRenderFunction={subqueryRenderFunction}
+            loadingRenderFunction={loadingRenderFunction}
           />
         </React.Fragment>
 

@@ -43,6 +43,8 @@ var __importStar =
 Object.defineProperty(exports, '__esModule', { value: true });
 const react_1 = __importStar(require('react'));
 const material_1 = require('@mui/material');
+const react_loader_spinner_1 = require('react-loader-spinner');
+const material_2 = require('@mui/material');
 const RenderFunctions = ({
   welcomeMessageRenderFunction,
   botMessageRenderFunction,
@@ -52,6 +54,7 @@ const RenderFunctions = ({
   referenceRenderFunction,
   relatedQuestionsRenderFunction,
   subqueryRenderFunction,
+  loadingRenderFunction,
 }) => {
   const WelcomeMessageRender = (0, react_1.useCallback)(
     (sendCustomMessage) => {
@@ -71,12 +74,7 @@ const RenderFunctions = ({
             },
             react_1.default.createElement(
               material_1.Typography,
-              {
-                variant: 'h4',
-                sx: {
-                  color: 'white',
-                },
-              },
+              { variant: 'h4', sx: { color: 'white' } },
               'Welcome! How can I help you today?',
             ),
           );
@@ -146,6 +144,72 @@ const RenderFunctions = ({
     },
     [subqueryRenderFunction],
   );
+  const LoadingMessageRender = (0, react_1.useCallback)(
+    (text, themeConfig, subquery_arrays, type = 1) => {
+      var _a, _b, _c, _d, _e, _f;
+      return loadingRenderFunction
+        ? loadingRenderFunction(text, themeConfig, subquery_arrays, type)
+        : react_1.default.createElement(
+            material_1.Box,
+            { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+            react_1.default.createElement(material_2.Avatar, {
+              sx: Object.assign(
+                { marginRight: '1rem' },
+                (_b =
+                  (_a =
+                    themeConfig === null || themeConfig === void 0
+                      ? void 0
+                      : themeConfig.components) === null || _a === void 0
+                    ? void 0
+                    : _a.Avatar) === null || _b === void 0
+                  ? void 0
+                  : _b.style,
+              ),
+              src:
+                (_d =
+                  (_c =
+                    themeConfig === null || themeConfig === void 0
+                      ? void 0
+                      : themeConfig.components) === null || _c === void 0
+                    ? void 0
+                    : _c.Avatar) === null || _d === void 0
+                  ? void 0
+                  : _d.botAvatarUrl,
+            }),
+            react_1.default.createElement(
+              material_1.Box,
+              {
+                sx: Object.assign(
+                  {},
+                  (_f =
+                    (_e =
+                      themeConfig === null || themeConfig === void 0
+                        ? void 0
+                        : themeConfig.components) === null || _e === void 0
+                      ? void 0
+                      : _e.LoaderBot) === null || _f === void 0
+                    ? void 0
+                    : _f.style,
+                ),
+              },
+              react_1.default.createElement(react_loader_spinner_1.DNA, {
+                visible: true,
+                height: '60',
+                width: '60',
+                ariaLabel: 'dna-loading',
+                wrapperStyle: {},
+                wrapperClass: 'dna-wrapper',
+              }),
+              react_1.default.createElement(
+                material_1.Typography,
+                { sx: { marginLeft: '1rem' } },
+                text,
+              ),
+            ),
+          );
+    },
+    [loadingRenderFunction],
+  );
   return {
     WelcomeMessageRender,
     BotMessageRender,
@@ -155,6 +219,7 @@ const RenderFunctions = ({
     ReferenceRender,
     RelatedQuestionsRender,
     SubqueryRender,
+    LoadingMessageRender,
   };
 };
 exports.default = RenderFunctions;

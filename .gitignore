@@ -21,9 +21,11 @@ gptstonks-test-package/
 
 # next.js
 /.next/
+.next
 
 # production
 /build
+/out/src/app/
 
 # misc
 .DS_Store
@@ -47,4 +49,5 @@ next-env.d.ts
 # Python cache
 __pycache__/
 
+# Owner of the project
 gptstonks/

@@ -41,25 +41,18 @@ var __importStar =
     return result;
   };
 Object.defineProperty(exports, '__esModule', { value: true });
-// File: /home/tracert/Desktop/gptstonks/chatbot_v2/chatbot/src/app/layout.tsx
-const entry = __importStar(require('../../../src/app/layout.js'));
-// Check that the entry is a valid entry
-checkFields();
-// Check the prop type of the entry function
-checkFields();
-// Check the arguments and return type of the generateMetadata function
-if ('generateMetadata' in entry) {
-  checkFields();
-  checkFields();
-}
-// Check the arguments and return type of the generateViewport function
-if ('generateViewport' in entry) {
-  checkFields();
-  checkFields();
-}
-// Check the arguments and return type of the generateStaticParams function
-if ('generateStaticParams' in entry) {
-  checkFields();
-  checkFields();
-}
-function checkFields() {}
+exports.RenderFunctionsProvider = exports.useRenderFunctions = void 0;
+const react_1 = __importStar(require('react'));
+const RenderFunctionsContext = (0, react_1.createContext)(null);
+const useRenderFunctions = () => {
+  return (0, react_1.useContext)(RenderFunctionsContext);
+};
+exports.useRenderFunctions = useRenderFunctions;
+const RenderFunctionsProvider = ({ children, renderFunctions }) => {
+  return react_1.default.createElement(
+    RenderFunctionsContext.Provider,
+    { value: renderFunctions },
+    children,
+  );
+};
+exports.RenderFunctionsProvider = RenderFunctionsProvider;

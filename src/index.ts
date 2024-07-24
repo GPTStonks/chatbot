@@ -7,6 +7,7 @@ export { default as ChatbotCore } from './components/chat/ChatbotCore';
 export { default as ChatbotInput } from './components/chat/ChatbotInput';
 export { default as useChatSocket } from './hooks/useChatSocket';
 export { default as RenderFunctions } from './components/renderers/RenderFunctions';
+export { default as DefaulRenderFunctions } from './components/renderers/DefaultRenderers';
 
 // Type definitions
 export * from './types/chatbot';
