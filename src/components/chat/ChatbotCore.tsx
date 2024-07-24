@@ -1,14 +1,17 @@
 import { APIConfig, ThemeConfig } from '@/types/chatbot';
 import { Message } from '@/types/message';
 import { Avatar, Box, List, ListItem, Typography } from '@mui/material';
-import {
-  defaultBotMessageRenderFunction,
-  defaultLoadingRenderFunction,
-  defaultSubqueryRenderFunction,
-  defaultUserMessageRenderFunction,
-  defaultWelcomeMessageRenderFunction,
-} from '../renderers/DefaultRenderers';
+import DefaultRenderFunctions from '../renderers/DefaultRenderers';
 import LinearBuffer from './LinearBuffer';
+import React from 'react';
+
+const {
+  defaultWelcomeMessageRenderFunction,
+  defaultBotMessageRenderFunction,
+  defaultUserMessageRenderFunction,
+  defaultSubqueryRenderFunction,
+  defaultLoadingRenderFunction,
+} = DefaultRenderFunctions;
 
 const ChatbotCore = ({
   messages,
