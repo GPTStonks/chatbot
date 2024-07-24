@@ -46,7 +46,7 @@ const ChatbotCore = ({
   apiConfig: APIConfig;
   botUser: string;
   humanUser: string;
-  botMessage: any;
+  botMessage: Message | null;
   messagesEndRef: any;
   isAnyMessageLoading: boolean;
   showLinearLoader: boolean;
@@ -78,6 +78,11 @@ const ChatbotCore = ({
     type: number,
   ) => JSX.Element | null;
 }) => {
+  const subquery_arrays = {
+    subqueryQuestions: botMessage?.subqueryQuestion,
+    subqueryResponses: botMessage?.subqueryResponse,
+  };
+
   const getMessage = (text: string) => {
     if (apiConfig?.modelStepTypes) {
       const modelStepTypes = apiConfig.modelStepTypes;
@@ -233,7 +238,7 @@ const ChatbotCore = ({
             {loadingRenderFunction(
               getMessage(botMessage.text),
               themeConfig,
-              botMessage.subqueryQuestion,
+              subquery_arrays,
               loaderType,
             )}
           </ListItem>
