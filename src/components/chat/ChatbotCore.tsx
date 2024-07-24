@@ -13,7 +13,7 @@ import LinearBuffer from './LinearBuffer';
 const ChatbotCore = ({
   messages,
   themeConfig,
-  loaderType,
+  loaderType = 1,
   apiConfig,
   isMobile,
   botUser,
@@ -38,7 +38,7 @@ const ChatbotCore = ({
 }: {
   messages: Message[];
   themeConfig: ThemeConfig;
-  loaderType: number;
+  loaderType?: number;
   isMobile: boolean;
   apiConfig: APIConfig;
   botUser: string;
