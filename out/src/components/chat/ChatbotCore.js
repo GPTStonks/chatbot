@@ -40,6 +40,12 @@ const ChatbotCore = ({
   loadingRenderFunction = defaultLoadingRenderFunction,
 }) => {
   var _a, _b, _c, _d, _e, _f;
+  const subquery_arrays = {
+    subqueryQuestions:
+      botMessage === null || botMessage === void 0 ? void 0 : botMessage.subqueryQuestion,
+    subqueryResponses:
+      botMessage === null || botMessage === void 0 ? void 0 : botMessage.subqueryResponse,
+  };
   const getMessage = (text) => {
     if (apiConfig === null || apiConfig === void 0 ? void 0 : apiConfig.modelStepTypes) {
       const modelStepTypes = apiConfig.modelStepTypes;
@@ -413,7 +419,7 @@ const ChatbotCore = ({
           loadingRenderFunction(
             getMessage(botMessage.text),
             themeConfig,
-            botMessage.subqueryQuestion,
+            subquery_arrays,
             loaderType,
           ),
         ),

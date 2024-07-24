@@ -31,7 +31,7 @@ declare const ChatbotCore: ({
   apiConfig: APIConfig;
   botUser: string;
   humanUser: string;
-  botMessage: any;
+  botMessage: Message | null;
   messagesEndRef: any;
   isAnyMessageLoading: boolean;
   showLinearLoader: boolean;
