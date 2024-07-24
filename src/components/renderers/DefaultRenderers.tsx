@@ -1,6 +1,6 @@
-import React from 'react';
 import { Avatar, Box, Typography } from '@mui/material';
-import { DNA, MutatingDots } from 'react-loader-spinner';
+import React from 'react';
+import { DNA } from 'react-loader-spinner';
 
 const defaultWelcomeMessageRenderFunction = (sendCustomMessage: (message: string) => void) => (
   <Box
@@ -73,10 +73,12 @@ const defaultLoadingRenderFunction = (
   );
 };
 
-export {
+const DefaultRenderFunctions = {
   defaultWelcomeMessageRenderFunction,
   defaultBotMessageRenderFunction,
   defaultUserMessageRenderFunction,
   defaultSubqueryRenderFunction,
   defaultLoadingRenderFunction,
 };
+
+export default DefaultRenderFunctions;
