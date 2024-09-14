@@ -4,7 +4,7 @@ import ChatbotWebsocketStreaming from '@/layouts/ChatbotWebsocketStreaming';
 import { MultimodeChat } from '@/types/chatbot';
 import { Message } from '@/types/message';
 import { Box, Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   BotMessageRender,
   ErrorRenderFunction,
@@ -14,8 +14,11 @@ import {
   UserMessageRender,
   WelcomeMessageRender,
 } from './CustomRenderers';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
+  // const params = useSearchParams();
+
   const [initializedChat, setInitializedChat] = React.useState(false);
   const [chatData, setChatData] = React.useState<any>(null);
   const [multimodeChat, setMultimodeChat] = useState<MultimodeChat>({
@@ -43,6 +46,33 @@ export default function Home() {
     setToken(storedToken);
   }, []);
 
+  const chatbotRef = useRef<{
+    handleSendCustomMessage: (message: string) => void;
+  }>(null);
+
+  // useEffect(() => {
+  //   if (params.has('query')) {
+  //     const encodedQuery = params.get('query');
+  //     if (encodedQuery) {
+  //       const query = decodeURIComponent(encodedQuery);
+
+  //       console.log('Query:', query);
+
+  //       setTimeout(() => {
+  //         if (chatbotRef.current) {
+  //           chatbotRef.current.handleSendCustomMessage(query);
+  //         }
+  //       }, 1000);
+  //     }
+  //   }
+  // }, []);
+
+  const handleButtonClick = () => {
+    if (chatbotRef.current) {
+      chatbotRef.current.handleSendCustomMessage('Hello from parent!');
+    }
+  };
+
   return (
     <main
       style={{
@@ -55,8 +85,10 @@ export default function Home() {
       }}
     >
       <div style={{ width: '20vw', height: '100%' }}></div>
+      <Button onClick={handleButtonClick}>Send Message to Chatbot</Button>
       <div style={{ width: '100%', height: '100%' }}>
         <ChatbotWebsocketStreaming
+          ref={chatbotRef}
           multimodeChat={multimodeChat}
           multimodeRenderFunction={(modes: string[]) => (
             <Box
