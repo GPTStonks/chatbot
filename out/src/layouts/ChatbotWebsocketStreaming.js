@@ -394,4 +394,5 @@ const ChatbotWebsocketStreaming = (0, react_1.forwardRef)(
     );
   },
 );
+ChatbotWebsocketStreaming.displayName = 'ChatbotWebsocketStreaming';
 exports.default = ChatbotWebsocketStreaming;

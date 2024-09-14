@@ -32,9 +32,8 @@ const ChatbotWebsocketStreaming_1 = __importDefault(require("@/layouts/ChatbotWe
 const material_1 = require("@mui/material");
 const react_1 = __importStar(require("react"));
 const CustomRenderers_1 = require("./CustomRenderers");
-const navigation_1 = require("next/navigation");
 function Home() {
-    const params = (0, navigation_1.useSearchParams)();
+    // const params = useSearchParams();
     const [initializedChat, setInitializedChat] = react_1.default.useState(false);
     const [chatData, setChatData] = react_1.default.useState(null);
     const [multimodeChat, setMultimodeChat] = (0, react_1.useState)({
@@ -58,20 +57,20 @@ function Home() {
         setToken(storedToken);
     }, []);
     const chatbotRef = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(() => {
-        if (params.has('query')) {
-            const encodedQuery = params.get('query');
-            if (encodedQuery) {
-                const query = decodeURIComponent(encodedQuery);
-                console.log('Query:', query);
-                setTimeout(() => {
-                    if (chatbotRef.current) {
-                        chatbotRef.current.handleSendCustomMessage(query);
-                    }
-                }, 1000);
-            }
-        }
-    }, []);
+    // useEffect(() => {
+    //   if (params.has('query')) {
+    //     const encodedQuery = params.get('query');
+    //     if (encodedQuery) {
+    //       const query = decodeURIComponent(encodedQuery);
+    //       console.log('Query:', query);
+    //       setTimeout(() => {
+    //         if (chatbotRef.current) {
+    //           chatbotRef.current.handleSendCustomMessage(query);
+    //         }
+    //       }, 1000);
+    //     }
+    //   }
+    // }, []);
     const handleButtonClick = () => {
         if (chatbotRef.current) {
             chatbotRef.current.handleSendCustomMessage('Hello from parent!');
