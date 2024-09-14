@@ -345,4 +345,6 @@ const ChatbotWebsocketStreaming = forwardRef<
   },
 );
 
+ChatbotWebsocketStreaming.displayName = 'ChatbotWebsocketStreaming';
+
 export default ChatbotWebsocketStreaming;
